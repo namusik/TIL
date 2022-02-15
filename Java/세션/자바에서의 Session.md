@@ -17,7 +17,7 @@ HttpSession session = request.getSession(true);
 HttpSsession session = request.getSession(false)
     이미 세션이 있으면, 그 세션을 return하고, 세션이 없으면 null 반환
 
-sessoin.setAttribute("key", value)
+sessoin.setAttribute(String "key", Object value)
     객체를 세션에 key-value로 저장
     value는 Object 타입으로 저장
 
