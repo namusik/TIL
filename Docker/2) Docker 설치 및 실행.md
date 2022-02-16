@@ -148,7 +148,40 @@ docker images 명령어를 실행시켜본다.
 
 브라우저에서 localhost:8080 접속하면 container 안에 있는 index.html을 읽어드림.
 
-## 
+## Container 안에 있는 파일 수정하기 
+
+docker desktop 
+
+1. container 클릭 후 우측 상단에 cli 클릭
+2. container 안에서 명령을 실행 시킬 수 있게 됨
+
+powershell 
+
+```
+    docker exec [OPTIONS] CONTAINER COMMAND [ARG...]
+
+    ex) docker exec -it ws1 /bin/bash 혹은 /bin/sh
+
+    -it : interactive, tty 조합해서 만든 옵션. 컨테이너와 지속적으로 연결을 유지할 때
+
+    shell 프로그램 실행. 사용자가 입력한 명령을 받아서 OS에 전달해주는 일종의 창구
+
+    <container와 연결 종료>
+    exit
+```
+```
+    httpd의 index.html이 있는 위치로 이동.
+
+    apt update
+    apt install nano
+    nano index.html 
+    수정하고 컨트롤 O. 나갈떄는 컨트로 X
+```
+
+## Host의 파일을 Container가 반영할 수 있도록 
+
+
+   
 
 ## 참고
 
