@@ -2,7 +2,7 @@
 
 ## 설치
 
-[kafka.apache.org/downloads](https://kafka.apache.org/downloads)
+https://kafka.apache.org/downloads
 
 설치 후 압축해제
 
