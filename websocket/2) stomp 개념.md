@@ -71,4 +71,21 @@ subscription: sub-1
 
 
 {"chatRoomId": 5, "type": "MESSAGE", "writer": "clientB"} ^@
+```
+
+##  Pub/Sub 메시징 흐름
+</br>
+
+![](https://images.velog.io/images/rainbowweb/post/15faab06-edf1-4a21-bd8e-c081d9a5eeb8/image.png)
+
+SEND : 발신자. 구독자에게 메세지를 보내고 싶어함.
+
+	1. 클라이언트에서 메세지를 보내면 일단 먼저 @MessageMapping이 붙은 Controller가 받는다.
+	2. /topic을 destination 헤더로 넣어서 메세지를 바로 송신할 수 도 있고
+    3. /app을 destination 헤더로 넣어서 서버 내에서 가공을 줄 수 있음
+    4. 서버가 가공을 완료했으면, 메시지를 /topic이란 경로를 담아서 다시 전송하면
+    5. SimpleBroker에게 전달되고
+    6. simpleBroker는 전달받은 메세지를 구독자들에게 최종적으로 전달하게 됨.
+
+MESSAGE : 구독.  /topic이란 경로를 구독중
 

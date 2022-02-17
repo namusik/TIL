@@ -175,12 +175,12 @@ powershell
     apt update
     apt install nano
     nano index.html 
-    수정하고 컨트롤 O. 나갈떄는 컨트로 X
+    수정하고 컨트롤 O. 나갈떄는 컨트롤 X
 ```
 
 ## Host의 파일을 Container가 반영할 수 있도록 
 
-
+    docker run -p 8082:80 -v C:\Users\nswoo\Desktop\docker\htdocs\:/usr/local/apache2/htdocs/ httpd
    
 
 ## 참고
