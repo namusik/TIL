@@ -1,4 +1,4 @@
-# 인터셉터
+# Interceptor
 
 ![interceptor](../images/Spring/interceptor.png)
 
@@ -39,7 +39,7 @@ postHandle(), afterConpletion()은 이미 구현되어있음.
 
 ```
 
-## WebMvcConfigurer
+## 선언
 
     인터셉터 관련 설정을 과거에는 .xml에서 해줬다면 이젠 자바 클래스에서 해줌
 
