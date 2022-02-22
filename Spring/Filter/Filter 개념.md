@@ -1,6 +1,6 @@
 # Filter
 
-![interceptor](../images/Spring/interceptor.png)
+![interceptor](../../images/Spring/interceptor.png)
 
 ## 정의
 
@@ -87,6 +87,9 @@ FilterRegistrationBean을 이용한 Filter 등록
         } 
     }
 ```
+## 연습예제 
+
+https://velog.io/@rainbowweb/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8-Filter-%EC%84%A4%EC%A0%95-%EC%98%88%EC%A0%9C
 
 ## 참고
 
