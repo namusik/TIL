@@ -9,6 +9,3 @@
    2. 첫번째 접근 때는 DB에서 find해서 가져옴
 4. @CachePut(value = "sample", key = "#sam") : 캐시 수정
 5. @CacheEvict() : 캐시 삭제 
-
-## 연습 예제 코드 
-
