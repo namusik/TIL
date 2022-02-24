@@ -4,18 +4,19 @@
 
     Remote Dictionary Server
 
-    인 메모리 키 값 데이터 구조 스토어?
+    Key -value 형태의 NosQL
 
     싱글 스레드
 
     캐시의 용도로 흔히 사용된다
 
-
 ## 장점 
 
     빠르다!
 
-    다양한 데이터 구조 집합을 제공
+    list, set, sorted set, hash 등 다양한 데이터 구조 집합을 제공
+
+    싱글 쓰레드 ; rade condition에 빠질 수 있음을 방지.
 
 ## 캐시(Cache)란?
 
@@ -50,7 +51,9 @@
     4. Job Queue
     5. 여러 서버의 데이터를 공유 할 때
 
+## 참고 
 
+https://sabarada.tistory.com/177?category=856943
 
     
     
