@@ -1,5 +1,17 @@
 # Redis 유의사항
 
+## Max memory 설정 
+
+    Redis 메모리의 한계는 maxmemory값으로 설정할 수 있음. 
+
+    max를 넘어서면 maxmemory policy에 따라 추가 메모리 확보
+
+    /proc/sys/vm/overcommit_memory=1로 설정해야 추가 메모리 할당 가능.
+
+    Maxmemory 초과로 인해 데이터가 지워지게 되는 것을 eviction이라 함.
+
+    Redis에서 INFO 명령어를 친후, evicted_keys 수치를 보면 eviction이 발생했는지 알 수 있음.
+
 ## 컬렉션 안에 너무 많은 아이템을 사용하지 않는다 
 
     명령어 수행에 걸리는 시간이 증가하여 퍼포먼스가 떨어진다

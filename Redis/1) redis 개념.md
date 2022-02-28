@@ -18,6 +18,15 @@
 
     싱글 쓰레드 ; rade condition에 빠질 수 있음을 방지.
 
+## 싱글 쓰레드
+
+    한 번에 딱 하나의 명령어만 실행 가능
+
+    Get/Set같은 명령어는 초당 10만개도 처리 가능
+
+    Keys 같이 처리가 오래 걸리는 명령어의 경우 뒤에 있는 명령어들이 전부 기다려야 함.
+
+
 ## 캐시(Cache)란?
 
     요청된 결과를 미리 저장하여, 추후 요청에 제공하는 것    
@@ -55,5 +64,5 @@
 
 https://sabarada.tistory.com/177?category=856943
 
-    
+https://brunch.co.kr/@jehovah/20
     
