@@ -2,6 +2,7 @@
 
 ## tiles 란?
 
+![tiles](../Images/JSP/tiles.png)
 
     tiles는 웹페이지의 상단이나 하단 메뉴와 같이 반복적으로 사용되는 부분들에 대한 코드를 분리해서 
 
@@ -51,7 +52,7 @@
                  template과 attribute가 같이 정의된 페이지를 의미 
 
 
-## maven 설정 
+## maven 라이브러리 다운로드
 
 ~~~java
 <properties>
@@ -87,7 +88,87 @@
 </dependency>
 ~~~
 
-## Template
+## tilesConfigurer 추가 
+
+~~~java
+@Bean
+public TilesConfigurer tilesConfigurer() {
+    TilesConfigurer tilesConfigurer = new TilesConfigurer();
+    tilesConfigurer.setPreparerFactoryClass(SpringBeanPreparerFactory.class);
+    tilesConfigurer.setDefinitions("WEB-INF/tiles/tiles3.xml", "WEB-INF/tiles/tiles3-mobile.xml");
+    
+    return tilesConfigurer;
+    }
+~~~
+
+dispatcher-servlet.xml이 아닌 @Bean으로 추가해주는 방식을 씀. 
+
+tiles.xml과 그 안에서 view에 맞는 해당 definition을 찾아줄 tilesViewResolver 추가.
+
+
+
+## Tiles Definition
+
+Tiles를 정의해줌. 
+
+tiles.xml 같은 곳에 써준다.
+
+~~~java
+<definition name="mainpage" template="/templates/layout.jsp">    
+   <put-attribute name="header" value="/tiles/banner.jsp" /> 
+   <put-attribute name="menu" value="/tiles/common_menu.jsp" /> 
+   <put-attribute name="body" value="/tiles/home_body.jsp" /> 
+   <put-attribute name="footer" value="/tiles/credits.jsp" /> 
+</definition>
+~~~
+
+xml에 template과 attribute의 경로를 정의해줌. 
+
+menu, header, footer는 자주 사용되므로 상속을 이용해서 중복을 피할 수 있음.
+
+## Definition 상속
+
+~~~java
+<definition name="base" template="/templates/layout.jsp">
+	<put-attribute name ="title" vlaue="Homepage" />
+   <put-attribute name="header" value="/tiles/banner.jsp" /> 
+   <put-attribute name="menu" value="/tiles/common_menu.jsp" /> 
+   <put-attribute name="content" value="/tiles/home_body.jsp" /> 
+   <put-attribute name="footer" value="/tiles/credits.jsp" /> 
+</definition>
+
+<definition name="home" extends="base">
+	<put-attribute name ="title" vlaue="Offers Homepage" />
+    <put-attribute name="content" value="/WEB-INF/tiles/home.jsp" />
+</definition>
+~~~
+
+## Template - layout.jsp
+
+~~~html
+ <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
+<table>
+	<tr>
+    	<td colspan="2">
+        	<tiles:insertAttribute name ="header" />
+        </td>
+    </tr>
+    <tr>
+    	<td>
+        	<tiles:insertAttribute name ="menu" />
+        </td>
+        <td>
+        	<tiles:insertAttribute name ="body" />
+        </td>
+    </tr>
+    <tr>
+    	<td colspan="2">
+        	<tiles:insertAttribute name="footer" />
+        </td>
+    </tr>
+<table>
+~~~
+
 
 
 
@@ -97,3 +178,7 @@
 https://sjh836.tistory.com/133
 
 https://tiles.apache.org/framework/tutorial/index.html
+
+https://hyoni-k.tistory.com/39
+
+https://offbyone.tistory.com/10
