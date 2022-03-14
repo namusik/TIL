@@ -52,7 +52,7 @@
                  template과 attribute가 같이 정의된 페이지를 의미 
 
 
-## maven 라이브러리 다운로드
+## maven 라이브러리 설정 - pom.xml
 
 ~~~java
 <properties>
@@ -88,17 +88,34 @@
 </dependency>
 ~~~
 
-## tilesConfigurer 추가 
+## TilesConfig
 
 ~~~java
-@Bean
-public TilesConfigurer tilesConfigurer() {
-    TilesConfigurer tilesConfigurer = new TilesConfigurer();
-    tilesConfigurer.setPreparerFactoryClass(SpringBeanPreparerFactory.class);
-    tilesConfigurer.setDefinitions("WEB-INF/tiles/tiles3.xml", "WEB-INF/tiles/tiles3-mobile.xml");
-    
-    return tilesConfigurer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.view.tiles3.TilesConfigurer;
+import org.springframework.web.servlet.view.tiles3.TilesView;
+import org.springframework.web.servlet.view.tiles3.TilesViewResolver;
+
+@Configuration
+public class TilesConfig {
+
+    @Bean
+    public TilesConfigurer tilesConfigurer() {
+        final TilesConfigurer configurer = new TilesConfigurer();
+        //해당 경로에 tiles.xml 파일을 넣음
+        configurer.setDefinitions(new String[]{"/WEB-INF/tiles/tiles.xml"});
+        configurer.setCheckRefresh(true);
+        return configurer;
     }
+
+    @Bean
+    public TilesViewResolver tilesViewResolver() {
+        final TilesViewResolver tilesViewResolver = new TilesViewResolver();
+        tilesViewResolver.setViewClass(TilesView.class);
+        return tilesViewResolver;
+    }
+}
 ~~~
 
 dispatcher-servlet.xml이 아닌 @Bean으로 추가해주는 방식을 씀. 
@@ -111,9 +128,9 @@ tiles.xml과 그 안에서 view에 맞는 해당 definition을 찾아줄 tilesVi
 
 Tiles를 정의해줌. 
 
-tiles.xml 같은 곳에 써준다.
+위 tilesConfigurer에서 setDefinitions에서 지정한 tiles.xml에 작성해준다. 
 
-~~~java
+~~~html
 <definition name="mainpage" template="/templates/layout.jsp">    
    <put-attribute name="header" value="/tiles/banner.jsp" /> 
    <put-attribute name="menu" value="/tiles/common_menu.jsp" /> 
@@ -126,47 +143,70 @@ xml에 template과 attribute의 경로를 정의해줌.
 
 menu, header, footer는 자주 사용되므로 상속을 이용해서 중복을 피할 수 있음.
 
+definition name 부분이 controller에서 뷰를 찾기 위해 반환하는 값.
+
+~~~html
+<definition name="views/lightstick/*/*/*/*/*" extends=".default">
+    <put-attribute name="body" value="/WEB-INF/views/lightstick/{1}/{2}/{3}/{4}/{5}.jsp" />
+</definition>
+~~~
+
+name의 패턴을 *을 사용해서 지정할 수 있는데, *는 아무 내용이나 들어갈 수 있음을 의미. 
+
+그리고 *의 내용은 <put-attribute>의 value값에 {1}부터 순차적으로 들어간다. 
+
+
 ## Definition 상속
 
-~~~java
+~~~html
 <definition name="base" template="/templates/layout.jsp">
 	<put-attribute name ="title" vlaue="Homepage" />
    <put-attribute name="header" value="/tiles/banner.jsp" /> 
    <put-attribute name="menu" value="/tiles/common_menu.jsp" /> 
-   <put-attribute name="content" value="/tiles/home_body.jsp" /> 
+   <put-attribute name="body" value="/tiles/home_body.jsp" /> 
    <put-attribute name="footer" value="/tiles/credits.jsp" /> 
 </definition>
 
 <definition name="home" extends="base">
 	<put-attribute name ="title" vlaue="Offers Homepage" />
-    <put-attribute name="content" value="/WEB-INF/tiles/home.jsp" />
+    <put-attribute name="body" value="/WEB-INF/tiles/home.jsp" />
 </definition>
 ~~~
 
-## Template - layout.jsp
+base라는 기본 설정을 extends 함으로써 부분만 또 바꿀수 있다. 
+
+## Template
+
+definition template의 위치와 일치하는 jsp에 작성
 
 ~~~html
- <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
-<table>
-	<tr>
-    	<td colspan="2">
-        	<tiles:insertAttribute name ="header" />
-        </td>
-    </tr>
-    <tr>
-    	<td>
-        	<tiles:insertAttribute name ="menu" />
-        </td>
-        <td>
-        	<tiles:insertAttribute name ="body" />
-        </td>
-    </tr>
-    <tr>
-    	<td colspan="2">
-        	<tiles:insertAttribute name="footer" />
-        </td>
-    </tr>
-<table>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%> 
+<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%> 
+<!DOCTYPE html> 
+<html lang="ko"> 
+<head> 
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> <title><tiles:getAsString name="title" /></title> 
+    <link href="<c:url value='/resources/css/layout.css' />" rel="stylesheet"></link> 
+</head> 
+<body> 
+    <header id="header"> 
+        <tiles:insertAttribute name="header" /> 
+    </header> 
+        
+    <section id="sidemenu"> 
+        <tiles:insertAttribute name="menu" /> 
+    </section> 
+
+    <section id="siteContent"> 
+        <tiles:insertAttribute name="body" /> 
+    </section> 
+
+    <footer id="footer"> 
+        <tiles:insertAttribute name="footer" /> 
+    </footer> 
+</body> 
+</html>
 ~~~
 
 
@@ -182,3 +222,5 @@ https://tiles.apache.org/framework/tutorial/index.html
 https://hyoni-k.tistory.com/39
 
 https://offbyone.tistory.com/10
+
+http://jmlim.github.io/spring/2019/02/08/spring-boot-tiles/
