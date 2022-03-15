@@ -1,6 +1,6 @@
 # SpringBoot Cache
 
-## 스프링부트에서 사용하기 
+## 스프링부트에서 내장 메모리 캐시 사용하기 
 
 1. starter-cache 의존성 추가.
 2. Application에 @EnableCaching 애너테이션 추가

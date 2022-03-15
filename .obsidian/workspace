@@ -1,0 +1,90 @@
+{
+  "main": {
+    "id": "50ed038a75a897c4",
+    "type": "split",
+    "children": [
+      {
+        "id": "12c3a5332df35fe9",
+        "type": "leaf",
+        "state": {
+          "type": "graph",
+          "state": {}
+        }
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "8d0f6d44eeed17e1",
+    "type": "split",
+    "children": [
+      {
+        "id": "f7a2ecf3421771ae",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "fecbd2c4e22269c9",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {}
+            }
+          },
+          {
+            "id": "6721ea23c2070198",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "3c123e8678cc7ec9",
+    "type": "split",
+    "children": [
+      {
+        "id": "9a5c499e98625c11",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "4542a870c7ab2ca6",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "active": "12c3a5332df35fe9",
+  "lastOpenFiles": [
+    "Docker/1) Docker 개념.md",
+    "Cache/Http Cache.md"
+  ]
+}
