@@ -2,7 +2,7 @@
 
 ## tiles 란?
 
-![tiles](../Images/JSP/tiles.png)
+![tiles](../images/JSP/tiles.png)
 
     tiles는 웹페이지의 상단이나 하단 메뉴와 같이 반복적으로 사용되는 부분들에 대한 코드를 분리해서 
 
@@ -18,7 +18,7 @@
 
 ## Composite View 패턴
 
-![tiles](../Images/JSP/tiles%20pattern.jpeg)
+![tiles](../images/JSP/tiles%20pattern.jpeg)
 
     모듈 단위의 뷰 들을 조합해서 하나의 뷰를 구성.
 
