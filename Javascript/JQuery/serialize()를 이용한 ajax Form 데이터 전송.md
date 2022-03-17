@@ -12,7 +12,7 @@
 
 ## 사용법 
 
-$("form #id 또는 .name").serialize()
+$("form #id").serialize()
 
     HTML form 요소를 통해 입력된 데이터를 쿼리 문자열로 변환.
 

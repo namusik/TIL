@@ -12,6 +12,8 @@
 
     docker run -d -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=yes --name mysqlCont mysql
 
+    docker run --platform linux/amd64 -p 3306:3306 --name mysql -e MYSQL_ALLOW_EMPTY_PASSWORD=YES -e MYSQL_DATABASE=SALESMEMO_LOCAL -d mysql:5.6
+
     <mysql 컨테이너 접속>
     docker exec -it mysqlCont /bin/bash
 
