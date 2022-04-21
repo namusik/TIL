@@ -38,6 +38,33 @@
 
     로그인 요청시 위 3가지 요소가 일치 했을 때 OAuth 로그인 성공.
 
+## OAuth2 흐름
+
+![oauth](../../images/Spring/OAuth2.jpeg)
+
+1. Client는 이미 등록을 통해 id, secret, redirect url을 가지고 있는 상태
+</br>   
+2. 사용자가 로그인을 하면 Auth server에서 redirect url 뒤에 Authorization Code를 붙여서 발급
+   1. redirect_url?code={code}
+</br>   
+3. Client는 위 4가지 정보를 Auth server로 전송. 
+</br>   
+4. 4가지 정보가 모두 일치하면 Access Token 발급.
+   1. 이 떄, 역할을 다한 Authorization Code는 삭제됨. 
+</br>   
+5. 발급받은 Access Token을 활용해 Resource Server의 기능을 이용할 수 있음. 
+</br>
+![oauth2](../../images/Spring/Oauth22.png)
+
+6. Refresh Token을 사용하는 경우.
+   1. Access Token에는 유효기간이 있음. 
+   2. Access Token 재발급을 위해 Refresh Token 사용.
+   3. Access Token은 주로 세션에 저장하고
+   4. Refresh Token은 주로 DB에 저장한다. 
+
+
 ## 출저
 
-    https://velog.io/@sonypark/OAuth2-%EC%9D%B8%EC%A6%9D
+https://velog.io/@sonypark/OAuth2-%EC%9D%B8%EC%A6%9D
+
+https://otrodevym.tistory.com/entry/spring-boot-%EC%84%A4%EC%A0%95%ED%95%98%EA%B8%B0-9-oauth2-%EC%84%A4%EC%A0%95-%EB%B0%8F-%ED%85%8C%EC%8A%A4%ED%8A%B8-%EC%86%8C%EC%8A%A4
