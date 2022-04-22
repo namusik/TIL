@@ -30,8 +30,12 @@ https://console.cloud.google.com/getting-started?pli=1
 ![range](../../images/Spring/range.png)
 </br>
 7. 테스트 사용자 설정은 패스. 
+
+
 </br>
 8. 다시 OAuth 클라이언트 ID 만들기 클릭.
+
+
 </br>
 9. 애플리케이션 유형, 이름, 리다이렉트 URI 설정
 
@@ -45,4 +49,4 @@ https://console.cloud.google.com/getting-started?pli=1
 따라서, 별도 Controller 구현없이 하기위해 제공되는 URI를 사용하면 됩니다. 
 
 </br>
-1.  생성된 클라이언트ID, 클라이언트 Secret 기억해두기
+10.  생성된 클라이언트ID, 클라이언트 Secret 기억해두기
