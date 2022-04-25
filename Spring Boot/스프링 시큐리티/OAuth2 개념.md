@@ -1,8 +1,13 @@
 #OAuth2
 
 ## 정의
+    The OAuth 2.0 Authorization Framework
 
-    OAuth2의 핵심역할은 AccessToken을 얻어내는 것.
+    OAuth은 "인가"를 위해 사용하는 프레임워크다.
+
+    토큰을 기반으로 하는 인가 프레임워크
+
+
 
 ## 배경
 
@@ -18,25 +23,40 @@
 
     이 AccessToken을 가지고 해당 서비스의 일부 기능을 이용할 수 있게됨.
 
-## OAuth 인증 주체
+## OAuth 필수 4요소
 
-    1. User : 일반 사용자
+    1. Resource Owner : 일반 사용자
 
-    2. App(client) : 나의 서비스
+    2. Client : 나의 서비스. Resource Owner가 실질적으로 사용하려하는 서비스
 
-    3. Auth Server : 구글, 네이버 같은 AccessToken을 제공해주는 곳.
-       1. Resource server : 리소스 저장 서버. API 제공.
-       2. Authorization server : 인증 담당 서버. accesstoken을 client에 제공. 일반적으로 리소스 서버와 인증서버를 분리
+    3. Authorization Server : 인가의 주체자. 구글, 네이버. 페이스북, 카카오 ....
+       1. 인증을 받은 이후에, OAuth로 인가를 받으면 Access Token이 발급됨.
 
-## OAuth를 위해 필요한 것
+    4. Resource Server
+       1.  Access Token을 얻은 Application의 인증받은 요청에 대해서 핸들링을 하는 곳.
+       2.  Authorization Server로 부터 발급받은 토큰을 확인하거나, 인가받았는지 여부를 확인하는 문지기 역할
+       3.  Authorization Server - 매표소. Resource Server - 검표하는 곳.
+       4.  3가지 역할
+           1.  Aceess Token의 확인
+           2.  Scope의 확인 - 해당 Cient의 권한 범위
+           3.  에러코드 및 비인가 접근에 대한 처리
+       5.  실제로 하는 역할은 필터에 가까운 모습. 
 
-    1. Client ID : 퍼블릭한 키
-    2. Client Secret : 시크릿 키. 
-    3. Redirect URL : id, secret 확인 후 리다이렉트할 주소.
+## Client가 Authorization Server에 전달해야 하는 것들
+
+    1. Client id, client secret : Client 고유의 id, password
+    2. Redirect URL : id, secret 확인 후 다시 제어권을 돌려받을 수 있는 리다이렉트할 주소.
+    3. response_type :  Authorization Server의 응답유형에 대한 정의
 
     위 3가지를 먼저, Auth Server에서 받아야 함. 
 
     로그인 요청시 위 3가지 요소가 일치 했을 때 OAuth 로그인 성공.
+
+## OAuth Grant Type
+
+    OAuth 2.0에는 Clientrㅏ OAuth Provider로 부터 토큰을 받아가는 4가지 방식
+
+    Grant Type에 따라 파라미터의 종류를 다르게 하거나 값을 달리해서 보냄.
 
 ## OAuth2 흐름
 
@@ -68,3 +88,5 @@
 https://velog.io/@sonypark/OAuth2-%EC%9D%B8%EC%A6%9D
 
 https://otrodevym.tistory.com/entry/spring-boot-%EC%84%A4%EC%A0%95%ED%95%98%EA%B8%B0-9-oauth2-%EC%84%A4%EC%A0%95-%EB%B0%8F-%ED%85%8C%EC%8A%A4%ED%8A%B8-%EC%86%8C%EC%8A%A4
+
+https://blinders.tistory.com/63?category=825013
