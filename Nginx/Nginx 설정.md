@@ -84,15 +84,99 @@ vi /etc/hosts
 ~~~
 
 ~~~
-# nginx server_name
 127.0.0.1 helloworld.com
 ~~~
-를 추가해준다. 
+
+를 추가해준다. 이러면 localhost의 ip주소의 이름을 helloworld.com으로 지정해줘서 
+
+helloworld.com을 요청하면 자동으로 localhost가 열리게 됨.
 
 
 ## 문법 검사 
 
-nginx -t
+해당 디렉토리에서 nginx -t
 
 ## http block 
+
+http 프로토콜을 사용하겠다는 블록
+
+*.conf는 http블록 안에 include 되어있기 때문에 자동으로 http block을 자동으로 내포하고 있음.
+
+## location block
+
+요청 URI 파라미터에 대한 세부 설정
+
+![location](../images/nginx/locationblock.png)
+
+Server block 안에 location block을 만들어 주면 됨.
+
+http://helloworld.com:82   ->   helloworld 리턴
+http://helloworld.com:82/a/ ->  helloworld-a 리턴
+
+새로운 conf.d 파일을 만들어준다.
+~~~
+server{
+    listen *:82;
+    server_name "helloworld.com";
+
+    location / {
+        return 200 "helloworld";
+    }
+
+    location /a/ {
+        return 200 "helloworld-a";
+    }
+    
+    location /b/ {
+        return 200 "helloworld-b";
+    }
+}
+~~~
+
+현재 상태에서는 문제가 있음. 
+
+helloworld.com:82/a/aa로 요청해도 helloworld-a를 리턴하게 됨. 
+
+exact match를 사용해야 함. 
+
+~~~
+server{
+    listen *:82;
+    server_name "helloworld.com";
+
+    location = / {
+        return 200 "helloworld";
+    }
+
+    location = /a/ {
+        return 200 "helloworld-a";
+    }
+    
+    location = /b/ {
+        return 200 "helloworld-b";
+    }
+}
+~~~
+
+curl helloworld.com:82/a/aa 를 접속하면 NOT FOUND가 발생.
+
+#### 쿠버네티스
+
+쿠버네티스 ingress에서도 경로 유형을 정할 수있다. 
+
+## file return
+
+문자열이 아닌 파일을 리턴하기
+
+![filereturn](../images/nginx/filereturn.png)
+
+root 파일경로
+
+
+
+## 참고 
+
+https://www.youtube.com/watch?v=hA0cxENGBQQ
+
+https://sonman.tistory.com/25
 

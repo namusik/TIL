@@ -8,6 +8,22 @@
 
     WAS : Spring Boot(Tomcat) : 동적페이지, 주문제작
 
+## 역사
+
+1995 - NCSA를 보다 개량한 APACHE 서버 만들어짐.
+
+#### apache 특징
+
+![apache](../images/nginx/apacheserver2.png)
+
+    요청이 들어올 때마다 process 생성.
+
+    prefork방식을 통해 만드는데 오래걸리는 process를 미리 만들어둠. 
+
+    새로운 요청이 오면 만들어둔 process 배치.
+
+    process없으면 추가로 생성.
+
 
 ## 왜 쓰는가?
 
