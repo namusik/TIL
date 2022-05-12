@@ -9,29 +9,28 @@
 ps aux --forest 
 ~~~
 
-![forest](../images/nginx/forest.png)
+## conf.d 폴더
 
-nginx.conf 파일에 접속하면
+보통 nginx.conf에서 include하는 conf파일들을 보관하는 곳.
 
-worker_processes auto; 로 설정되있는 것을 볼 수 있는데
-
-숫자로 바꿔주면 개수를 직접 설정할 수 있다. 
-
-## 설정파일
+## nginx.conf
 
 /etc/nginx/nginx.conf
 
-디렉티브(directives)로 관리 
+nginx의 설정이 들어가는 핵심 파일
 
-![nginxConf](../images/nginx/nginxConf.png)
+nginx의 configuration 옵션을 디렉티브(directives)로 부름.
 
-    간단 디렉티브 
+![nginxframe](../images/nginx/nginxframe.png)
 
-        user nginx; 처럼 {}으로 안감싸져 있는 것들.
 
-    블럭 디렉티브 
+간단 디렉티브 
 
-        http{} 처럼 블록으로 감싸져 있는 것들
+    user nginx; 처럼 {}으로 안감싸져 있는 것들.
+
+블럭 디렉티브 
+
+    http{} 처럼 블록으로 감싸져 있는 것들
 
 설정의 끝은 세미콜론;
 
@@ -39,17 +38,55 @@ include를 사용해서 설정파일을 분리해서 관리
 
     include /etc/nginx/conf.d/*.conf;
 
+## Core 모듈 설정
+
+nginx.conf 맨 윗부분들. 
+
+nginx 설정값을 정해준다. 
+
+![forest](../images/nginx/forest.png)
+
+worker_process 
+
+    몇개의 워크 프로세스를 생성할 것인지 지정하는 지시어. 
+
+    1이면 모든 요청을 하나의 프로세스로 실행하겠다는 뜻. 보통 auto로 함. 
+
+
+## Events block 
+
+네트워크 동작방법과 관련된 설정
+
+worker_connections : 하나의 프로세스가 처리할 수 있는 커넥션의 수
+
+최대 동시접속 = worker_process * worker_connections
+
+## http block 
+
+http 프로토콜을 사용하겠다는 블록
+
+하위에 server, location block을 가지는 **루트 블록**
+
+*.conf는 http블록 안에 include 되어있기 때문에 자동으로 http block을 자동으로 내포하고 있음.
 
 ## Server block
 
 서버 기능을 설정하는 블록
+
+하나의 웹사이트를 선언하는데 사용
+
+서버블록이 여러개면 한대의 호스트에서 여러 웹사이트를 서빙할 수 있음. 
+
+    일종의 가상 호스트. 
+
+    각각의 사이트는 같은 IP 머신으로 연결되지만 다른 페에지를 보여주도록 설정 가능.
 
 어떤 주소 port로 요청을 받을지 결정
 
 ![serverblock](../images/nginx/serverblock.png)
 
 listen : 포트번호 설정
-server_name : 받을 도메인 설정
+server_name : 클라이언트가 접속하는 서버. request의 header값과 일치여부 확인함.
 
 #### 연습. 
 
@@ -95,12 +132,6 @@ helloworld.com을 요청하면 자동으로 localhost가 열리게 됨.
 ## 문법 검사 
 
 해당 디렉토리에서 nginx -t
-
-## http block 
-
-http 프로토콜을 사용하겠다는 블록
-
-*.conf는 http블록 안에 include 되어있기 때문에 자동으로 http block을 자동으로 내포하고 있음.
 
 ## location block
 
@@ -172,6 +203,35 @@ curl helloworld.com:82/a/aa 를 접속하면 NOT FOUND가 발생.
 
 root 파일경로
 
+file.conf 만들어줌.
+~~~
+server {
+    listen *:82;
+
+    location = / {
+        return 200 "helloworld";
+    }
+
+    # case1: 정규식(대소문자 구분 x)
+    # 준비 mkdir -p /tmp/images
+    #      touch /tmp/images/a.jpg    
+    # curl helloworld.com:82/images/a.jpg
+    location /images {
+        root /tmp;
+        try_files $uri =404;
+    }
+}
+~~~
+
+만들어준 a.jpg에 내용을 추가해줌. 
+
+##upstream block
+
+![upstream](../images/nginx/upstream.png)
+
+origin 서버. 
+
+
 
 
 ## 참고 
@@ -180,3 +240,6 @@ https://www.youtube.com/watch?v=hA0cxENGBQQ
 
 https://sonman.tistory.com/25
 
+https://juneyr.dev/nginx-basics
+
+https://architectophile.tistory.com/12
