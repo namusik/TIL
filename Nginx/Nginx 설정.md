@@ -232,7 +232,7 @@ server {
 origin 서버. 
 
 
-
+ 
 
 ## 참고 
 
@@ -243,3 +243,5 @@ https://sonman.tistory.com/25
 https://juneyr.dev/nginx-basics
 
 https://architectophile.tistory.com/12
+
+https://hhseong.tistory.com/218
