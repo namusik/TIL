@@ -189,6 +189,21 @@ Assumption
 
     assumingThat : 파라미터로 전달된 코드블럭만 실행되지 않음. 
 
+
+~~~java
+void dev_env_only(){
+    assumeTrue("DEV".equals(System.getenv("ENV")), () -> "개발 환경이 아닙니다.");
+    assertEquals("A", "A"); //단정문이 실행되지 않음. 
+}
+
+void some_test(){
+    assumingThat("DEV".equals(System.getenc("ENV")), () -> {assertEquals("A","B");});
+    //단정문이 실행되지 않음. 
+
+    assertEquals("A", "A"); //단정문이 실행됨
+}
+~~~    
+
 ## 참고 
 
 https://www.youtube.com/watch?v=EwI3E9Natcw
