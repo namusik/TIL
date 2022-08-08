@@ -41,10 +41,24 @@
 
     gradle build - 로컬에 설치된 gradle 사용
 
-    ./gradlew build - wrapper 사용
+    ./gradlew build - wrapper 사용 
+
+        gradle을 로컬에 설치안해도 됨
+
+        또한, 로컬에 설치된 gradle 버전과 개발당시 버전이 달라서 발생하는 오류에서 자유로움.
+
+    ./gradlew --status
+
+        gradle daemon 확인
+
+    ./gradlew --stop
+
+        gradle daemon 종료
 
 
 
 ## 참고 
 
 https://yeh35.github.io/blog.github.io/documents/infra/gradle/gradle-start1/
+
+https://velog.io/@viiviii/test-%EC%8B%A4%ED%96%89-%EC%8B%9C-GradleWorkerMain%EC%9D%84-%EC%B0%BE%EC%9D%84-%EC%88%98-%EC%97%86%EB%8A%94-%EC%98%88%EC%99%B8
