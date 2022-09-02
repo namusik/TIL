@@ -1,0 +1,22 @@
+# Java에서 Redis 사용 
+
+## Redis에 LocalDateTime 저장하기 
+
+~~~java
+@Bean
+public ObjectMapper objectMapper() {
+    return new ObjectMapper()
+            .findAndRegisterModules()
+            //ObjectMapper 클래스의 메서드로써 JDK ServiceLoader에 의해
+            //기본적으로 제공되는 모듈들을 찾아 넣어줌.
+            .enable(SerializationFeature.INDENT_OUTPUT)
+            //JSON 형태로 저장하거나 출력할 때 인덴트를 맞춰서 formatting 해줌
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+            //Date를 TimeStamp 형식으로 직렬화하지 못하게 함.
+            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+            //역직렬화하는 대상에 모르는 속성 (필드) 이 있더라도 역직렬화를 수행하라는 의미에서 false
+            .registerModule(new JavaTimeModule());
+            //JavaTimeModule 혹은 JDK8Module을 넣어주면 LocalDateTime 직렬화 / 역직렬화가 가능
+}
+~~~
+
