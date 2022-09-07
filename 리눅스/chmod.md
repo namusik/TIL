@@ -23,5 +23,9 @@
     즉, chmod 명령을 사용하여 파일의 mode를 변경한다. 
     파일의 권한을 변경한다.
 
+## chmod 종류 
+
+
+
 ## 참고 
 https://recipes4dev.tistory.com/175
