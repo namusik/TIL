@@ -1,25 +1,25 @@
-#Spring Batch
+# Spring Batch
 
-##정의
+## 정의
 
 포괄적인 경량 배치 프레임워크.
 
 배치란? 개발자가 정의한 작업을 한 번에 일괄적으로 처리하는 애플리케이션
 
-##용도
+## 용도
 
 1. 다량의 정보를 자동, 효율적으로 처리하는 복잡한 프로세싱.주로 시간 기반 이벤트 (월말 정산, 통지)
 2. 매우 큰 데이터 set을 반복, 주기적으로 처리(보험료 조정)
 3. 내/외부 시스템에서 받은 데이터를 통합하는 일.
 
-##장점
+## 장점
 
 1. 자동화
 2. 대용량 처리
 3. 견고성 - 예외처리에 대한 대비
 4. 재사용성 - 공통 코드 단위별로 재사용
 
-##주의점 
+## 주의점 
 
     가벼워야 한다.
     배치 처리시 Input, Output의 사용을 최소화해야 함.
@@ -33,7 +33,7 @@
     스케쥴링 기능을 제공하지 않는다. 
     
 
-##기본 구조
+## 기본 구조
 
 ![springbatcharchi](../../images/Spring/springbatcharchi.png)
 
@@ -54,31 +54,31 @@ Application과 Batch Core 모두 공통 Infrastructure 위에서 빌드함.
 ## Batch Diagram
 ![batchdia](../../images/Spring/batchdia.png)
 
-###JobRepository
+### JobRepository
 현재 실행 중인 프로세스의 메타정보는 JobRepository에 저장.           
 
-###JobLauncher
+### JobLauncher
 Job을 실행하기 위한 런처.
 
-###Job
+### Job
 전체 배치 프로세스를 캡슐화한 엔티티.
 
 ![batchjob](../../images/Spring/batchjob.png)
 
 
 
-###Step
+### Step
 하나의 Job은 여러개의 Step
 
 Step은 아래 Item들을 딱 한 개씩 가짐.
 
-###ItemReader
+### ItemReader
 
-###ItemProcessor
+### ItemProcessor
 
-###ItemWriter
+### ItemWriter
 
-##출처
+## 출처
 
 https://www.youtube.com/watch?v=1xJU8HfBREY
 

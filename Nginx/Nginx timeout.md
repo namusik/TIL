@@ -1,4 +1,4 @@
-#Nginx timeout
+# Nginx timeout
 
 ## timeout error란?
 
