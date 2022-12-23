@@ -1,6 +1,6 @@
-#systemd
+# systemd
 
-##systemd란?
+## systemd란?
 
     PlD1을 차지하고 있는 프로세스 
     
@@ -12,13 +12,13 @@
 
     systemctl 명령어도 systemd를 사용. 관리도구.
 
-##init 
+## init 
 
     systemd 이전에 사용되던 프로세스
 
     부팅 시 가장 먼저 시작되는 프로세스, 부모 프로세스
 
-##systemctl 
+## systemctl 
 
     기존에는 시스템 서비스를 조작하기 위해 service 명령어 사용
 
