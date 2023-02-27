@@ -2,4 +2,4 @@
 
 https://dejavuhyo.github.io/posts/which-version-of-jdk-should-i-use/
 
-https://yoonpunk.tistory.com/11
+https://miro7923.github.io/java/set-java-version/
