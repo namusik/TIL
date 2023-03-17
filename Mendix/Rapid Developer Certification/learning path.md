@@ -7,4 +7,5 @@
   * What do they need to accomplish? <business value>
   * How can I help them do that? <what>
 * 최종형식
-  * As a <user type> I want <what>, so that <business value>.
+  * As a **user type** I want **what**, so that **business value**.
+  * 
