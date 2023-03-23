@@ -53,6 +53,7 @@
     *  스프링으로 프로젝트를 만들면 기본적으로 의존성 추가는 됨
 2. PrimaryKeyEntity
    1. equal, hashcode를 공통으로 사용할 수 있는 추상클래스를 만들자.
+   2. 
 3. 
 ## 출처
 https://spoqa.github.io/2022/08/16/kotlin-jpa-entity.html

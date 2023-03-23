@@ -43,10 +43,15 @@ https://veluxer62.github.io/tutorials/take-advantage-of-kotlin-fixture/
 * Test Data의 생성을 쉽게 도와주는 라이브러리
 * Kotlin에서 객체를 무작위 데이터로 생성하는 도구
 
-## 이용 방법
+#### 의존성 추가
 ~~~kotlin
 testImplementation("com.appmattus.fixture:fixture:<latest-version>")
 ~~~
+
+#### 이용 방법
+
+
+
 
 
 
