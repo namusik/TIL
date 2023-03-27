@@ -23,7 +23,12 @@ https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui
 ~~~java
 // https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui
 implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.13'
+
+
 ~~~
+
+스프링부트3 에서 변경됨.
+https://springdoc.org/v2/#getting-started
 
 1.6.13버전은 아래의 기능들을 지원한다.
 OpenAPI 3
