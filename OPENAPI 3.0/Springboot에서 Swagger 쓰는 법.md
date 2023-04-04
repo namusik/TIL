@@ -15,7 +15,6 @@ https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui
 2022년 꾸준히 업데이트 되는중이다. 
 
 기존에는 springfox를 무지성으로 사용했었는데 꾸준히 업데이트되는 SpringDoc을 사용해보도록 하겠다.
-
 공식 홈페이지 https://springdoc.org/
 
 ## Gradle 설정방법
