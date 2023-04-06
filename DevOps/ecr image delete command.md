@@ -20,7 +20,7 @@ The **--query** option in the AWS CLI allows you to use the JMESPath language to
 **imageIds**: The top-level object in the output of the list-images command is an array of imageIds objects, which contain information about each image in the repository.
 **[?imageTag!=tag]**: This is a filter expression that selects only the imageIds objects where the imageTag property **is not equal** to the specified tag. Replace tag with the tag you want to preserve. Note that the backticks (`) are used to enclose the tag value in the filter expression, since the tag value itself may contain special characters that need to be escaped.
 **.[imageDigest]**: This is a projection expression that selects only the imageDigest property from each selected imageIds object.
-So, the --query option with this JMESPath expression will return an array of image digests, where each image digest corresponds to an image in the repository that has no tag or has a tag that's different from the specified <tag>.
+So, the **--query** option with this JMESPath expression will return an array of image digests, where each image digest corresponds to an image in the repository that has no tag or has a tag that's different from the specified <tag>.
 --output text: The output format for the command. This option specifies that the output should be in plain text format.
 The output of this command will be a list of image digests, one per line.
 
