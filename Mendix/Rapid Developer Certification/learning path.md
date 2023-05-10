@@ -48,3 +48,101 @@ commonly used to display a list of objects.
 
 ## List View
 shows a list of objects.
+
+## XPath Queries
+![xpath](../../images/mendix/xpath.png)
+
+![xpathOp](../../images/mendix/xpathOper.png)
+
+ex) //Administrator.Account[UserManager.Employee_Account/UserManager.Employee/Firstname = 'Henry']
+
+https://docs.mendix.com/refguide/xpath/
+
+For example, the below will return all employee objects that have an account associated to them:
+
+[UserManager.Employee/UserManager.Employee_Account] 
+
+## Security
+
+### Authorization
+
+1. Project Security
+   1. project level
+   2. password policy같은 general setting
+
+2. Module Security
+   1. module level
+   2. pages, microflows, entities 접근 setting
+  
+security configuration screens 혹은 각 properties에서 security 설정 가능
+
+roles라는 컨셉을 통해 module security를 projec security에 연결 가능.
+
+![security](../../images/mendix/mendixsecurity.png)
+
+mendix security model은 크게 4개의 section으로 나눈다.
+
+### App Security level 
+always applied to your whole app
+* Off
+  * no security
+* Prototype/Demo
+  * prototype이 있을 때
+  * login functionality, page access, and microflow and nanoflow access.
+* Production
+  * cloud 배포 전
+  *  configure all aspects of security
+  *  not be allowed to deploy your app to a licensed node in the Mendix cloud.
+
+![moduleroles](../../images/mendix/moduleroles.png)
+
+app security 와 module security로 나눌 수 있음.
+App security는 general settings
+Module security는 individual elements in module
+
+module과 security를 같이 export, import 할 수 있다.
+
+App security에서 User Roles를 만들어서 user에 할당할 수 있다. 
+
+Module Security에서는 module roles를 만들어서 user roles에 할당할 수 있다.
+
+![AppSecurity](../../images/mendix/AppSecurity.png)
+
+* Module Status 
+  * 전체 module security 상태를 확인할 수 있다.
+* User roles 
+  * user role을 만들고 수정할 수 있다. module role이랑 연결도 가능
+* Administrator
+  * initial user to log in
+  * name, password, user role이 있어야 한다.
+* Demo Users
+  * security 설정이 제대로 되는지 확인해보고 싶을 때
+  * demo user를 사용
+* Anonymous users
+  * user account 없는 사용자를 위해.
+* password Policy
+  * 비밀번호 규칙
+
+
+![moduelSecurity](../../images/mendix/moduleSecurity.png)
+
+* Module roles 
+  * module role을 생성할 수 있다.
+* Page access
+  * navigation, link, button으로 접근할수 있는 모든 페이지 목록
+* Microflow access
+  * microflow가 button, link 또는 navigation menu에 부착된경우 여기에 뜬다.
+* Nanoflow access
+  * 상동
+* Entity access
+  * Entity도 access rule을 설정해줄 수 있다.
+  * 여러개의 module rule이 결합될 수 있다.
+  * object를 create/delete 권한을 role에 줄 수 있음.
+  * 각 attribute에 read or read/write할 수 있는 권한도 줄 수 있음.
+
+
+## System and Administration Module
+* System Module
+  * required module that you cannot edit. It is key to the functioning of Mendix and allows your users to log in. 
+* Administration Module
+  * provided to you by default and allows you to manage your local users. This module is editable and you can even remove it if you want to. However, the recommendation is to leave it where it is as it contains essential functionality to manage users. 
