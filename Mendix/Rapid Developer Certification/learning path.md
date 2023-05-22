@@ -146,3 +146,17 @@ Module Security에서는 module roles를 만들어서 user roles에 할당할 �
   * required module that you cannot edit. It is key to the functioning of Mendix and allows your users to log in. 
 * Administration Module
   * provided to you by default and allows you to manage your local users. This module is editable and you can even remove it if you want to. However, the recommendation is to leave it where it is as it contains essential functionality to manage users. 
+
+
+## Nanoflows
+
+microflow와 비슷.
+차이점
+nanoflow runs on the client side and not in the runtime.
+implemented in JavaScript
+nanoflows do not run in a transaction like microflows do
+any change to your data is immediate
+advisable to use nanoflows mainly for interaction with the client device
+specific benefits for mobile
+  can be used in an offline app
+  speed benefit
