@@ -43,3 +43,12 @@ JDBC 표준 인터페이스가 있고
 중간에 SQL Mapper혹은 ORM을 사용하는 것. 
 
 결국 JDBC부터 알아야 한다. 기본이기 때문에.
+
+## 쿼리
+
+1. executeUpdate
+   1. 저장, 수정, 삭제
+   2. 반환값은 int, 영향받은 row 수
+2. executeQuery
+   1. 조회 select
+   2. resultSet 표 형태 반환.
