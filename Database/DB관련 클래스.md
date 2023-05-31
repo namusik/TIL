@@ -43,6 +43,20 @@ HikariCP의 코드에 직접 의존하는 것이 아니라, DataSource 인터페
 DriverManager 기능을 가진 DataSource 인터페이스 구현체.
 DataSource만 주입받으면 DriverManager도 이 클래스를 통해 구현할 수 있다.
 
+**HikariDataSource**
+HikariPool을 사용하는 datasource 구현체
+
+### 자동 등록
+스프링부트는 datasource를 자동등록해준다.
+application.properties에 아래 처럼 정보를 미리 입력해주면,
+~~~properties
+spring.datasource.url=jdbc:h2:tcp://localhost/~/test
+spring.datasource.username=sa
+spring.datasource.password=
+~~~
+
+기본적으로 **HikariDataSource**를 빈으로 등록함.
+
 ## 트랜잭션
 트랜잭션 ACID
 1. 원자성 Atomicity
@@ -89,6 +103,30 @@ DataSource의 구현체를 주입받아야 한다.
 
 즉, repository는 DataSource 구현체와 PlatformTransactionManager 구현체가 필요하다.
 
+~~~java
+DriverManagerDataSource dataSource = new DriverManagerDataSource(URL, USERNAME, PASSWORD);
+PlatformTransactionManager transactionManager = new DataSourceTransactionManager(dataSource);
+~~~
+
+~~~java
+//트랜잭션 시작
+TransactionStatus status = transactionManager.getTransaction(new DefaultTransactionDefinition());
+
+//커밋
+transactionManager.commit(status);
+
+//롤백
+transactionManager.rollback(status);
+~~~
+
+### 자동등록
+platformTransactionManager도 스프링이 자동등록을 해준다.
+
+등록된 라이브러리를 보고 빈으로 등록하는데,
+JDBC 라이브러리가 있으면, DataSourceTransactionManager.
+
+JPA 라이브러리가 있으면, JpaTransactionManager. (jdbc기능도 가지고 있다.) 
+
 ## TransactionSynchronizationManager
 ![tssyncro](../images/DB/tssyncro.png)
 
@@ -106,8 +144,27 @@ ThreadLocal을 사용해서 커넥션을 동기화.
 DataSourceUtils.getConnection()
 ~~~
 위 메서드 내부에서 transactionsynchronizationmanager를 사용
+동기화 매니저 내부에 있는 커넥션을 꺼내옴. 없으면 새로 만듦.
 
 커넥션 반환
 ~~~java
 DataSourceUtils.releaseConnection()
 ~~~
+커넥션을 종료시키는 것이 아니라, 동기화 매니저에 돌려줌.
+
+## TransactionTemplate
+비즈니스 로직에서 반복되는 try cath commit rollback을 템플릿 콜백 패턴으로 만들어주는 템플릿 클래스
+
+~~~java
+this.txTemplate = new TransactionTemplate(transactionManager);
+~~~
+transactiontemplate은 주입받은 PlatformTransactionManager를 가지고 만든다.
+
+## @Transactional
+스프링AOP를 통해 프록시 도입.
+서비스 계층에 여전히 남아있는 트랜잭션 코드를 없애기 위해.
+
+![aop](../images/DB/transactionAOP.png)
+
+@Transactional을 쓰더라도 내부에서 
+DataSource, PlatformTransactionalManager 모두 빈 등록이 필요하다.
