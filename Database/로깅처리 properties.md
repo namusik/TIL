@@ -4,5 +4,8 @@
 
 그때 그때 찾아쓰기 위해 정리해놓기.
 
+### JdbcTemplate SQL 로그
 ~~~properties
+logging.level.org.springframework.jdbc=debug
 ~~~
+main, test 모두에 추가해줘야 함.
