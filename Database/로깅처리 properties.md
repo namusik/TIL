@@ -9,3 +9,4 @@
 logging.level.org.springframework.jdbc=debug
 ~~~
 main, test 모두에 추가해줘야 함.
+

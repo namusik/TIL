@@ -26,5 +26,18 @@ public SampleRepository(DataSource dataSource) {
 
 데이터를 저장할 때, PK 값을 데이터베이스가 생성하는 경우, 서버는 INSERT가 완료되어야 PK 값을 알 수 있다. 이 때, Keyholder를 사용해서 생성된 PK 값을 가져온다. 
 
-3. 
+3. NamedParameterJdbcTemplate
 
+sq 파라미터를 지정해서 값을 넣도록 해줌. 
+
+4. BeanPropertyRowMapper
+
+select 한 결과를 자바 객체에 자동으로 넣어줌.
+
+~~~java
+BeanPropertyRowMapper.newInstance(객체명.class)
+~~~
+
+5. SimpleJdbcInsert
+
+INSERT SQL 대신 작성해줌.

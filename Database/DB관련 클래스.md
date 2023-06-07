@@ -169,6 +169,8 @@ transactiontemplate은 주입받은 PlatformTransactionManager를 가지고 만�
 @Transactional을 쓰더라도 내부에서 
 DataSource, PlatformTransactionalManager 모두 빈 등록이 필요하다.
 
+@Transactional을 테스트코드에서 쓰면, 각 테스트가 완료 후, 자동으로 트랜잭션을 롤백시켜버린다.
+
 ## DataAccessException
 
 RuntimeException을 상속한 예외 클래스
