@@ -10,3 +10,20 @@ logging.level.org.springframework.jdbc=debug
 ~~~
 main, test 모두에 추가해줘야 함.
 
+### MyBatis SQL 로그
+~~~properties
+logging.level.hello.itemservice.repository.mybatis=trace
+~~~
+
+### JPA SQL 로그
+~~~properties
+logging.level.org.hibernate.SQL=debug
+logging.level.org.hibernate.type.descriptor.sql.BasicBinder=trace
+~~~
+
+
+### 트랜잭션 로그
+~~~properties
+logging.level.org.springframework.transaction.interceptor=trace
+~~~
+트랜잭션의 시작과 종료를 알 수있는 로그.
