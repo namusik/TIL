@@ -159,3 +159,9 @@ DynamoDB에서 CSV 파일로 추출.
 </br>
     4. Lambda 트리거 설정
        1. 위에 만들어준 SNS 주제 선택 
+
+
+## 참고
+https://medium.com/bgpworks/aws-ses-%EC%9D%B4%EB%A9%94%EC%9D%BC-%EC%9D%B4%EB%B2%A4%ED%8A%B8-%EB%A1%9C%EA%B9%85-bounce-complaint-%ED%99%95%EC%9D%B8-4ec7c2d1d332
+
+https://repost.aws/ko/knowledge-center/lambda-sns-ses-dynamodb
