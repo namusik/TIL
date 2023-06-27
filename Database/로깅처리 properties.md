@@ -26,4 +26,9 @@ logging.level.org.hibernate.type.descriptor.sql.BasicBinder=trace
 ~~~properties
 logging.level.org.springframework.transaction.interceptor=trace
 ~~~
-트랜잭션의 시작과 종료를 알 수있는 로그.
+트랜잭션의 시작과 종료를 알 수있는 로그. 
+
+## 트랜잭션 전파
+트랜잭션 전파 
+s3 presigned Url을 통해 유저들의 이미지를 받는다.
+
