@@ -86,19 +86,36 @@ jenv versions
 
 add 해준 JDK가 보이게 된다. 
 
-5. 버전 변경해주기
-Global 적용. 
+5. Global 버전 변경해주기
+
 mac OS 전체에 적용되는 JAVA_HOME 값을 바꾼다.
 ~~~sh
 jenv global {version 이름}
 ~~~
 
-Local 적용
-현재 실행한 working directory에만 적용된다. .java-version이라는 파일을 만들어서 java-version을 관리한다.
+JAVA_HOME 확인
+global로 version을 바꾼후 확인해보면 바뀌어있다.
+~~~sh
+java -version
+~~~
+
+{}안에 위에 versions 했을 때, 뜨는 이름을 적어주면 된다. 적용이 되면 옆에 set이 붙는다.
+
+6. Local 적용
+특정 프로젝트에만 특정 자바 버전을 적용시키고 싶을 때 사용한다. 
+프로젝트가 있는 경로에서 명령어를 실행한다.
 ~~~sh
 jenv local {version 이름}
+exec $SHELL -l
+cat .java-version
 ~~~
-{}안에 위에 versions 했을 때, 뜨는 이름을 적어주면 된다. 적용이 되면 옆에 set이 붙는다.
+![jenvlocal](../images/Java/jenvlocal.png)
+
+![jenvlocaljv](../images/Java/localjavaversion.png)
+
+위처럼 .java-version이라는 파일이 생기고 확인해보면 지정한 자바 버전으로 돼있다.
+
+
 
 
 ## 출처
