@@ -15,6 +15,16 @@ GET요청을 보낼 때, URL에 쿼리 파라미터를 붙이는 경우.
 
 검색, 필터, 페이징등에 주로 사용한다. 
 
+## PathVariable 경로 변수
+
+형식
+
+    /hello/woosik/30
+
+리소스 경로에 식별자를 붙이는 타입.
+
+최근 HTTP API에서 자주 쓴다. 
+
 ## POST - FORM 데이터 전송
 쿼리 파라미터를 URL이 아닌 메세지 바디에 넣어서 전달한다. 
 
@@ -24,7 +34,9 @@ GET요청을 보낼 때, URL에 쿼리 파라미터를 붙이는 경우.
 
 형식은 GET 쿼리 파라미터와 동일하다. 단지 어디에 있느냐의 차이.
 
-특이점은 content-type이 application/x-www-form-urlencoded
+특이점은 
+
+    content-type:application/x-www-form-urlencoded
 
 회원가입, 주문, HTML Form에 주로 사용.
 
@@ -35,6 +47,8 @@ GET요청을 보낼 때, URL에 쿼리 파라미터를 붙이는 경우.
 HTTP 요청 메시지 바디에 JSON 형식으로 넣어서 보내는 경우다.
 
 주로 HTTP API에서 사용한다. 
+
+POST PUT PATCH method에 주로 사용
 
 형식 
 ~~~json
