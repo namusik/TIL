@@ -25,9 +25,9 @@ implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
 ## 핵심
 ~~~html
-th:href
+th:속성명
 ~~~
-기존 html 속성 앞에 th를 붙여주면 되는데.
+속성명 앞에 th:를 붙여주면 기존 속성을 대체한다. 
 뷰 템플릿을 통해 볼 때는 th가 적용되고, HTML 파일을 열어 볼 때는 th 없다고 인식해서 모두 사용할 수 있다.
 
 ## 기능들
@@ -63,6 +63,7 @@ Unescape, 즉 HTML에서 사용하는 태그들의 효과를 적용시키려면 
 해당 속성을 주면 이 태그 안에서는 타임리프가 해석하지 말라는 옵션을 줄 수 있다. 
 
 
+
 #### URL 링크 표현식
 ~~~html
 th:href="@{/hello/world}"
@@ -84,14 +85,29 @@ th:href="@{/basic/items/{itemId}(itemId=${item.id}, query='test')}"
 단, 경로변수명과 쿼리파라미터명은 서로 달라야 한다. 
 쿼리파라미터끼리는 이름 중복 사용 가능.
 
+#### 리터럴
+사실 타임리프에서 문자 리터럴을 표현하기 위해서는 ''로 감싸야 한다. 
+
+하지만, 공백이 없을 경우 생략이 가능하다. 
+
+~~~html
+<li><span th:text="'hello world!'"></span></li>
+//띄어쓰기가 있을 땐, ''로 감싸기
+~~~
+
 #### 리터럴 대체 
 ~~~html
+<span th:text="|hello world!|"></span>
+
 th:onclick="|location.href='@{/basic/items/add}'|"
 
 th:href="@{|/basic/items/${item.id}|}"
 ~~~
 
-**|.....|** 문자와 표현식을 같이 써주기 위해 사용한다.
+**|.....|** 
+공백이 있는 문자의 경우 ''와 같은 역할을 하기도 한다.
+
+그리고 문자와 표현식을 같이 써주기 위해 사용한다.
 
 #### 변수 표현식
 ~~~html
@@ -154,11 +170,18 @@ form 에서 **th:action**을 통해 요청을 보낼 경로를 입력할 수 있
 
 #### 반복문
 ~~~html
-<tr th:each="item : ${items}">
+<tr th:each="item, itemStat : ${items}">
     <td th:text="${item.price}">10000</td>
 </tr>
 ~~~
 th:each. for each 문과 유사한 방법이다. 
 item 변수를 th:each 안에서 ${item}으로 조회할 수 있다. 
 
+두번째 파라미터는 인덱스, 사이즈 등을 알 수 있는 파라미터이다. (파라미터명 자유롭게 지정 가능)
 
+#### 조건문 
+~~~html
+<span th:text="'진실'" th:if="10 < 20"></span>
+~~~
+
+타임리프의 조건문은 false일 때, 아예 태그를 없는 것 취급한다. 
