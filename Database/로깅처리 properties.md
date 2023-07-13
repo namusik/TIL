@@ -18,14 +18,15 @@ logging.level.hello.itemservice.repository.mybatis=trace
 ### JPA SQL 로그
 ~~~properties
 logging.level.org.hibernate.SQL=debug
-logging.level.org.hibernate.type.descriptor.sql.BasicBinder=trace
+logging.level.org.hibernate.type.descriptor.sql.BasicBinder=trace (스프링부트 3 이전)
+logging.level.org.hibernate.orm.jdbc.bind=TRACE (스프링부트 3 부터는 얘 쓰기)
 ~~~
 JPA SQL 로그와 파라미터 바인딩 뜨도록 로깅처리.
 
 ~~~properties
 logging.level.org.hibernate.resource.transaction=debug
 ~~~
-
+JPA 트랜잭션 정보를 로깅한다. 
 
 ### 트랜잭션 관련 로그
 ~~~properties

@@ -15,3 +15,7 @@ DBeaver나 HeidiSQL은 DBMS들을 편리하게 관리할 수 있는 프로그램
 
 ## aurora mysql과 mysql은 뭔 차이일까 
 Aws RDS 에서 DB를 생성하려고 보면 Aurora(mysql 호환)와 mysql이 있다. 
+
+저장방식에 차이가 있다.
+
+aurora는 대신 mysql 최신버전이 아니다. 
