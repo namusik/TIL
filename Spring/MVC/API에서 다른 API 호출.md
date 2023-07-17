@@ -29,7 +29,7 @@ public String addItemV6(@ModelAttribute  Item item, RedirectAttributes redirectA
     return "redirect:/basic/items/{itemId}";
 }
 ~~~
-redirect에 전달하고싶은 변수가 있다면 
+redirect에 전달하고싶은 변수가 있다면, RedirectAttributes를 파라미터로 받아준다.
 redirectAttributes.addAttribute를 사용해주고 변수명을 {...}안에 적어주면 된다. 
 
 그리고, 경로 변수로 적어주지 않는 attribute는 쿼리 파라미터의 형태로 같이 날라간다. ?status=true
