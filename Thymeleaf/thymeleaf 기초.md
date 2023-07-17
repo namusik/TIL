@@ -7,10 +7,12 @@
 서버를 통해 뷰 템플릿을 거치면 동적으로 변경된 값을 확인할 수 도 있다. 
 
 이런 특징을 가진 템플릿을 natural templates라고 한다. 
-
+  
 ## 공식문서
+기본 메뉴얼
 https://www.thymeleaf.org/doc/tutorials/3.1/usingthymeleaf.html
 
+스프링 통합 메뉴얼 
 https://www.thymeleaf.org/doc/tutorials/3.1/thymeleafspring.html
 
 ## gradle 추가
@@ -157,7 +159,28 @@ value="1" th:value="${item.id}" readonly>
 ~~~
 **th:value**는 태그 안에 있는 value 속성을 변경해준다. 
 
-#### FORM th:action
+#### FORM
+
+##### th:object
+~~~java
+model.addAttribute("item", new Item());
+~~~
+~~~html
+<form action="item.html" th:action method="post" th:object="${item}">
+~~~
+model에 담은 객체를 form에서 사용할 객체를 th:object로 받을 수 있다. 
+
+##### th:field
+~~~html
+<input type="text" th:field="*{itemName}">
+~~~
+th:field=*{필드명}를 사용하면 th:object로 받은 객체에 접근해서 필드명을 가져온다. 
+굳이 ${item.itemName} 할 필요없어짐.
+
+이때, id와 name value 속성을 자동으로 만들어줘서 생략이 가능하다.
+
+
+##### th:action
 ~~~html
 <form action="item.html" th:action th:object="${item}"  method="post">
 </form>

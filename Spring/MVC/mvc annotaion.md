@@ -79,6 +79,20 @@ HTTP 파라미터를 객체 형태로 받을 때.
 
 물론 수정을 해서 넘겨준다면 따로 담아줘야 한다. 
 
+## ModelAttribute 2
+~~~java
+@ModelAttribute("itemList")
+public Map<String, String> items() {
+    Map<String, String> itemList = new LinkedHashMap<>();
+    itemList.add("aa", "aa");
+
+    return itemList;
+}
+~~~
+@ModelAttribute 아예 별도의 메소드에 붙일 수 도 있다. 이렇게 되면 해당 Controller의 모든 메서드에 return값이 model.addAttribute로 자동으로 들어간다. 
+
+이 방법은 주로 여러 메소드에서 중복적으로 특정 값을 addAttribute해줄 때 사용한다.
+
 ## 여기서 부터는 HTTP 메시지 바디에 담긴 데이터를 읽는 방법이다. 
 
 ## InputStream
