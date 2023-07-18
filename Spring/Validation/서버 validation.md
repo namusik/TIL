@@ -18,7 +18,34 @@
 
 서버에서 검증을 하고 오류가 발생 시, View로 다시 보내야 할 때 
 
-1. 어떤 값을 입력했는지 
+1. 기존에 입력했던 값들 
 2. 어떤 오류가 발생했는지
 
-2가지 정보가 있어야 한다. 
+2가지 정보를 다시 전달해줘야 한다.
+
+## BindingResult
+
+### 사용법
+~~~java
+@PostMapping
+public String addItemV1(@ModelAttribute Item item, BindingResult bindingResult,Model model)
+~~~
+파라미터로 BindingResult를 받는다.
+
+~~~java
+bindingResult.addError(new FieldError("item", "itemName", item.getItemName(), false, null, null, "상품이름은 필수입니다."));
+~~~
+
+### FieldError
+Field에 오류가 있을 때, FieldError를 생성해 bindingResult에 addError로 담아준다.
+
+~~~java
+new FiedError("@ModelAttribute이름", "오류 발생 field명", "잘못입력한 값", "binding오류 boolean", null, null, "에러 메세지")
+~~~
+
+### ObjectError
+특정 Field오류가 아니라 복합 오류일 때 사용.
+
+~~~java
+new ObjectError("@ModelAttribute 이름", null, null, "오류 메세지");
+~~~

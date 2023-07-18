@@ -208,3 +208,18 @@ item 변수를 th:each 안에서 ${item}으로 조회할 수 있다.
 ~~~
 
 타임리프의 조건문은 false일 때, 아예 태그를 없는 것 취급한다. 
+
+#### Safe Navigation Operator
+~~~html
+<div th:if="${items?.containsKey('item')}">
+    ...
+</div>
+~~~
+NullPointerException이 발생하면 대신 null을 반환.
+
+items라는 Map에서 item이라는 Key가 있는지 없는데 확인하는 상황.
+만약 items 자체가 model에 담겨오지 않으면 NullPointerException이 발생한다. 이때, ?. 사용함으로써 예외가 터지지 않고 null이 반환됨. 
+
+th:if와 null이 결합되면 없는 html로 취급된다.
+
+[공식문서](https://docs.spring.io/spring-framework/reference/core/expressions/language-ref/operator-safe-navigation.html)
