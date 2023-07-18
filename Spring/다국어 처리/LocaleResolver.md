@@ -177,15 +177,51 @@ CookieLocaleResolver setLocale 과정이다.
 그리고 HttpServletRequest Attribute에 locale값을 넣어준다.
 
 
-
-
-
 ## SessionLocaleResolver
 [공식문서](https://docs.spring.io/spring-framework/reference/web/webmvc/mvc-servlet/localeresolver.html#mvc-localeresolver-session)
 
 locale setting을 서블릿 컨테이너의 HttpSession에 저장.
 
 당연히 세션이 종료되면 Locale 세팅도 사라진다.
+
+#### resolveLocale
+~~~java
+Locale locale = (Locale) WebUtils.getSessionAttribute(request, localeAttributeName);
+if (locale == null) {
+    locale = determineDefaultLocale(request);
+}
+~~~
+SessionLocaleResolver는 세션에서 "SessionLocaleResolver.class.getName() + ".LOCALE" 이름을 가진 attribute에서 locale 정보를 가져온다. 
+
+없으면 defaultLocale을 가져온다.
+
+#### setLocaleContext
+~~~java
+locale = localeContext.getLocale();
+WebUtils.setSessionAttribute(request, this.localeAttributeName, locale);
+~~~
+localeContext에서 Locale정보를 가져옵니다.
+가져온 Locale을 Session의 attribute로 저장해줍니다.
+
+## FixedLocaleResolver
+Request와 상관없이 고정된 Locale 반환.
+
+#### resolveLocale()
+~~~java
+public Locale getLocale() {
+    return getDefaultLocale();
+}
+~~~
+그대로 DefaultLocale을 반환한다. 
+
+#### setLocale()
+FixedLocaleResolver는 setLocale을 지원하지 않는다. 
+
+~~~java
+throw new UnsupportedOperationException("Cannot change fixed locale - use a different locale resolution strategy");
+~~~
+호출시, 해당 예외를 던진다.
+
 
 ##  참고
 https://terry9611.tistory.com/304

@@ -43,8 +43,6 @@ https://docs.spring.io/spring-framework/reference/core/beans/context-introductio
 
 MessageSourceAutoConfiguration의 생성자를 확인해보면 알 수 있다.
 
-SpringMessageResolver의 resolveMessage에서 AbstractMessageSource의 getMessage()를 호출하는 것 같다.
-
 ## 사용법
 
 ~~~properties
@@ -61,4 +59,12 @@ messageSource.getMessage("메세지 변수명", args, locale)
 메세지 파일에서 값을 불러오는 메서드이다. 
 이때, locale 정보가 없으면 Locale.getDefault()를 가져온다. 
 
+## SpringMessageResolver
 
+~~~java
+resolveMessage(
+    return this.messageSource.getMessage(key, messageParameters, context.getLocale());
+)
+~~~
+
+타임리프가 렌더링 될때, SpringMessageResolver가 동작하고, 그 안에서 메세지를 가져온다.
