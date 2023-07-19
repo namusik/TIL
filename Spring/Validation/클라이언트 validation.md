@@ -1,6 +1,6 @@
 # 클라이언트 validation
 
-## Thymeleaf와 BindigResult 
+## Thymeleaf와 BindingResult 
 
 ### #fields
 
