@@ -1,4 +1,4 @@
-# 코틀린에서의 jpa entity
+# 코틀린에서의 JPA ENTITY 고민
 
 코틀린으로 JPA를 사용할때, Entity 정의를 어떻게 내릴 것인가.
 JPA규격을 위반하지 않으면서, Kotlin의 방식을 따를려면?
@@ -33,12 +33,13 @@ Java에서 Field에 private 안붙인거와 같은 상황.
 Kotlin에서 클래스가 가지는 상태는 field가 아니라 property이다.
 property는 Field를 외부에 직접 노출하지 않고 Setter와 Getter로 노출 시키는 것.
 
-## 2. Entity에 data class를 쓰지 말자
+## 2. Entity에 Data class를 쓰지 말자
 #### Data Class를 쓰는 이유는 편해서
 * equals(), hashcode(), toString()을 자동으로 등록해준다.
 * Data Class는 데이터를 전달하기 위한 용도이기 때문에 불변변수로 해주는 것이 좋다. 
 * Value Object의 개념이라 할 수 있다.
 * 반면 Entity는 식별자를 제외하고는 상태가 변할 수 있다. 
+* 즉, Entity와 Data class는 성격이 다르다.
 
 
 #### JPA에서 요구하는 Entity 조건
@@ -77,14 +78,135 @@ property는 Field를 외부에 직접 노출하지 않고 Setter와 Getter로 �
     * Book에서 toString을 호출하면, page의 toString을 호출하고, 그러면 또 Book의 toString을 호출해서 StackOverflowException이 발생하게 된다.
     * 따라서, 위의 함수들을 override해서 사용해줘야 한다.
 
-##3. Kotlin Entity를 JPA에 맞게 구성하기
+##3. lateinit 사용 주의
+보통 코드를 사용하는 시점까지 초기화를 미루기 위해 lateinit을 사용한다. 
+JPA Entity에서는 주로 연관계를 정의 할 때 lateinit이 사용된다. 
+
+~~~kotlin
+@Entity
+class Board(
+  title: String,
+  writerId: UUID,
+) {
+  @Id
+  var id: UUID = UUID.randomUUID()
+
+  @Column
+  var title: String = title
+
+  @Column
+  var writerId: UUID = writer.id
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "writerId")
+  lateinit var writer: User
+}
+~~~
+연관관계인 User에 lateinit을 사용하였다. 
+
+문제는, Entity를 생성한 직후, 영속화가 되기전에 조회를 하면 런타임 오류가 발생한다. 이유는, 아직 JPA가 writer를 초기화 해주지 않았기 때문이다. 
+
+~~~kotlin
+val user = User("홍길동")
+val board = Board2("게시판", user.id)
+val writer = board.writer // error: lateinit property writer has not been initialized
+~~~
+
+이를 해결할 수 있는 방법이, **nullable** 타입으로 정의하는 것이다.
+
+~~~kotlin
+@Entity
+class Board(
+  title: String,
+  writerId: UUID,
+) {
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "writerId")
+  var writer: User? = null
+}
+~~~
+
+이러면 애초에 기본값이 null로 들어가기 때문에, 예상치못한 null을 만나도 초기화 오류는 피할 수 있다.
+
+하지만, 이또한 근본적인 해결책은 아니다. Entity에 null이 들어가는 것이 정상적인 것은 아니기 때문이다. 그래서 연관관계에 식별자를 넣는 것이 아니라 해당 Entity 자체를 넣어주는 방법이 있다. 
+
+~~~kotlin
+@Entity
+class Board(
+  title: String,
+  writer: User,
+) {
+  @Id
+  var id: UUID = UUID.randomUUID()
+
+  @Column
+  var title: String = title
+
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  var writer: User = writer
+}
+~~~
+이러면, 생성자 호출시 연관관계 객체를 넣어서 초기화하기 때문에 값이 없을 걱정이 없다.
+
+##4. Property 접근 제어
+Entity의 식별자를 제외한 Properties들은 mutable이기 때문에 var로 선언하는 것이 맞아보인다. 
+
+하지만 아무데서나 setter를 사용하는 것은 옳지 않다. 
+
+이 때, protected set을 써준다. 
+
+~~~kotlin
+@Entity
+class User(
+    name: String,
+){
+    @Column
+    var name: String = name
+        protected set
+}
+~~~
+protected를 설정해주면, 자신과 상속받은 Class에서만 set이 가능해진다.
+
+참고로, Entity 클래스에 allOpen을 통해 open 키워드를 붙여준 이상, private set은 불가능하다.
+
+### val인 경우
+Property 중에 생성 후 변경이 필요없는 경우도 있다. 
+이때는, val을 써주면 된다. 
+
+##5. nullable 
+Java의 Field는 nullable이다.
+Java의 Entity에서 @Column을 생략하면 자동으로 DB에 not null이 붙는다. 
+@Column을 쓸 때는 기본값이 true이므로 nullabe=false를 붙이는게 좋다.
+
+Kotlin의 Property는 non-nullable이다.
+
+
+##6. Kotlin Entity를 JPA맞게 만드는 TIP
 1. 플러그인 추가하기
     *  allOpen, noArg
     *  스프링으로 프로젝트를 만들면 기본적으로 의존성 추가는 됨
-2. PrimaryKeyEntity
-   1. equal, hashcode를 공통으로 사용할 수 있는 추상클래스를 만들자.
-   2. 
-3. 
+2. 공통 abstract class 만들기
+   1. Primary Key 정의
+   2. Persistable을 구현해보자
+      1. @ID에 @GeneratedValue를 사용하지 않을 때.
+      2. 
+   3. equal, hashcode를 공통으로 사용하기 위해.
+      1. Entity는 식별자만 비교하면 된다.
+      2. hibernateProxy에 주의하자.
+
+
+## 결론 
+~~~kotlin
+~~~
+1. data class 쓰지 말자
+2. allopen, no-arg plugin 적용하자
+   1. 기본적으로 플러그인이 자동 적용된다.
+   2. allOpen은 @Entity에 적용 되지않아 따로 추가해줘야 한다.
+3. property를 var로 쓰지말자. 무분별하게 외부에서 수정을 노출시키는 것을 막기위해.
+4. 식별자는 불변이기 때문에, val로 선언하자
+
+
 ## 출처
 https://spoqa.github.io/2022/08/16/kotlin-jpa-entity.html
 

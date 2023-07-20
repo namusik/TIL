@@ -25,7 +25,9 @@ data class Order(
   val state: OrderState = OrderState.SUBMITTED
 }
 ~~~
-만약, Data Class를 사용하고, 생성될 때 기본값을 가지고 생성하게 하고싶다면, 해당 property는 primary constructor에서 빠져야 한다. 이러면, data class의 함수들을 원하는 대로 활용이 어려워 진다.
+만약, 생성될 때 기본값을 가지고 생성하게 하고싶다면, 해당 property는 primary constructor에서 빠져야 한다. 왜냐하면, 기본값이 있을 때 
+
+이러면, data class의 함수들을 원하는 대로 활용이 어려워 진다.
 
 ## 출처
 https://kotlinlang.org/docs/data-classes.html

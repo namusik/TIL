@@ -40,7 +40,3 @@ throw를 통해 예외를 던질 수 도 있다.
 이러면 param이 null 일때, 
 param?.lenth가 null을 반환하고,
 ?: 0 을 통해 최종적으로 0을 반환한다.
-
-## is 
-
-## as 
