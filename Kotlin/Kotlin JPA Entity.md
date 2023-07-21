@@ -213,3 +213,5 @@ https://spoqa.github.io/2022/08/16/kotlin-jpa-entity.html
 https://velog.io/@heyday_7/JPA-Entity-%EC%8B%AC%EC%B8%B5%ED%83%90%EA%B5%AC-2-Kotlin%EC%9C%BC%EB%A1%9C-Entity%EB%A5%BC-%EC%9E%91%EC%84%B1%ED%95%98%EB%8A%94-%EC%95%8C%EB%A7%9E%EC%9D%80-%EB%B0%A9%EB%B2%95
 
 https://wslog.dev/kotlin-jpa
+
+https://jpa-buddy.com/blog/best-practices-and-common-pitfalls/
