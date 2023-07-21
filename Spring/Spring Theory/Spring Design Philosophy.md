@@ -14,3 +14,6 @@ Guiding principles of the Spring Framework
 
 * 여기서 `persistence providers`는 영속성 제공자? 라고 할 수 있겠다. 
   JPA, ORM, RDB, NoSQL, 인메모리 데이터베이스, 파일시스템 등등 시간 경과에 따른 데이터를 저장하고 관리하도록 도와주는 기술을 의미한다.
+
+-------
+
