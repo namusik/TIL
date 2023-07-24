@@ -179,6 +179,8 @@ th:field=*{필드명}를 사용하면 th:object로 받은 객체에 접근해서
 
 이때, id와 name value 속성을 자동으로 만들어줘서 생략이 가능하다.
 
+참고로, 오류가 발생하면 *{}의 value를 BindingResult의 rejectedValue값을 가져온다.
+
 
 ##### th:action
 ~~~html
