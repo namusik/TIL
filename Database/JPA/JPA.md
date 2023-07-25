@@ -38,7 +38,7 @@ JPA가 사용하는 객체라고 지정
 JPA를 편리하게
 JPARepository 인터페이스 제공. 기본적인 CRUD 가능.
 
-![springdata](../Java/springdatajpa.png)
+![springdata](../../Java/springdatajpa.png)
 
 JPARepository를 상속받은 인터페이스를 프록시로 구현체를 만듦. 
 
@@ -49,5 +49,5 @@ https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repositories
 ### @Query
 JPARepository를 상속받은 상태에서 JPQL을 사용하려면 @Query와 함께 사용.
 
-### @Repository
+### @Repository 필요하나?
 Spring data JPA는 @Repository 없어도 예외 변화해준다. 

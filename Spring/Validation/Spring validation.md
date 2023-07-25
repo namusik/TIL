@@ -12,7 +12,9 @@
 
 2. 서버에서 데이터를 받아 검증해서 잘못된 경우, View로 다시 되돌려 보내기.
 
-이 둘을 섞어서 사용해야 하며, 서버에서의 검증을 필수적으로 확인해야 한다.
+Client에서 검증을 한다고 해도, HTTP 요청이 악의적으로 변경 후 넘어올 수 있다. 
+
+**따라서, 최종적으로 서버에서의 검증을 필수적으로 확인해야 한다.**
 
 ## 검증 시 챙겨야할 정보 
 
@@ -183,6 +185,8 @@ public void init(WebDataBinder dataBinder) {
 오류 검증을 할 객체인 @ModelAttribute 앞에 @Validated를 붙인다. 
 
 이러면, validator를 직접 호출하는 코드가 사라지고 요청이 오면 @InitBinder에 등록한 validator의 supports()와 validate()를 스프링이 알아서 실행한다.
+
+
 
 
 

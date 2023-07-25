@@ -55,7 +55,8 @@ public String mappingPath(@PathVariable String userId)
 
 ## @ModelAttribute
 
-HTTP 파라미터를 객체 형태로 받을 때.
+HTTP 쿼리 파라미터를 객체 형태로 받을 때.
+쿼리 파라미터형식이 url에 있든, 메세지 바디에 있든 받을 수 있다.
 
 ~~~java
 @ModelAttribute Data data
@@ -79,7 +80,7 @@ HTTP 파라미터를 객체 형태로 받을 때.
 
 물론 수정을 해서 넘겨준다면 따로 담아줘야 한다. 
 
-## ModelAttribute 2
+## @ModelAttribute 2
 ~~~java
 @ModelAttribute("itemList")
 public Map<String, String> items() {
@@ -93,7 +94,7 @@ public Map<String, String> items() {
 
 이 방법은 주로 여러 메소드에서 중복적으로 특정 값을 addAttribute해줄 때 사용한다.
 
-## 여기서 부터는 HTTP 메시지 바디에 담긴 데이터를 읽는 방법이다. 
+## 여기서 부터는 HTTP 메시지 바디에 담긴 데이터 자체를 읽는 방법이다. (쿼리 파라미터 형식이 아닌 경우)
 
 ## InputStream
 
