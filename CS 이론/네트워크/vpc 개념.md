@@ -6,7 +6,7 @@ Virtual Private Network
 
 가상사설망
 
-![vpn](../images/Cs/vpn.png)
+![vpn](../../images/Cs/vpn.png)
 
 실제가 아닌 가상의 사설망. 
 
@@ -17,13 +17,13 @@ Virtual Private Network
 
 Virtual Private Cloud
 
-![nonvpc](../images/Cs/nonvpc.png)
+![nonvpc](../../images/Cs/nonvpc.png)
 
-    vpc가 없다면 EC2를 추가해줄 떄 마다 모든 연결을 다 직접 해줘야 함.
+* vpc가 없다면 EC2를 추가해줄 떄 마다 모든 연결을 다 직접 해줘야 함.
 
-![vpc](../images/Cs/vpc.png)    
+![vpc](../../images/Cs/vpc.png) 
 
-    각각의 VPC는 완전히 독립된 네트워크처럼 동작.
+* 각각의 VPC는 완전히 독립된 네트워크처럼 동작.
 
 </br>
 </br>    
@@ -39,7 +39,7 @@ VPC를 사설 아이피 대역에 맞춰야 함.
 
 ## 서브넷 
 
-![subnet](../images/Cs/subnet.png)
+![subnet](../../images/Cs/subnet.png)
 
     VPC를 구분해놓는 단위. 
 
@@ -50,7 +50,7 @@ VPC를 사설 아이피 대역에 맞춰야 함.
 
 ## 라우팅 테이블/라우터 
 
-![routher](../images/Cs/router.png)
+![routher](../../images/Cs/router.png)
 
     네트워크 요청이 발생하면 먼저 라우터로 향하게 됨. 
 

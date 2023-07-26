@@ -12,4 +12,6 @@
 
     아키텍쳐 영역은 고민이 필요함. 
 
+
+https://ducktyping.tistory.com/6?category=1180172
     
