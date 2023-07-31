@@ -3,7 +3,7 @@
 https://mybatis.org/mybatis-3/ko/index.html
 
 ## 설정법
-~~~gradle
+~~~groovy
 implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.0'
 ~~~
 

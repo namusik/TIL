@@ -4,7 +4,7 @@
 JDBC를 편리하게 사용할 수 있도록 도와주는 라이브러리 
 
 ## 사용법
-~~~gradle
+~~~groovy
 implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 ~~~
 안에 같이 들어있음. 

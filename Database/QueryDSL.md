@@ -1,7 +1,7 @@
 # QueryDSL
 
 ## 의존성추가
-~~~gradle
+~~~groovy
 implementation 'com.querydsl:querydsl-jpa'
 annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jpa"
 annotationProcessor "jakarta.annotation:jakarta.annotation-api"
@@ -9,7 +9,7 @@ annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 ~~~
 
 스프링부트 3.0버전에선
-~~~gradle
+~~~groovy
 // Querydsl 추가
 implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
 annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
@@ -18,7 +18,7 @@ annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 ~~~
 
 clean 코드 추가
-~~~gradle
+~~~groovy
 delete file('src/main/generated')
 ~~~
 
