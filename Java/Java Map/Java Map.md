@@ -1,15 +1,16 @@
 # Map
 
-## Map
+## 구조
+![map](../../images/Java/map.png)
 
-### HashMap
+## HashMap
 synchronized 키워드가 존재하지 않음.
 
 성능이 제일 좋지만, multi-thread에서 사용 불가.
 
-### TreeMap
+## TreeMap
 
-### LinkedHashMap
+## LinkedHashMap
 
 ## MultiValueMap
 

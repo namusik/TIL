@@ -186,6 +186,8 @@ List<String> collect = value.stream().map(String::toUpperCase).collect(Collector
 Optional 객체를 Stream 객체로 변환.
 Optional 비어있다면 empty Stream을 만든다.
 
+주로 Optional을 stream으로 바꿔서 동작을 진행하는 방식으로 쓰인다.
+
 ## 주의점
 
 > Optinal을 쓰고 null check를 하지 말자 
