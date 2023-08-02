@@ -33,6 +33,11 @@ parameter -> body
 1. 람다표현식은 외부 block에 있는 변수에 접근할 수 있다.
 2. 외부 변수가 지역변수 일때, final 혹은 effectively final이야만 한다.
 
+#### Capturing Lambda
+람다 표현식 중에서 외부 변수를 사용하는 것들을 `capturing lambda`라고 부른다.
+
+
+
 ## 참고
 http://www.tcpschool.com/java/java_lambda_concept
 

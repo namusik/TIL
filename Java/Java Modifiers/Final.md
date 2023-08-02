@@ -77,6 +77,23 @@ https://www.baeldung.com/java-effectively-final
 
 Java 8에 도입된 개념.
 
+변수에 final이 붙지 않았지만, 선언된 후 참조가 변경되지 않는 경우.
+
+#### 나오게 된 이유
+사실, final이 붙이지 않더라도 객체나 값을 변경하지 않는 이상 사실상 final이 붙은 거나 마찬가지라 할 수 있다.
+
+기존에 익명 클래스에는 non-final 지역변수를 사용할 수 없었다.
+
+물론 여전히 익명 클래스, 내부 클래스, 람다 표현식에는 하나 이상의 값이 할당된 변수를 쓰지 못한다.
+
+하지만, effectively final 개념을 통해 더이상 final 제어자를 쓰지 않아도 되었으며 타자를 줄여주었다.
+
+#### final vs effectively final
+사실 effectively final이 될 수 있는지 가장 쉽게 알아보는 방법은 final을 없애보는 것이다.
+만약, compile 오류가 발생하면 final을 붙여야만 하는 것이다.
+
+붙어있는 final을 떼거나, final을 붙여도 compile 오류가 없다면 이것은 effectively final이라 할 수 있다.
+
 
 ## final의 퍼포먼스 영향
 https://www.baeldung.com/java-final-performance
