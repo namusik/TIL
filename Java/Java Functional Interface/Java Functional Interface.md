@@ -37,7 +37,7 @@ public static void main(String[] args){
 
 
 
-## Java 제공 functional interface
+## 표준 함수형 인터페이스
 ### Supplier
 ~~~java
 @FunctionalInterface 
@@ -82,11 +82,20 @@ public interface Consumer<T> {
   void accept(T t);
 }
 ~~~
-
+반환타입이 void이다. 
+매개변수를 받고 동작만 하고 return은 하지 않는 case이다.
 예시, 
 ~~~java
-ArrayList.forEach(Consumer<? super E> action)
+List<String> names = Arrays.asList("John", "Freddy", "Samuel");
+names.forEach(name -> System.out.println("Hello, " + name));
 ~~~
+List의 원소를 매개변수로 받아 sout를 동작하는 경우이다. return이 없음.
+
+`BiCounsumer`라는 변형 interface도 존재하는데
+~~~java
+HashMap.forEach(BiConsumer<? super K, ? super V> action)
+~~~
+매개변수를 2개 받을 때 사용한다. 주로 Map에서 key와 value를 받는다.
 
 ### Function
 ~~~java
@@ -113,14 +122,60 @@ Function<Integer, String> quoteIntToString = quote.compose(intToString);
 
 `Stream.map()`이 `Function interface`를 사용하는 예이다.
 
+## UnaryOperator
+Operator 계열 interface.
+신기하게 기본 Operator interface는 없다.
+
+~~~java
+@FunctionalInterface
+public interface UnaryOperator<T> extends Function<T, T> {
+    static <T> UnaryOperator<T> identity() {
+        return t -> t;
+    }
+}
+~~~
+Function과 똑같지만, 인자의 타입과 return의 타입이 같아야 한다.
+
+~~~java
+List<String> names = Arrays.asList("bob", "josh", "megan");
+
+names.replaceAll(name -> name.toUpperCase());
+~~~
+List의 원소를 받아 수정을 거친 후 그대로 같은 타입으로 반환하는  경우 쓰인다.
+
+
+### Predicate
+~~~java
+@FunctionalInterface
+public interface Predicate<T> {
+  boolean test(T t);
+}
+~~~
+매개변수를 받아 논리를 진행한 후, boolean을 반환하는 case이다.
+
+~~~java
+List<String> names = Arrays.asList("Angela", "Aaron", "Bob", "Claire", "David");
+
+List<String> namesWithA = names.stream()
+  .filter(name -> name.startsWith("A"))
+  .collect(Collectors.toList());
+~~~
+가장 흔한 예로, stream의 filter()가 있다.
 
 
 
+## Legacy Functional Interfaces
 
-## Runnable, Callabe interface
 Java 8 이전에도, functional interface의 제약을 따르는 interfacer가 있었다. 
 
-동시성 API에 사용되는 runnable, callabe interface가 대표적이다. 
+동시성 API에 사용되는 `Runnable`, `Callable` interface가 대표적이다. 
+
+~~~java
+Thread thread = new Thread(
+    () -> System.out.println("Hello"));
+thread.start();
+~~~
+Thread의 생성자를 보면 Runnable을 매개변수로 받는다.
 
 Java8 이후로, 해당 interface에 @FunctionalInterface 애노테이션이 붙게 되었다.
 

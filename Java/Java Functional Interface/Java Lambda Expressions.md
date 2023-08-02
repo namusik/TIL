@@ -6,6 +6,9 @@
 
 `익명함수(Anonymous functions)`를 지칭하는 말이다.
 
+## 익명함수
+말 그대로 이름이 없는 함수.
+
 ## 특징
 고차함수에 인자로 전달되거나, 고차 함수의 return값으로 쓰인다. 
 
@@ -36,4 +39,6 @@ http://www.tcpschool.com/java/java_lambda_concept
 https://www.baeldung.com/java-lambda-effectively-final-local-variables
 
 https://velog.io/@snack655/Java-Fire%ED%95%9C-Effectively-Final%EC%9D%B4%EB%9E%80
+
+https://futurecreator.github.io/2018/07/19/java-lambda-basics/
 
