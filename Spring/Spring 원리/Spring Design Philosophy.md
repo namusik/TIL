@@ -6,6 +6,14 @@ When you learn about a framework, it’s important to know not only what it does
 
 스프링 프레임워크는 왜 쓸까?에 대한 고민.
 
+----
+
+**스프링의 핵심 컨셉**
+
+자바 기반의 좋은 객체 지향 애플리케이션을 개발할 수 있도록 도와주는 프레임워크
+
+기존의 EJB는 객체 지향을 해치게 되어서 스프링이 등장하게 되었다.
+
 -------
  **design decisions**를 최대한 늦게 하도록 한다. 예를 들어 `Configuration`을 통해 코드의 직접적인 변경 없이 `persistence providers`를 변경할 수 있다.
 
@@ -20,7 +28,9 @@ When you learn about a framework, it’s important to know not only what it does
 packages들 사이에 `circular dependencies`가 없도록 clean code structure를 자랑한다. 
 
 ------
+
 유지 보수를 용이하게 위해, 신중하게 JDK version과 third party libraries을 support한다.
+
 -----
 
 

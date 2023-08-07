@@ -21,7 +21,7 @@ logging.level.hello.itemservice.repository.mybatis=trace
 매핑 XML을 호출해주는 매퍼 인터페이스
 
 작동원리
-![mybatis](../Java/mybatismapper.png)
+![mybatis](../images/DB/mybatismapper.png)
 역시 동적 프록시 기술이 사용됨.
 @Transactional과 비슷.
 

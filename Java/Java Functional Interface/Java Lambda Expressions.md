@@ -59,7 +59,6 @@ parameter -> body
 
 >그리고 값을 복사한다고 해서, 그 값이 지역변수의 최신 값임을 보장할 수 가 없다. 동시성 문제가 발생 할 수 있다.
 
-
 ## 참고
 http://www.tcpschool.com/java/java_lambda_concept
 

@@ -18,6 +18,19 @@ Collection 반복을 처리해주는 기능.
 
 ## Stream Creation
 
+## find
+~~~java
+findAny() : Optional 반환
+~~~
+
+## array to stream
+`Arrays.stream(배열)`
+~~~java
+Arrays.stream(request.getCookies())
+    .filter(cookie -> cookie.getName().equals(cookieName))
+    .findAny()
+    .orElse(null);
+~~~
 
 ## 참고
 

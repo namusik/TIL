@@ -38,7 +38,7 @@ JPA가 사용하는 객체라고 지정
 JPA를 편리하게
 JPARepository 인터페이스 제공. 기본적인 CRUD 가능.
 
-![springdata](../../Java/springdatajpa.png)
+![springdata](../../images/DB/springdatajpa.png)
 
 JPARepository를 상속받은 인터페이스를 프록시로 구현체를 만듦. 
 

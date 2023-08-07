@@ -59,6 +59,7 @@ HandlerAdapter ha = getHandlerAdapter(mappedHandler.getHandler());
 mv = ha.handle(processedRequest, response, mappedHandler.getHandler());
 ~~~
 
+
 #### HandlerAdapter
 핸들러 매핑으로 찾은 핸들러를 실행할 수 있는 핸들러 어댑터
 
@@ -74,6 +75,9 @@ boolean supports(Object handler)
 ModelAndView handle(HttpServletRequest request, HttpServletResponse response, Object handler)
 //http request, response, hanlder를 받아 handle한다. 여기서 ModelAndView를 반환한다.
 ~~~
+
+#### HandlerMethod
+`RequestMappingHandlerAdapter`를 사용하면 불러오는 Handler들이 HandlerMethod 형태로 넘어온다.
 
 #### ArgumentResolver
 

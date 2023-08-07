@@ -1,12 +1,20 @@
 # 인터페이스 분리 원칙
 
-## Interface Segregation Priniple
+ISP : 인터페이스 분리 원칙(Interface Segregation Priniciple)
+
+## 정의
+
+특정 클라이언트를 위한 인터페이스 여러 개가 범용 인터페이스 하나보다 낫다.
+
+## 개념
 
 범용적인 인터페이스 보다는 사용자가 실제로 사용하는 Interface를 만들어야 한다. 
 
 인터페이스를 사용에 맞게 각각 분리해야한다는 뜻
 
-![isp](../../images/Spring/isp.png))
+![isp](../../../images/Spring/isp.png)
+
+인터페이스가 명확해지고, 대체 가능성이 높아진다.
 
 ## SRP vs ISP
 
@@ -15,10 +23,7 @@ ISP : 인터페이스의 단일 책임
 
 하지만, SRP을 만족하더라고 ISP가 만족되지 않을 수 있다.
 
-![srp](../../images/Spring/srp.png)
+![srp](../../../images/Spring/srp.png)
 
 ## 출처 
-
-https://inpa.tistory.com/entry/OOP-%F0%9F%92%A0-%EC%95%84%EC%A3%BC-%EC%89%BD%EA%B2%8C-%EC%9D%B4%ED%95%B4%ED%95%98%EB%8A%94-ISP-%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4-%EB%B6%84%EB%A6%AC-%EC%9B%90%EC%B9%99
-
 https://blog.itcode.dev/posts/2021/08/16/interface-segregation-principle
