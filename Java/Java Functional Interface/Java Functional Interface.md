@@ -122,7 +122,7 @@ Function<Integer, String> quoteIntToString = quote.compose(intToString);
 
 `Stream.map()`이 `Function interface`를 사용하는 예이다.
 
-## UnaryOperator
+### UnaryOperator
 Operator 계열 interface.
 신기하게 기본 Operator interface는 없다.
 
