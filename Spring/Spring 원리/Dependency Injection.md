@@ -1,7 +1,10 @@
 # DI(Dependency Injection)
+의존관계 주입
 
 ## 정의
-의존관계 주입
+IoC를 구현하는 패턴 중 하나이다.
+
+객체의 의존관계를 역전된 제어가 설정한다.
 
 ## 의의
 자바의 다형성, OCP, DIP를 가능하도록 지원해준다.
@@ -15,7 +18,10 @@ DI를 활용하면, 클라이언트의 코드 변경없이 확장이 가능하�
 
 의존관계를 마치 외부에서 주입해주는 것 같다 해서, DI 의존관계 주입이라 부른다.
 
-### 생성자 주입
+### Constructor-Based DI
+[baeldung](https://www.baeldung.com/constructor-injection-in-spring)
+
+인스턴스화 시점에 클래스에 필요한 components들을 전달한다.
 
 ~~~java
 public class MemberServiceImpl implements MemberService{
@@ -32,7 +38,9 @@ public class MemoryMemberRepository implements MemberRepository{}
 ~~~
 
 ~~~java
+@Configuration
 public class AppConfig {
+    @Bean
     public MemberService memberService() {
         return new MemberServiceImpl(new MemoryMemberRepository());
     }
@@ -69,4 +77,7 @@ OCP
 DIP
 >클라이언트가 Interface에만 의존하도록 변경됨.
 
-ㅇ
+## 참고
+[baeldung](https://www.baeldung.com/tag/spring-di)
+
+https://www.baeldung.com/inversion-control-and-dependency-injection-in-spring#what-is-dependency-injection
