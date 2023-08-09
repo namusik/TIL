@@ -144,12 +144,100 @@ Map<String, MemberRepository> beansOfType =
 #### @AutoWired
 기존에는 @Configuration에서 의존관계 설정을 다 해줬는데, @ComponentScan과 @Component를 쓰면 어디서 의존관계를 설정(어떤 구현체를 주입?)해주게 되는지 모른다.
 
-이때 사용하는 것이 @AutoWired
+이때 사용하는 것이 `@AutoWired`
 
 스프링 컨테이너가 타입에 맞는 스프링 빈을 찾아와서 의존관계 주입을 자동으로 해준다.
 
-같은 타입이 여러개면 오류가 나는데?!
+@Autowired는 스프링 빈에 등록된 객체에서 사용이 가능하다.
 
+------
+
+`@Autowired`에는 옵션을 줄 수 가 있다.
+
+~~~java
+//자동 주입할 인수가 스프링 빈이 아니면,
+
+//호출자체가 안됨
+@Autowired(required = false)
+public void test(Member member) {}
+
+//null이 들어감
+@Autowired
+public void test(@Nullable Member member) {}
+
+//Optional.empty()가 들어감
+@Autowired(required = false)
+public void test(Optional<Member> member) {}
+~~~
+
+----
+
+`@Autowired` 타입으로 조회하기 때문에, 같은 타입이 여러개면 오류가 발생한다.
+
+~~~java
+@Autowired
+private People asian
+
+or
+
+@Autowired
+public Test(People asian){
+    this.people = asian
+}
+~~~
+중복되는 타입의 스프링 빈이 있을 땐, 필드 주입의 필드명 혹은 생성자 주입의 파라미터명을 기준으로 가져온다. Asian 구현 클래스 스프링 빈을 자동주입하게 됨. 
+
+~~~java
+@Component
+@Qualifier("asian")
+public class Asian implements People {}
+
+@Autowired
+public Test(@Qualifier("asian") People people){
+    this.people = asian
+}
+~~~
+@Qualifier를 일종의 별칭?으로 사용해준다.
+
+---
+
+~~~java
+@Component
+@Primary
+public class Asian implements People {}
+~~~
+우선순위 구현 클래스에 `@Primary` 사용.
+
+둘다 적용되면 `@Qualifier`가 더 우선순위는 높다.
+
+다만, 이렇게 되면 클라이언트에 코드 수정이 생기므로 OCP 위반이 생기게 된다. 일종의 트레이드 오프
+
+---
+
+~~~java
+@Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER, ElementType.TYPE, ElementType.ANNOTATION_TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+@Inherited
+@Documented
+@Qualifier("asian")
+public @interface Asian {
+}
+
+@Component
+@Asian
+public class Asian implements People{
+}
+
+@Autowired
+public Test(@Asian People people){
+    this.people = asian
+}
+~~~
+`@Qualifier`를 사용하면, 이름을 String으로 적어주기 때문에, 실수에 취약하다. 컴파일 오류가 나질 않기 때문에.
+
+`@Qulifier`를 포함하는 애노테이션을 만들어서 대신 붙여준다.
+
+커스텀 애노테이션을 무분별하게 쓰는 것은 권장하지 않는다. 코드를 파악해야되는 노력이 추가로 들기 때문에.
 
 #### @SpringBootApplication
 @Configuration, @EnableAutoConfiguration,@ComponentScan이 합쳐진 애노테이션
