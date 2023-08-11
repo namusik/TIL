@@ -68,14 +68,41 @@ public MyClass myClass() {}
 빈의 생성과 의존관계 주입, 초기화까지만 책임짐.
 그 뒤로는 컨테이너는 관리하지 않음. `@PreDestory `호출 안된다.
 
+#### 싱글톤과 프로토타입 혼재의 문제점.
+싱글톤 빈이 프로토타입 빈을 필드로 가지고 있게 된 경우.
 
+프로토타입 빈은 생성시점에만 새로운 인스턴스이고, 한번 싱글톤 빈의 필드로 들어가면 값은 참조 값이 유지된다. 
 
+공유되는 필드값과 같은 상황.
 
+#### ObjectProvider
+~~~java
+@Autowired
+private ObjectProvider<PrototypeBean> prototypeBeanProvider;
 
-#### 웹 관련 스코프
+PrototypeBean prototypeBean = prototypeBeanProvider.getObject();
+~~~
+`ObjectProvider.getObject()`를 사용해서 스프링 컨테이너에서 해당 빈을 찾아 반환한다.
+
+꼭, 프로토타입 빈에 쓰이기만 하는 것은 아니고 대신 조회해주는 역할이라 보면 된다.
+
+#### JSR-330 Provider
+~~~java
+implementation 'javax.inject:javax.inject:1'
+
+//springboot3
+implementation 'jakarta.inject:jakarta.inject-api:2.0.1'
+~~~
+
+#### 웹 스코프
+웹 환경에서 동작.
 * request
-  * 웹 요청이 오고 나갈때까지 유지
+  * HTTP 요청이 오고 나갈때까지 유지. 각 HTTP 요청마다 빈 인스턴스 생성
 * session
-  * 웹 세션이 생성되고 종료될 때가지
+  * HTTP 세션과 동일한 생명주기
 * application
-  * 서블릿 컨텍스와 같이 유지
+  * ServletContext와 동일한 생명주기
+* websocket
+  * 웹소켓과 동일한 생명주기
+
+#### Request Scope

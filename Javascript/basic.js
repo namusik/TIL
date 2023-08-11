@@ -9,6 +9,7 @@ let myName = "mike";
 let age = 30;
 
 // Cannot redeclare block-scoped variable 'myName'
-let myName = "john"
+// let myName = "john"
+myName = "john";
 
 alert(myName);
