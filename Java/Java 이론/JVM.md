@@ -24,3 +24,24 @@ JVM은 각 운영체제에 맞는 버전이 존재한다.
 
 ## JVM Architecture
 ![jvm](../../Images/Java/jvm.png)
+
+## Runtime Data Area
+
+### 모든 thread가 공유해서 사용하는 메모리(Garbage Collector 대상)
+
+#### Method Area
+`.class`, 클래스 파일을 읽어서 클래스 데이터를 저장하는 메모리.
+이때, `클래스 변수`(static이 붙은 클래스 영역 내의 변수)도 이 곳에 저장된다.
+
+#### Heap Area
+new 키워드로 생성되는 인스턴스가 생성되는 공간.
+프로그램 실행 중 생성되는 인스턴스는 모두 이곳에 생성된다.
+`인스턴스 변수`(static이 붙지 않은 클래스 영역 내의 변수)도 이 곳에 있다.
+
+### Thread 마다 하나씩 생성되는 메모리
+
+#### Stack
+
+#### PC Register
+
+#### Native Method Stack
