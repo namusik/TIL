@@ -11,6 +11,8 @@ Java8에 도입되었다.
 NullPointerException을 방지하기 위해.
 Null 체크 로직 때문에 떨어진 코드 가독성과 유지 보수성.
 
+자바에서는 NULL을 주고받으면 좋지 않다.
+
 ## Tip
 1. Optional을 최대 1개의 원소를 가지고 있는 특별한 Stream이라고 생각하자. Stream과 사용방법이나 사상이 유사하다.
 

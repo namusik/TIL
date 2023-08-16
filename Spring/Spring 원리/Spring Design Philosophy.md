@@ -33,4 +33,11 @@ packages들 사이에 `circular dependencies`가 없도록 clean code structure�
 
 -----
 
+**light-weight framework** 지향
+
+스프링이 없어도 돌아가는 코드로 만들게 되자.
+
+
+
+
 

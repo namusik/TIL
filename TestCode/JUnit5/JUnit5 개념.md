@@ -1,5 +1,8 @@
 # JUnit5
 
+[Junit5 공식문서](https://junit.org/junit5/docs/current/user-guide/#overview)
+
+
 ## JUnit5 이란? 
 
     단위 테스트 프레임워크 
@@ -9,6 +12,10 @@
 ## JUnit 구성
 
 ![junit5](../../images/AWS/junit5.png)
+
+### JUnit Platform
+JVM에서 테스트 프레임워크를 시작하기 위한 런처 제공
+TestEngineAPI를 정의하고 있다.
 
 ## JUnit5 시작하기 
 
@@ -25,7 +32,10 @@
 testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
 ~~~    
 
-##Annotations 
+##Annotations
+### @SpringbootTest
+
+@SpringBootTest를 사용하면 손쉽게 통합 테스트를 위한 환경을 준비해준다. @SpringBootTest는 모든 빈들을 스캔하고 애플리케이션 컨텍스트를 생성하여 테스트를 실행한다.
 
 ###@Test 
 
@@ -207,3 +217,5 @@ void some_test(){
 ## 참고 
 
 https://www.youtube.com/watch?v=EwI3E9Natcw
+
+https://www.baeldung.com/junit-5

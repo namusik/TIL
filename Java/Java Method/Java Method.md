@@ -1,4 +1,6 @@
 # Java Method
+## private Method
+
 ## Abstract Method
 추상 메서드는 2가지의 경우가 있다고 볼 수 있다.
 ### Abstract Class 내부 abstract method
