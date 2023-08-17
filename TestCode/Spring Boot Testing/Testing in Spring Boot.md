@@ -24,6 +24,3 @@ testImplementation 'org.springframework.boot:spring-boot-starter-test'
 ## @TestConfiguration
 
 테스트 내부 안에서 내부 설정 클래스를 만들고 해당 @를 붙이면, 자동으로 스프링 빈으로 등록해줌.
-
-## protected method
-같은패키지에 있는 테스트 코드 에서 쓸 수 있도록.

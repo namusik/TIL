@@ -46,6 +46,8 @@ final이 붙은 객체(참조형 변수) 역시 재할당이 불가능하다. �
 
 하지만, 객체의 field는 재할당이 가능하다. (물론, final이 붙지 않은 field에 한해서)
 
+list, map의 값은 역시 변경 가능.
+
 #### Final fields
 Final fields는 2가지 경우로 볼 수 있다. 
 1. **constant**(상수)

@@ -20,19 +20,20 @@ Null 체크 로직 때문에 떨어진 코드 가독성과 유지 보수성.
 
 ### Optinal 객체 만들기
 
-#### 1. Optional 빈값 생성하기
+#### 1. empty()
 ~~~java
 Optional<String> opt = Optional.empty();
 ~~~
 내부에 빈값으로 생성해주는 empty()메서드를 가지고 있다.
 
-#### 2. 절대 Null이 아닌 경우
+#### 2. of()
 ~~~java
 Optional<String> op = Optional.of("aa");
 ~~~
+절대 Null이 아닌 경우
 여기서는 오히려 null을 값으로 넣으면 NPE 발생
 
-#### 3. null 일수도 있는 경우
+#### 3. ofNullable()
 ~~~java
 String name = "baeldung";
 String name = null

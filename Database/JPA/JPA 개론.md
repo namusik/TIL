@@ -20,10 +20,23 @@ logging.level.org.hibernate.type.descriptor.sql.BasicBinder=trace
 ~~~properties
 logging.level.org.hibernate.orm.jdbc.bind=TRACE
 ~~~
-
-
 spring.jpa.show-sql=true
 system.out으로 출력돼서 권장하지 않음.
+
+## 의의
+Entity Relationship을 Object Relationship으로 바꿔주는것.
+
+1. JPA는 자바진영 ORM 표준 인터페이스
+2. 이를 구현한 것이 Hibernate
+3. 객체를 관계형DB 테이블과 매핑해줌.
+4. 자바 컬렉션에 저장하고 조회하듯이 사용가능
+5. SQL 대신 만들어줌.
+
+## 주의
+원래 목적은 insert update delete가 목적
+
+쿼리(조회)에는 매우 불리하다.
+
 
 ## @Entity
 JPA가 사용하는 객체라고 지정

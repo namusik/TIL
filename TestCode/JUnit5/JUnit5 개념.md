@@ -33,15 +33,13 @@ testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
 ~~~    
 
 ##Annotations
-### @SpringbootTest
 
-@SpringBootTest를 사용하면 손쉽게 통합 테스트를 위한 환경을 준비해준다. @SpringBootTest는 모든 빈들을 스캔하고 애플리케이션 컨텍스트를 생성하여 테스트를 실행한다.
+### @Test
+[baeldung](https://www.baeldung.com/junit-5-test-annotation)
 
-###@Test 
+테스트 메서더라는 것을 나타내는 어노테이션
 
-    테스트 메서더라는 것을 나타내는 어노테이션
-
-    JUnit4와 다르게 어떠한 속성도 선언하지 않음.
+JUnit4와 다르게 어떠한 속성도 선언하지 않음.
 
 ~~~java
 @Test

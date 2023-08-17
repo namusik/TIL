@@ -3,6 +3,7 @@
 
 ## Abstract Method
 추상 메서드는 2가지의 경우가 있다고 볼 수 있다.
+
 ### Abstract Class 내부 abstract method
 
 ### interface 내부 method
@@ -24,7 +25,7 @@ public interface Vehicle{
 ~~~
 위처럼 interface에 동작이 정의된 static method를 쓸 수 있다.
 
-static method는 오직 interface 내부에서는 호출이 가능하다.
+static method는 오직 interface 내부에서만 호출이 가능하다.
 하지만, 구현 클래스에서 override 할 수 없다.
 
 ~~~java
@@ -33,6 +34,8 @@ String producer = Vehicle.producer();
 외부에서 static method 호출을 위해서는 interface를 통해서만 쓸 수 있다.
 
 따로 instance의 생성없이 바로 호출이 가능하다.
+
+기존 static method와  똑같은 기능을 하는 것임.
 
 ## Default Method
 ~~~java
