@@ -5,19 +5,20 @@
 
 ## JUnit5 이란? 
 
-    단위 테스트 프레임워크 
+Java 생태계에서 가장 유명한 단위 테스트 프레임워크 
 
-    스프르이 부트 2.2버전 이상부터 제공 
+스프르이 부트 2.2버전 이상부터 제공 
 
 ## JUnit 구성
 
 ![junit5](../../images/AWS/junit5.png)
 
 ### JUnit Platform
-JVM에서 테스트 프레임워크를 시작하기 위한 런처 제공
-TestEngineAPI를 정의하고 있다.
+JVM에서 테스트 프레임워크를 구동하기 위한 런처 제공
 
-## JUnit5 시작하기 
+클라이언트와 JUnit 사이에 안정적이고 강력한 인터페이스(`TestEngine`)를 정의한다.
+
+## 의존성 추가
 
 스프링부트 
 
@@ -32,49 +33,77 @@ TestEngineAPI를 정의하고 있다.
 testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
 ~~~    
 
-##Annotations
+## Annotations
 
 ### @Test
 [baeldung](https://www.baeldung.com/junit-5-test-annotation)
 
-테스트 메서더라는 것을 나타내는 어노테이션
+테스트 메서더라는 것을 나타내는 어노테이션.
+
+private 이면 안되고, void 여야 한다.
 
 JUnit4와 다르게 어떠한 속성도 선언하지 않음.
 
 ~~~java
 @Test
-void test(){
+void test(){ //앞에 굳이 안적어줘도 됨.
     ...
 }
 ~~~    
 
-###@BeforeAll
+### @BeforeAll
 
-    해당 클래스에 위치한 모든 테스트 메서드 실행 전에 딱 한 번 실행되는 메서드 
+해당 클래스에 위치한 모든 테스트 메서드 실행 전에 딱 한 번 실행되는 메서드
 
-###@AfterAll 
+비용이 많이 드는 공통 작업을 실행하는 경우 사용.
+DB연결이나 서버 시작같은.
 
-    해당 클래스에 위치한 모든 테스트 메서드 실행 후에 딱 한 번 실행되는 메서드 
+`static`여야 한다.
 
-###@BeforeEach 
+### @AfterAll 
 
-    해당 클래스에 위치한 모든 테스트 메서드 실행 전에 실행되는 메서드 
+해당 클래스에 위치한 모든 테스트 메서드 실행 후에 딱 한 번 실행되는 메서드 
 
-    모든 테스트 마다 실행됨. 
+역시 `static`이어야 한다.
 
-    테스트마다 조건을 초기화 시켜줘야 할 때 사용.
+~~~java
+@BeforeAll
+static void setup() {
+    .....
+}
 
-###@AfterEach
+@AfterAll
+static void tearDown() {
+    ....
+}
+~~~
 
-    해당 클래스에 위치한 모든 테스트 메서드 실행 후에 실행되는 메서드 
+### @BeforeEach 
 
-    모든 테스트마다 실행됨. 
+해당 클래스에 위치한 모든 테스트 메서드 실행 전에 실행되는 메서드 
 
-    테스트마다 조건을 초기화 시켜줘야 할 때 사용.
+테스트마다 조건을 초기화 시켜줘야 할 때 사용.
 
-###@Disabled
+### @AfterEach
 
-    테스트를 하고 싶지 않은 클래스나 메서드에 붙이는 어노테이션 
+해당 클래스에 위치한 모든 테스트 메서드 실행 후에 실행되는 메서드 
+
+테스트마다 조건을 초기화 시켜줘야 할 때 사용.
+
+~~~java
+@BeforeEach 
+void init() {
+    ....
+}
+
+@AfterEach
+void teardown() {
+    ....
+}
+~~~
+### @Disabled
+
+테스트를 하고 싶지 않은 **클래스나 메서드**에 붙이는 어노테이션 
 
 ~~~java
 @Test
@@ -84,12 +113,13 @@ void test(){
 }
 ~~~    
 
+### @DisplayName
 
-###@DisplayName
+어떤 테스트인지 쉽게 표현할 수 있도록 해주는 어노테이션.
 
-    어떤 테스트인지 쉽게 표현할 수 있도록 해주는 어노테이션 
+클래스/메서드에 붙일 수 있다.
 
-    공백, 이모지, 특수문자 모두 지원 
+공백, 이모지, 특수문자 모두 지원 
 
 ~~~java
 @DisplayName("테스트1")
@@ -102,7 +132,7 @@ class DisplayName{
 }
 ~~~
 
-###@RepeatedTest
+### @RepeatedTest
 
     특정 테스트를 반복시키고 싶을 때 사용
 
@@ -135,11 +165,13 @@ void test(){
 
     Before/After와 같은 테스트 생명주기에 관계된 메서드들도 게층에 맞춰 동작    
 
-###@Assertions
+## Assertions
 
-    테스트 케이스의 수행 결과를 판별하는 메서드 
+테스트 케이스의 수행 결과를 판별하는 메서드 
 
-    static 메서드 
+`static 메서드`라서 바로 쓸 수 있다.
+
+**org.junit.jupiter.api.Assertions**에 속해있음.
 
 assertAll
 
