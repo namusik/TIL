@@ -33,7 +33,6 @@ SUT를 테스트 할 때, DOC가 문제가 되는 경우 [TestDouble](../Test%20
 
 단위 테스트가 다른 클래스를 의존하고 있는 상태
 
-
 ### Solitary Tests
 ![solitatry](../../images/TestCode/solitarytest.png)
 
@@ -53,6 +52,20 @@ sociable test를 선호한다.
 ### FIRST 원칙
 Clean Code에서는 좋은 단위 테스트 규칙을 설명하고 있다.
 
+> FAST
+실행이 빨라야 한다. 
+
+> Isolated
+단위 기능에 집중해야 한다.
+
+> Repeatable
+반복 수행해도 항상 같은 결과여야 한다.
+
+> Self-validating
+테스트의 결과를 assert(단언)해야 한다.
+
+> Timely
+즉각 작성한다.
 ### 계약으로 정해져 있는 것은 테스트 할 필요 없다
 JPARepository의 findById 같은 method는 정해져있기 때문에 테스트할 필요 없다.
 
