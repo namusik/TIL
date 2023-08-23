@@ -109,4 +109,32 @@ console을 찍어보면 객체가 들어온다.
 약속된 PROP. Unique한 값을 줘야 한다.
 
 ## 이벤트 기능
-PROP의 값으로 함수를 전달한다.
+컴퍼넌트의 PROP의 값으로 함수를 전달한다.
+
+~~~js
+<Header title="REACT" onChangeMode={()=>{
+  alert('Header');
+}}></Header>
+~~~ 
+해당 컴퍼넌트를 클릭했을 때, 해당 함수의 내용이 실행되도록 하길 원한다.
+
+~~~js
+<header>
+  <h1><a href="/" onClick={(event)=>{
+    event.preventDefault();
+    props.onChangeMode();
+  }} >{props.title}</a></h1>
+</header>
+~~~
+> 안에 있는 a태그는 유사HTML이다. 리액트 개발환경이 브라우저가 이해할 수 있는 HTML로 컨버팅해주는 것이랑 문법이 다를 수 있다.
+> onClick={}로 사용
+
+> **event**
+> call back 함수에 리액트는 event 객체를 첫번 째 파라미터로 주입해준다. 이벤트 상황을 제어할 수 있는 여러 정보와 기능이 있다.
+
+> **event.preventDefault()**
+> a 태그의 기본동작을 방지한다. 즉, 클릭해도 reload안됨.
+
+해당 컴포넌트 안에서 prop에 담겨있는 함수를 받아서 onClick시 수행할 함수로 넣어준다.
+
+## State
