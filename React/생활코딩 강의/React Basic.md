@@ -178,8 +178,8 @@ setMode('READ');
 ~~~
 값을 바꿀 때는 setMode()사용.
 
-setMode()가 호출돼서 state 값이 바뀌면, 컴포넌트가 다시 실행된다.
-그러면 useState가 값을 재설정한다.
+setMode()가 호출돼서 state (mode)값이 바뀌면, App()컴포넌트가 다시 실행된다.
+그러면 useState()가 값을 재설정한다.
 
 
 
