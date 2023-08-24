@@ -138,3 +138,48 @@ console을 찍어보면 객체가 들어온다.
 해당 컴포넌트 안에서 prop에 담겨있는 함수를 받아서 onClick시 수행할 함수로 넣어준다.
 
 ## State
+![state](../../images/react/reactstate.png)
+prop과 마찬가지고 state도 값이 변경되면 새로운 return값을 만들어서 UI를 만든다.
+
+Prop : 컴포넌트를 사용하는 외부자를 위한 것.
+State : 컴포넌트를 만드는 내부자를 위한 것.
+
+### 사용법
+
+~~~js
+import {useState} from 'react';
+~~~
+useState함수를 import
+
+~~~js
+const _mode = useState('WELCOME');
+~~~
+`useState()`함수를 사용해서 상태를 만듦.
+
+_mode를 로그로 찍어보면 
+![usestate](../../images/react/useState.png)
+useState()는 배열을 return 한다.
+
+0번째 원소는 상태의 값.
+1번째 원소는 상태의 값을 변경할 때 쓰는 함수.
+
+~~~js
+const mode = _mode[0];
+const setMode = _mode[1];
+~~~
+
+~~~js
+const [mode, setMode] = useState('WELCOME');
+~~~
+축약해서 한번에 배열로 받아준다.
+
+~~~js
+setMode('READ');
+~~~
+값을 바꿀 때는 setMode()사용.
+
+setMode()가 호출돼서 state 값이 바뀌면, 컴포넌트가 다시 실행된다.
+그러면 useState가 값을 재설정한다.
+
+
+
