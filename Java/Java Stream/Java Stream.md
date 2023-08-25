@@ -20,7 +20,9 @@ Collection 반복을 처리해주는 기능.
 
 ## find
 ~~~java
-findAny() : Optional 반환
+<Optional> findAny() : Stream에서 아무 요소 반환.
+
+<Optional> afindFirst() : Stream에서 첫번째 요소 반환. 그런데 Stream안에는 encount order가 없을 수 있다. 중간 소스와 중간 작업에 따라 다르다. 순서가 없다면, 랜덤으로 나온다.
 ~~~
 
 ## array to stream
@@ -32,8 +34,12 @@ Arrays.stream(request.getCookies())
     .orElse(null);
 ~~~
 
+
+
 ## 참고
 
 https://futurecreator.github.io/2018/08/26/java-8-streams/
 
 https://zangzangs.tistory.com/171
+
+https://www.baeldung.com/java-stream-findfirst-vs-findany
