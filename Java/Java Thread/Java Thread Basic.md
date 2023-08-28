@@ -101,12 +101,93 @@ run()을 호출하는 것은 단순히 선언된 메소드를 호출하는 것�
 
 > 한 번 실행이 종료된 쓰레드는 다시 실행할 수 없기 때문에, start()는 딱 한 번 호출될 수 있다.
 
+## 싱글쓰레드와 멀티쓰레드
+![singlevsmulti](../../Images/Java/singlevsmulti.png)
+
+* 싱글쓰레드에서 2개의 작업을 한다면 순차적으로 진행된다.
+* 멀티쓰레드에서 2개의 작업을 한다면 2개의 쓰레드가 **짧은 시간동안 번갈아가면서 진행한다.** 이게 마치 동시에 작업이 진행되는 것처럼 보이는 것이다.
+
+### 컨텍스트 스위칭(context switching)
+오히려, 멀티쓰레드의 작업시간이 싱글쓰레드보다 오래 걸릴 수가 있다. 
+이유는 프로세스/쓰레드가 작업 전환(context switching)을 할 때, 정보를 I/O하는 시간이 필요하기 때문이다.
+
+만약 서로 다른 자원을 필요로 하는 작업인 경우에는 멀티쓰레드가 훨씬 효율적이다. 
+
+만약 **멀티코어** 이상일 경우에는, 두개의 쓰레드가 동시에 수행될 수 있다.
+
+자바 OS 독립적이라고 말하지만, 사실 쓰레드 만큼은 OS 종속적인 부분이 있다.
+
+## 쓰레드의 우선순위
+![priority](../../Images/Java/threadpriority.png)
+`Thread` Class는 **우선순위**(priority)라는 멤버변수를 가지고 있다.
+
+우선순위에 따라서 쓰레드가 받을 수 있는 작업시간이 달라진다.
+
+주로, 시각적인 부분이나 빠른 반응이 필요한 작업을 하는 쓰레드는 우선순위가 높다.
+
+~~~java
+private int priority;
+void setPriority(int a);
+int getPriority();
+/**
+ * The minimum priority that a thread can have.
+ */
+public static final int MIN_PRIORITY = 1;
+
+/**
+ * The default priority that is assigned to a thread.
+ */
+public static final int NORM_PRIORITY = 5;
+
+/**
+ * The maximum priority that a thread can have.
+ */
+public static final int MAX_PRIORITY = 10;
+~~~
+
+쓰레드의 우선순위는 1~10이다.
+
+숫자가 높을수록 우선순위가 높다.
+
+쓰레드의 우선순위는 쓰레드를 호출한 쓰레드의 우선순위를 그대로 가져가는데, 자바의 main 쓰레드는 우선순위가 5이다.
+
+하지만, OS의 JVM마다 우선순위에 대한 구현이 다르기 때문에 우선순위가 높다고 차이가 없을 수 있다.
+
+차라리, 쓰레드가 아닌 작업에 우선순위를 두어서 PriorityQueue에 저장해두는 것이 나을 수 있다.
+
+## 쓰레드 그룹(ThreadGroup)
+관련된 쓰레드를 그룹으로 묶어서 관리가 가능.
+
+참고로, 모든 쓰레드는 반드시 쓰레드 그룹에 속해있다. 
+
+default로 thread를 생성할 때 thread group 값을 인수로 주지 않아도 자신을 생성한 thread와 같은 그룹에 속한다.
+
+~~~java
+ public Thread(ThreadGroup group, Runnable target){}
+~~~
+thread를 생성할 떄, ThreadGroup을 지정할 수 있다.
+
+참고로 JVM은 **main** 과 **system**이라는 쓰레드그룹을 만든다.
+
+**main 메서드**는 **main 쓰레드 그룹**에 속하고, 사실상 생성하는 모든 쓰레드 그룹은 main 쓰레드 그룹 하위에 속한다. 지정하지 않으면 자동적으로 main 쓰레드그룹에 속한다.
+
+가비지컬렉션을 수행하는 **Finalizer Thread**는 **system 쓰레드 그룹**에 속한다.
+
+## 데몬 쓰레드
+daemon thread
+일반 쓰레드의 작업을 돕는 보조 역할
+일반 쓰레드가 모두 종료되면 데몬 쓰레드도 더이상 필요없기 때문에 강제 종료된다.
+
+주로 가비지 컬렉터, 워드 자동저장, 화면갱신에 쓰인다.
+
+~~~java
+thread.setDaemon(true);
+~~~
+데몬 쓰레드 설정은 반드시 start()전에 해줘야 한다.
 
 ## 참고
 자바의 정석
 
 https://www.baeldung.com/java-runnable-vs-extending-thread
-
-https://www.baeldung.com/java-thread-lifecycle
 
 https://www.baeldung.com/java-start-thread

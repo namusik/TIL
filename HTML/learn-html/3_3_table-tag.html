@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      table {
+        border: 1px solid black;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        border: 1px solid black;
+        padding: 12px;
+      }
+
+      .col1 {
+        width: 80px;
+      }
+      .col2 {
+        background-color: yellow;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>table 기본</h1>
+    <table>
+      <caption>
+        프로필 테이블
+      </caption>
+      <tr>
+        <th>이름</th>
+        <th>이름</th>
+        <th>이름</th>
+      </tr>
+      <tr>
+        <th>이름</th>
+        <th>이름</th>
+        <th>이름</th>
+      </tr>
+      <tr>
+        <th>이름</th>
+        <th>이름</th>
+        <th>이름</th>
+      </tr>
+    </table>
+    <hr />
+
+    <h1>Table 그룹 태그</h1>
+    <table>
+      <caption>
+        학급점수
+      </caption>
+      <colgroup>
+        <col class="col1" />
+        <col class="col2" />
+        <col class="col3" />
+        <col class="col4" />
+        <col class="col5" />
+        <col class="col6" />
+      </colgroup>
+      <thead>
+        <tr>
+          <th>1반</th>
+          <th>2반</th>
+          <th>3반</th>
+          <th>4반</th>
+          <th>5반</th>
+          <th>6반</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td rowspan="2">ddd</td>
+          <td>ddd</td>
+          <td>ddd</td>
+          <td>ddd</td>
+          <td>ddd</td>
+          <td>ddd</td>
+        </tr>
+        <tr>
+          <td>ddd</td>
+          <td>ddd</td>
+          <td>ddd</td>
+          <td>ddd</td>
+          <td>ddd</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="2">ddd</td>
+          <td>ddd</td>
+          <td>ddd</td>
+          <td>ddd</td>
+          <td>ddd</td>
+        </tr>
+      </tfoot>
+    </table>
+  </body>
+</html>
