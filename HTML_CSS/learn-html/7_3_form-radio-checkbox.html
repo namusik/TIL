@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <form action="/signup">
+      <fieldset>
+        <legend>좋아하는 색상</legend>
+        <ul>
+          <li>
+            <label for="red">red</label>
+            <input type="checkbox" id="red" value="red" />
+          </li>
+          <li>
+            <label for="orange">orange</label>
+            <input type="checkbox" id="orange" value="orange" />
+          </li>
+          <li>
+            <label for="yellow">yellow</label>
+            <input type="checkbox" id="yellow" value="yellow" />
+          </li>
+          <li>
+            <label for="green">green</label>
+            <input type="checkbox" id="green" value="green" />
+          </li>
+        </ul>
+      </fieldset>
+      <fieldset>
+        <legend>배송방법은?</legend>
+        <ul>
+          <li>
+            <label for="free">free</label>
+            <input type="radio" name="delivery" id="free" />
+          </li>
+          <li>
+            <label for="pay">pay</label>
+            <input type="radio" name="delivery" id="pay" />
+          </li>
+        </ul>
+      </fieldset>
+      <fieldset>
+        <legend>자기소개서</legend>
+        <textarea name="" id="" cols="30" rows="10">기본내용입력</textarea>
+      </fieldset>
+      <fieldset>
+        <legend>주문 상품 선택</legend>
+        <ul>
+          <li>
+            <select name="goods" id="goods" multiple>
+              <option value="apple">사과</option>
+              <option value="apple" selected>사과2</option>
+              <option value="apple">사과</option>
+              <option value="apple">사과</option>
+              <option value="apple">사과</option>
+            </select>
+          </li>
+          <li>
+            <label for="ice-cream-choice">맛 선택</label>
+            <input
+              list="ice-cream-flavors"
+              name="ice-cream-choice"
+              id="ice-cream-choice"
+            />
+            <datalist id="ice-cream-flavors">
+              <option value="choco"></option>
+              <option value="vanila"></option>
+              <option value="starwberry"></option>
+            </datalist>
+          </li>
+        </ul>
+      </fieldset>
+      <button type="submit">제출하기</button>
+      <button type="reset">리셋하기</button>
+      <button type="button" onclick="alert('alert')">버튼</button>
+    </form>
+  </body>
+</html>
