@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Selector attribute</title>
+    <style>
+      h2[class] {
+        font-size: 30px;
+      }
+      a[target] {
+        color: green;
+      }
+      h2[class='naver-title'] {
+        color: green;
+      }
+      a[href*='www'] {
+        text-decoration: none;
+      }
+      h2[class^='google'] {
+        color: blue;
+      }
+      a[href$='facebook.com'] {
+        color: red;
+      }
+      h2[class~='title'] {
+        color: blue;
+      }
+    </style>
+  </head>
+  <body>
+    <h2 class="naver-title">네이버</h2>
+    <a href="http://www.naver.com">네이버</a>
+    <h2 class="google-title">구글</h2>
+    <a href="http://www.naver.com" target="_blank">구글</a>
+    <h2 class="kakao-title">카카오</h2>
+    <a href="http://www.facebook.com">카카오</a>
+    <h2 class="text title aaaa">aaa</h2>
+  </body>
+</html>
