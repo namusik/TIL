@@ -32,13 +32,13 @@
          4. 생성된 서버 키 사용
    2. 애플리케이션 엔드포인트 생성
       1. 디바이스 토큰 입력
-         1. 안드로이드 앱에 코드를 추가해서 FCM 토큰을 받아야 한다.
+         1. 안드로이드 앱에 코드를 추가해서 FCM 토큰을 받아서 입력 후 생성
 
 ## 안드로이드 앱 생성
 
 1. 안드로이드 스튜디오 설치
 2. New Project > Empty Activity
-3. FCM 토큰 확인 코드 추가
+3. FCM 토큰 확인 코드
 
    ```kotlin
        override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,9 +65,51 @@
     }
    ```
 
-   2.
+4. SNS 메시지 수신 후 로그 남기는 코드
 
-4.
+```kotlin
+package com.example.megabird_android
+
+import com.google.firebase.messaging.FirebaseMessagingService
+import com.google.firebase.messaging.RemoteMessage
+import android.util.Log
+
+class MyFirebaseMessagingService : FirebaseMessagingService() {
+    companion object {
+        private const val TAG = "MyFirebaseMsgService"
+    }
+
+    // [START receive_message]
+    override fun onMessageReceived(remoteMessage: RemoteMessage) {
+        // TODO(developer): Handle FCM messages here.
+        // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
+        Log.d(TAG, "From: ${remoteMessage.from}")
+
+        // Check if message contains a data payload.
+        if (remoteMessage.data.isNotEmpty()) {
+            Log.d(TAG, "Message data payload: ${remoteMessage.data}")
+        }
+
+        // Check if message contains a notification payload.
+        remoteMessage.notification?.let {
+            Log.d(TAG, "Message Notification Body: ${it.body}")
+        }
+    }
+    // [END receive_message]
+}
+```
+
+5. 위에 만든 클래스 manifest 추가
+
+```xml
+<service
+   android:name=".MyFirebaseMessagingService" //클래스 경로
+   android:exported="false">
+   <intent-filter>
+         <action android:name="com.google.firebase.MESSAGING_EVENT" />
+   </intent-filter>
+</service>
+```
 
 안드로이드 FCM 샘플 코드
 https://github.com/firebase/snippets-android/blob/a5b7968230d3d256182b3b9f50a01df626a11a7b/messaging/app/src/main/java/com/google/firebase/example/messaging/kotlin/MainActivity.kt
