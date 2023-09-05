@@ -50,9 +50,21 @@ Thread.getState()
 
 Object.wait(), Thread.join(), LockSupport.park()를 호출하면 WAITING 상태가 된다.
 
+ex) 어떤 스레드 내부에서 다른 스레드를 .join()으로 호출하면, 다른 스레드가 종료될 때까지 WAITING 상태에 들어간다.
+
 ### TIMED_WAITING
 
+WAITING 상태에다가 시간이 지정된 경우.
+
+Thread.sleep(long millis), wait(int timeout), thread.join(long millis), LockSupport.parkNanos, LockSupport.parkUntil을 호출하면 `TIMED_WAITING` 상태가 된다.
+
 ### TERMINATED
+
+죽은 쓰레드.
+
+실행이 완료되었거나, 비정상적으로 종료된 경우.
+
+`isAlive()`를 통해 Boolean으로 죽었는지 확인 가능.
 
 ## 상태 메서드
 
