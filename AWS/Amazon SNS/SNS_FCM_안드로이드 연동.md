@@ -6,17 +6,8 @@
 2. 앱 추가하기
    1. 프로젝트 설정 > 일반 > 내 앱
    2. 앱에 Firebase 추가 > Android 선택
-   3. Android 앱에 Firebase 추가
-      1. 앱 등록
-         1. Android 패키지 이름 : build.gralde의 `applicationId` 값
-      2. google-services.json 파일 추가
-         1. app 디렉토리 아래에 추가
-      3. 안드로이드 앱에 Firebase SDK 추가
-         1. 프로젝트 수준 build.gradle
-            1. `plugins{ id("com.google.gms.google-services") version "4.3.15" apply false}` 추가
-         2. 앱 수준 build.gradle
-            1. `plugins{ id("com.google.gms.google-services") version "4.3.15" apply false}` 추가
-            2. `dependencies {implementation(platform("com.google.firebase:firebase-bom:32.2.3"))  implementation ("com.google.firebase:firebase-messaging:22.0.0")}` 추가
+   3. Android 앱에 Firebase 추가 1. 앱 등록 1. Android 패키지 이름 : build.gralde의 `applicationId` 값 2. google-services.json 파일 추가 1. app 디렉토리 아래에 추가 3. 안드로이드 앱에 Firebase SDK 추가 1. 프로젝트 수준 build.gradle 1. `plugins{ id("com.google.gms.google-services") version "4.3.15" apply false}` 추가 2. 앱 수준 build.gradle 1. `plugins{ id("com.google.gms.google-services") version "4.3.15" apply false}` 추가 2. `dependencies {implementation(platform("com.google.firebase:firebase-bom:32.2.3"))  implementation ("com.google.firebase:firebase-messaging:22.0.0")}` 추가
+      noAccessToProcedureBodies=true
 
 ## Amazon SNS 설정
 
