@@ -21,6 +21,7 @@ docker run --platform linux/amd64
 
     docker run -d -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=yes --name mysqlCont mysql
 
+    //맥북에서
     docker run --platform linux/amd64 -p 3307:3306 --name megabird_local -e MYSQL_ALLOW_EMPTY_PASSWORD=YES -e MYSQL_DATABASE=MEGABIRD_LOCAL -d mysql:5.6
 
     //ONLY_FULL_GROUP_BY 에러제거
