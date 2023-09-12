@@ -78,27 +78,34 @@ sleep()은 항상 현재 실행 중인 쓰레드에 대해 작동한다.
 
 그래서 static이기 때문에 Thread.sleep으로 바로 호출하는 것이 일반적.
 
-### interrupt()
+### interrupt() & interrupted()
 
 쓰레드에게 작업을 멈추라고 요청한다.
 
 하지만, 요청만 할 뿐 강제로 종료시키지는 못한다.
 단지 `private volatile boolean interrupted;`의 값을 바꾸기만 하는 것이다.
 
-쓰레드의 interrupted 기본값은 false인데,
+`interrupt()`를 호출하면 interrupted의 값이 false에서 true로 바뀐다.
 
-interrupt()를 호출하면 interrupted의 값이 true로 바뀐다.
+`interrupted()`를 호출하면 현재 쓰레드의 interrupted 값을 반환하고(이를 통해, iterrupt()가 호출되었는지 알 수 있다.), true인 경우 false로 변경한다.
 
-sleep()이나 join()에 의해 일시정지상태인 쓰레드에 interrupt()를 쓰면 InterruptedException 발생하고 깨어난다.
-
-### join()
-
-지정된 시간동안 쓰레드 실행
-시간이 지나거나, 작업이 종료되면 기존의 쓰레드로 복귀
+sleep()이나 join()에 의해 일시정지상태인 쓰레드에 interrupt()를 쓰면 **InterruptedException** 발생하고 깨어난다.
 
 ### yield()
 
-실행 중에 자신에게 주어진 실행시간을 다른 쓰레드에게 양보하고 자신은 실행대기 상태가 됨
+실행 중에 자신에게 주어진 실행시간을 다음 차례의 쓰레드에게 양보하고 자신은 실행대기 상태가 됨.
+
+yield()와 interrupt()를 적절히 사용하면, 효율적인 실행을 가능케 한다.
+
+### join()
+
+지정된 시간동안 다른 쓰레드를 실행한다.
+
+시간이 지나거나, 작업이 종료되면(시간을 지정하지 않았을 때) 기존의 쓰레드로 복귀.
+
+주로, 작업 중에 다른 쓰레드가 먼저 수행될 필요가 있을 때 사용됨.
+
+join()은 특정 쓰레드에 대해 동작하기 때문에, static은 아니다.
 
 ## 스레드 라이프 흐름
 
