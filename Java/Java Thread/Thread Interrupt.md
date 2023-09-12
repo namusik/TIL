@@ -18,6 +18,15 @@ Thread가 waiting, sleeping 상태일 때, 쓰레드에서 interrupt()가 호출
 
 `checked exception`이다.
 
+```java
+try {
+  Thread.sleep(1000);
+} catch (InterruptedException e) {
+  //sleep이 끝났을 때, interrupt()가 예약되어있는 쓰레드라면 InterruptedException이 발생할 것이므로. catch로 잡아준다.
+  System.out.println("InterruptedException 발생");
+}
+```
+
 ## 참고
 
 https://www.baeldung.com/java-interrupted-exception

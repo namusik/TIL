@@ -87,9 +87,12 @@ sleep()은 항상 현재 실행 중인 쓰레드에 대해 작동한다.
 
 `interrupt()`를 호출하면 interrupted의 값이 false에서 true로 바뀐다.
 
-`interrupted()`를 호출하면 현재 쓰레드의 interrupted 값을 반환하고(이를 통해, iterrupt()가 호출되었는지 알 수 있다.), true인 경우 false로 변경한다.
-
-sleep()이나 join()에 의해 일시정지상태인 쓰레드에 interrupt()를 쓰면 **InterruptedException** 발생하고 깨어난다.
+- 쓰레드가 RUNNABLE 상태일 때
+  - InterruptedException이 예약된다.
+  - 바로 종료시킬 순 없으니까.
+- interrupt가 예약된 쓰레드가 실행되다가 sleep, join, wait 같이 WAITING 혹은 BLOCKED 상태가 되면
+  - InterrupedException이 바로 발생
+  - run()이 정상 종료된다.
 
 ### yield()
 
@@ -107,7 +110,7 @@ yield()와 interrupt()를 적절히 사용하면, 효율적인 실행을 가능�
 
 join()은 특정 쓰레드에 대해 동작하기 때문에, static은 아니다.
 
-## 스레드 라이프 흐름
+## 쓰레드 라이프 흐름
 
 1. 쓰레드를 생성하고 start()를 호출한다
 2. RUNNABLE 상태이지만 바로 실행되는 것이 아니라, 실행대기열에서 차례를 기다린다.
