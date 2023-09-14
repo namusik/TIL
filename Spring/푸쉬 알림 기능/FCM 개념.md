@@ -26,6 +26,8 @@ FCM이 중간에 끼어있는 형태.
 
 ### FCM Token
 
+![fcmtoken](../../images/Spring/fcmtoken.png)
+
 앱이 설치된 디바이스마다 고유하게 가지고 있는 토큰 값. 기기 고유의 ID값이라 보면 된다.
 
 FCM 서버와 앱이 설치된 디바이스가 통신하기 위해 사용되는 식별자.
@@ -42,7 +44,7 @@ topic을 통한 푸시 발송시, 해당 topic을 구독한 디바이스들에�
 
 각 디바이스들은 topic을 구독/구독취소 할 수 있다.
 
-토픽을 한글이 불가하고, unique해야 한다.
+토픽 이름은 한글이 불가하고, unique해야 한다.
 
 ## 동작 원리
 
@@ -57,6 +59,12 @@ topic을 통한 푸시 발송시, 해당 topic을 구독한 디바이스들에�
 ## 특징
 
 FCM SDK는 HTTPS를 통해 제공되는 페이지에서만 지원된다.
+
+## 서버 체크사항
+
+FCM 토큰을 서버가 관리해야 한다. Firebase에서는 발급 이후에 따로 관리를 하고 있지 않는다.
+
+토픽 역시 서버에서 관리해 줘야 한다.
 
 ## FCM 메시지 종류
 
@@ -140,3 +148,5 @@ FCM이 클라이언트 앱을 대신하여 알림 표시를 처리하도록 할 
 https://kerobero.tistory.com/38
 
 https://firebase.google.com/docs/cloud-messaging/concept-options?hl=ko&authuser=2
+
+https://zuminternet.github.io/FCM-PUSH/
