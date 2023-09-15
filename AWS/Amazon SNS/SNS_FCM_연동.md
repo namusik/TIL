@@ -138,7 +138,7 @@ implementation 'com.amazonaws:aws-java-sdk-sns:1.12.123'
 ### AmazonSNS Bean 등록
 
 ```java
-static class SNSConfiguration {
+public class SNSConfiguration {
 
     @Value("AWS 액세스 키")
     private String awsAccessKey;
