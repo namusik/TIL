@@ -15,6 +15,31 @@ process의 자원을 이용해서 실제로 작업을 수행하는 것이 바로
 
 프로세스에는 최소 하나 이상의 쓰레드가 존재한다. 만약 쓰레드가 여러개 있으면 **멀티쓰레드 프로세스**라고 부른다.
 
+## process vs thread
+
+물리적 메모리 공간에 메모리 매핑을 통해 메모리 공간을 할당받아야 프로그램이 실행된다. 메모리에 올라온다고 해서 이걸 **Load**라고 한다.
+
+이렇게 실행중인 프로그램을 **Process** 라고 한다.
+
+이 자바 Process 내부를 보면, **main thread**가 제일 먼저 실행된다.
+
+하나의 thread가 시작되면, **JVM stack(thread stack)** 이 만들어진다.
+
+이 스택은 자바 method들을 위한 메모리 공간이다. 쓰고 나면 사라진다.
+
+main method에서 새로운 thread를 시작하면 이 thread를 위한 thread stack이 또 만들어진다.
+
+모든 쓰레드는 하나의 **Heap Memory**를 공유한다. 여기에 new로 만드는 객체들이 저장된다.
+
+2개의 프로세스가 돌고 있다면, OS의 thread scheduler가 CPU에 프로세스를 할당해준다.
+
+즉, 하나의 process 안에 n개의 thread가 가능하다.
+
+- process 에는 최소 하나의 thread가 있다.
+- process는 별도의 memory 공간에서 실행된다.
+- 사실 하나로 보이는 프로그램이 여러개의 프로세스가 협력하는 것일 수 있다.
+- process는 task(작업)이라고 부르기도 한다.
+
 ## 멀티태스킹과 멀티쓰레딩
 
 멀티태스킹(multi-tasking) : 여러개의 프로세스가 동시에 실행
