@@ -26,6 +26,8 @@ topic을 새로 만들 때 db에 저장해줘야 한다.
 
 마찬가지로 unsubscribe 할 때는 delete 해야 한다.
 
+그리고 기존 토픽에 이미 등록된 번호를 재구독 api를 요청하면 fcm 내부에서 중복 구독을 알아서 처리해준다. 따로 ㅇ
+
 ## 참고
 
 https://zuminternet.github.io/FCM-PUSH/
