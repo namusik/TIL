@@ -97,8 +97,32 @@ create table EMPLOYEE(
   - PK
 
 ```sql
+SHOW CREATE TABLE EMPLOYEE
+```
+
+- 테이블 CREATE 문 출력
+- 각종 CONSTRAINT도 보여줌
+
+```sql
 ALTER TABLE DEPARTMENT
-ADD FOREIGN KEY(leader_id) references EMPLOYEE(id) on update CASCADE on delete SET NULL;
+ADD FOREIGN KEY(leader_id) //FK 추가
+references EMPLOYEE(id)
+on update CASCADE on delete SET NULL;
+```
+
+```sql
+ALTER TABLE employee
+ADD blood VARCHAR(2) //attribute 추가
+RENAME COLUMN phone TO phone_num //attribute 이름 변경
+MODIFY COLUMN blood CHAR(2) //attribute 타입 변경
+RENAME TO employee_2 //table 이름 변경
+ADD PRIMARY KEY (id) //PK 추가
+```
+
+- 이미 서비스 중인 table의 schema를 변경하는 것이기 때문에 사이드 이펙트를 검토해야 한다.
+
+```sql
+DROP TABLE DEPARTMENT; //테이블 삭제
 ```
 
 ### attribute data type
@@ -216,6 +240,8 @@ ADD FOREIGN KEY(leader_id) references EMPLOYEE(id) on update CASCADE on delete S
 - Referential Integrity constraint
 - attribute가 다른 table의 PK나 Unique Key를 참조할 때 지정해주기 위해 사용
 - 실제 존재하는 값이 FK로 올 수 있다.
+
+  - 값이 없는상태라면 null을 넣어야 한다.
 
 - on delete / on update 조건
   - 참조하고 있는 값이 삭제되거나, 수정될 때 행동 조건
