@@ -96,12 +96,16 @@ create table EMPLOYEE(
   - data type
   - PK
 
+---
+
 ```sql
 SHOW CREATE TABLE EMPLOYEE
 ```
 
 - 테이블 CREATE 문 출력
 - 각종 CONSTRAINT도 보여줌
+
+---
 
 ```sql
 ALTER TABLE DEPARTMENT
@@ -120,6 +124,8 @@ ADD PRIMARY KEY (id) //PK 추가
 ```
 
 - 이미 서비스 중인 table의 schema를 변경하는 것이기 때문에 사이드 이펙트를 검토해야 한다.
+
+---
 
 ```sql
 DROP TABLE DEPARTMENT; //테이블 삭제
