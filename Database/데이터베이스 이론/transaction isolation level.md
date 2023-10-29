@@ -43,6 +43,7 @@
 - 상업적인 DBMS에서 사용하는 방법을 반영해서 isolation level을 반영하지 않았다.
   - **snapshot isolation**
     - 어떻게 concurrency control을 구현할지에 기반한 level
+    -  
 
 ### serializable
 
