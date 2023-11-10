@@ -52,3 +52,104 @@ console.log(message4);
 
 
 
+// 객체
+const superman = {
+  name : 'clark',
+  age : 30,
+}
+
+superman.hairColor = 'black'
+superman['hobby'] = 'football'
+
+delete superman.age
+
+console.log(superman)
+console.log(superman.name)
+console.log(superman['age'])
+
+function makeObject(name, age){
+  return {
+    name,
+    age,
+    hobby : 'football'
+  }
+}
+
+const mike = makeObject("mike", 30)
+console.log(mike)
+
+console.log("age" in mike)
+console.log("birthday" in mike)
+
+function isAdult(user){
+  if(!('age' in user) ||  // user 객체에 age 프로퍼티가 없거나
+      user.age < 20){
+    return false
+  }
+  return true
+}
+
+const John  = {
+  name : "john",
+  age : 30,
+}
+
+const bob = {
+  name : "bob",
+}
+
+console.log(isAdult(John))
+console.log(isAdult(bob))
+
+const aa = {
+  name : "mike",
+  age : 30,
+}
+
+for (x in aa){
+  console.log(x)
+  console.log(aa[x])
+}
+
+let boy = {
+  name : 'mike',
+  showName : function(){
+    // console.log(boy.name)
+    console.log(this.name)
+  }
+}
+
+boy.showName()
+
+let man = boy
+
+man.name = 'TOM'
+
+console.log(boy.name)
+man.showName()
+boy = null
+man.showName() 
+// console.log(boy.name)
+// TypeError: Cannot read properties of null (reading 'name')
+
+
+// array
+let days = ['aa', 'bb', 'cc']
+
+console.log(days[1])
+
+days[1] = 'afaf'
+
+console.log(days)
+
+for(let day of days){
+  console.log(day)
+}
+
+days.map((day) => {
+  console.log(day)  
+})
+
+
+
+
