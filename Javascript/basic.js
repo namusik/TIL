@@ -138,7 +138,7 @@ let days = ['aa', 'bb', 'cc']
 
 console.log(days[1])
 
-days[1] = 'afaf'
+days[1] = '#{' + days[1] + '}'
 
 console.log(days)
 
