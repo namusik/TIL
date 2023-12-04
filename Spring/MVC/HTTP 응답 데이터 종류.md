@@ -26,3 +26,9 @@ contentType이 application/json 이어야 함.
 
 객체를 만들어서 objectMapper를 통해 string으로 만들어줘야 함.
 
+# ResponseEntity 응답
+```java
+return new ResponseEntity<>(result, HttpStatus.valueOf(statusCode));Q
+```
+
+- 클라이언트에 JSON 반환
