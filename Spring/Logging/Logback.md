@@ -26,7 +26,12 @@ logging.level.hello.springmvc=debug
 ~~~java
 log.info("data={}", aa)
 ~~~
+- 로그에 들어갈 문자열을 {}를 써서 치환시켜준다.
 
+```java
+log.error("resolver ex", e);
+```
+- 예외 로그는 {} 안써줘도 가능
 
 ## 로그 설정
 

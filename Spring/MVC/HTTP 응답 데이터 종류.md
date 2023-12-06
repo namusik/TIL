@@ -19,12 +19,18 @@ response.getwriter().println(html 코드)
 메시지 바디에 JSON을 담아 응답한다. 
 
 ~~~java
+Map<String, Object> errorResult = new HashMap<>();
+errorResult.put("ex", ex.getClass());
+errorResult.put("message", ex.getMessage());
+
+String result = objectMapper.writeValueAsString(errorResult);
 response.setContentType("application/json");
 response.setCharacterEncoding("utf-8");
+response.getWriter().write(result);
 ~~~
-contentType이 application/json 이어야 함.
+- contentType이 application/json 이어야 함.
 
-객체를 만들어서 objectMapper를 통해 string으로 만들어줘야 함.
+- 객체를 만들어서 objectMapper를 통해 string으로 만들어줘야 함.
 
 # ResponseEntity 응답
 ```java
