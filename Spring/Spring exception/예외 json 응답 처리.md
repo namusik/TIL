@@ -88,7 +88,10 @@ public String responseStatusEx2() {
 
 ```java
 @Slf4j
-//@RestControllerAdvice(assignableTypes = ApiExceptionV2Controller.class)
+@RestCtrollerAdvice // 모든 컨트롤러
+@RestControllerAdvice(assignableTypes = {ApiExceptionV2Controller.class, sample.class}) // controller 지정
+@RestControllerAdvice("org.example.controllers") // package를 지정
+@RestControllerAdvice(annotations = RestController.class) // 특정 어노테이션 붙은 컨트롤러 지정
 public class ExControllerAdvice {
   // 1
   @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -113,16 +116,29 @@ public class ExControllerAdvice {
       log.error("[exceptionHandler e]", e);
       return new ErrorResult("EX", "내부오류");
   }
+
+  // 4 
+  @ExceptionHandler(ViewException.class)
+  public ModelAndView ex(ViewException e){
+    log.info("exception e", e);
+    return new ModelAndView("error");
+  }
 }
 ```
-- **@ExceptionHandler(처리할 예외 class 타입)** 을 메서드에 붙여준다. 
+- **@RestControllerAdvice**
+  - 대상으로 지정된 controller에 **@ExceptionHandler**와 **@InitBinder** 기능을 부여해준다.
+  - @ControllerAdvice에 @ResponseBody 를 추가한 어노테이션
+  - contorller를 따로 지정해주지 않으면 모든 controller에 적용된다.
+- **@ExceptionHandler(처리할 예외 class 타입)** 선언해준다.
   - 생략하면 메서드의 파라미터로 지정된 exception을 처리한다.
   - 상세한 설정이 우선이라는 법칙이 있기 때문에 자식 exception은 우선 호출된다. 
 
 - 1번 케이스 
-  - **@ResponseStatus(HttpStatus)** 를 사용해서 처리 후 응답의 HttpStatus를 지정할 수 있다.
+  - **@ResponseStatus(HttpStatus)** 는 Custom Exception 뿐만 아니라, ExceptionHandler에도 쓰일 수 있다. 이러면 응답의 HttpStatus를 지정할 수 있다.
 - 2번 케이스 
   - 응답의 형식을 직접 생성한 객체로 할 수도 있고, **ResponseEntity<>(객체,Httpstatus)** 로 할 수 도 있다. 
-  - **ResponseEntity<>**를 사용하면 자동으로 **@ResponseStatus**를 쓸 필요가 없어진다.
+  - **ResponseEntity<>**를 사용하면 자동으로 **@ResponseStatus**를 쓸 필요가 없어진다. 대신 코드 내에서 동적으로 상태코드를 바꿀 수 있다는 장점이 있다.
 - 3번 케이스 
-  - 
+  - Exception 전체를 인자로 받고 있다. 상세한 설정 외의 모든 예외를 이렇게 처리하겠다는 뜻이다.
+- 4번 케이스
+  - ModelAndView를 반환해서 오류 화면을 띄울 수 도 있다.
