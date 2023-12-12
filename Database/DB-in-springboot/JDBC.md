@@ -18,7 +18,7 @@ java.sql.ResultSet  : SQL 요청 응답
 
 
 ## 동작 방식
-![jdbcdriver](../images/DB/jdbcdriver.png)
+![jdbcdriver](../../images/DB/jdbcdriver.png)
 
 JDBC 표준 인터페이스가 있고 
 

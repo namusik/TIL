@@ -4,7 +4,7 @@
 Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
 ~~~
 
-![drivermanager](../images/DB/drivermanager.png)
+![drivermanager](../../images/DB/drivermanager.png)
 
 1. Drivermanager.getConnection()을 호출.
 2. DriverManager가 스프링 라이브러리에 등록된 **DB Driver** 목록을 쭉 훑으면서 커넥션을 획득할 수 있는지 확인.
@@ -19,7 +19,7 @@ Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
    5. DB드라이버는 응답을 받아 커넥션 객체를 생성해서 클라이언트에 반환
 
 ## Connection Pool
-![connectionPool](../images/DB/connectionPool.png)
+![connectionPool](../../images/DB/connectionPool.png)
 DriverManager를 통해 매 요청마다 커넥션을 생성하는 것은 오래걸린다. 
 그래서 미리 커넥션을 생성해두고 사용하자는 개념이 Connection Pool.
 
@@ -31,7 +31,7 @@ DriverManager를 통해 매 요청마다 커넥션을 생성하는 것은 오래
 HikariCP를 스프링에서는 기본적으로 사용.
 
 ## DataSource 
-![datasource](../images/DB/datasource.png)
+![datasource](../../images/DB/datasource.png)
 
 javax.sql.DataSource
 커넥션을 획득하는 방법을 추상화한 인터페이스
@@ -58,7 +58,7 @@ spring.datasource.password=
 기본적으로 **HikariDataSource**를 빈으로 등록함.
 
 ## PlatformTransactionManager
-![tsManager](../images/DB/transactionmanager.png)
+![tsManager](../../images/DB/transactionmanager.png)
 
 스프링 트랜잭션 인터페이스 (트랜잭션 매니저)
 JDBC, JPA 마다 트랜잭션을 획득하는 코드가 다 다르다. 
@@ -95,7 +95,7 @@ JDBC 라이브러리가 있으면, DataSourceTransactionManager.
 JPA 라이브러리가 있으면, JpaTransactionManager. (jdbc기능도 가지고 있다.) 
 
 ## TransactionSynchronizationManager
-![tssyncro](../images/DB/tssyncro.png)
+![tssyncro](../../images/DB/tssyncro.png)
 
 트랜잭션 동기화 매니저.
 
@@ -131,7 +131,7 @@ transactiontemplate은 주입받은 PlatformTransactionManager를 가지고 만�
 스프링AOP를 통해 프록시 도입.
 서비스 계층에 여전히 남아있는 트랜잭션 코드를 없애기 위해.
 
-![aop](../images/DB/transactionAOP.png)
+![aop](../../images/DB/transactionAOP.png)
 
 @Transactional을 쓰더라도 내부에서 
 DataSource, PlatformTransactionalManager 모두 빈 등록이 필요하다.
