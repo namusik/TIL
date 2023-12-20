@@ -5,9 +5,9 @@ Spring Container는 스프링 프레임워크의 IoC Container 이다.
 
 스프링 빈의 인스턴스화, 구성, 조립, 생명주기 관리의 역할을 한다.
 
-## 관련 Class
+### 1. 관련 Class
 
-#### @Configuration
+#### 1.1 @Configuration
 애플리케이션 설정정보 클래스에 적어주는 애노테이션.
 
 Spring은 이제 이 클래스를 설정정보로 인식.
@@ -20,7 +20,7 @@ Spring은 이제 이 클래스를 설정정보로 인식.
 >
 > `CGLIB`를 사용해서 바이트 코드를 조작하고, 싱글톤이 보장되도록 한다.
 
-#### @Bean
+#### 1.2 @Bean
 스프링 컨테이너는 `@Configuration` 클래스 내에 있는 `@Bean`이 적힌 method들을 모두 호출해서 return된 객체를 `스프링 컨테이너`에 등록한다.
 
 >만약 `@Configuration`없는 클래스에 `@Bean`만 있다면 스프링 빈으로 등록은 되지만, 싱글톤을 보장하지는 않는다.
@@ -48,12 +48,12 @@ public class AppConfig {
 ~~~
 ![beanfactory](../../images/Java/beanfactory.png)
 
-#### BeanFactory
+#### 1.3 BeanFactory
 스프링 컨테이너 최상 interface
 
 기본적인 스프링 빈 조회 기능
 
-#### ApplicationContext
+#### 1.4 ApplicationContext
 `Spring Container` interface
 스프링 컨테이너
 
@@ -61,14 +61,14 @@ public class AppConfig {
 
 대부분, ApplicationContext를 사용한다.
 
-#### BeanDefinition
+#### 1.5 BeanDefinition
 ![beandefinition](../../images/Java/beandefinition.png)
 스프링 빈 설정 메타정보
 `@Bean`, `<bean>` 당 각각 하나씩 메타 정보가 생성됨. 
 
 스프링 컨테이너는 이 메타정보를 기반으로 스프링 빈을 만든다. 따라서, 스프링 빈이 자바 코드인지, XML인지 몰라도 된다.
 
-#### AnnotationConfigApplicationContext
+#### 1.6 AnnotationConfigApplicationContext
 애노테이션 기반 자바 설정 클래스 일 때 사용
 
 `ApplicationContext`의 구현체
@@ -114,7 +114,7 @@ Map<String, MemberRepository> beansOfType =
 
 이때는, beansOfType()을 쓰거나, 스프링 빈 이름을 지정하거나, 구현체 타입으로 조회하면 된다.
 
-#### @ComponentScan
+#### 1.7 @ComponentScan
 컴포넌트 스캔
 
 설정정보가 없어도 자동으로 스프링 빈을 등록하는 기능
@@ -134,14 +134,14 @@ Map<String, MemberRepository> beansOfType =
 
 사실 `@SpringBootApplication`에 @ComponentScan이 들어있어서 따로 쓸일은 없다.
 
-##### 스캔 대상
+##### 1.7.1 스캔 대상
 @Component
 @Controller
 @Service
 @Repository
 @Configuration
 
-#### @AutoWired
+#### 1.8 @AutoWired
 기존에는 @Configuration에서 의존관계 설정을 다 해줬는데, @ComponentScan과 @Component를 쓰면 어디서 의존관계를 설정(어떤 구현체를 주입?)해주게 되는지 모른다.
 
 이때 사용하는 것이 `@AutoWired`
@@ -239,7 +239,7 @@ public Test(@Asian People people){
 
 커스텀 애노테이션을 무분별하게 쓰는 것은 권장하지 않는다. 코드를 파악해야되는 노력이 추가로 들기 때문에.
 
-#### @SpringBootApplication
+#### 1.9 @SpringBootApplication
 @Configuration, @EnableAutoConfiguration,@ComponentScan이 합쳐진 애노테이션
 
 SpringApplication.run()이 구동되면, 해당 위치의 패키지와 하위패키지를 모두 스캔한다.
@@ -248,7 +248,7 @@ run()내부에서 스프링 컨테이너가 생성된다.
 
 스프링 애플리케이션의 컨텍스트를 생성하는데 사용.
 
-## 스프링 컨테이너 생성과정
+### 2.스프링 컨테이너 생성과정
 1. 스프링 컨테이너가 생성 될 때, 구성정보(@Configuration)이 지정되어야 한다. 하나의 스프링 컨테이너 안에, 여러 구성정보가 들어갈 수 있다.
 2. 스프링 컨테이너는 @Bean을 모두 호출해서 return 객체들을  스프링 빈으로 등록한다.
 3. 구성정보를 참고해서 스프링 빈 DI를 한다.
@@ -256,20 +256,18 @@ run()내부에서 스프링 컨테이너가 생성된다.
 ![springcontainer](../../images/Java/springcontainer.png)
 
 
-## 스프링 컨테이너 특징
+### 3. 스프링 컨테이너 특징
 
-#### 싱글톤 컨테이너
+#### 3.1 싱글톤 컨테이너
 스프링 컨테이너는 싱글톤 패턴의 문제점을 해결하면서, 스프링 빈을 하나만 생성한다.
 
 싱글톤 객체를 생성하고 관리하는 싱글톤 레지스트리 역할을 한다.
 
 
-#### 스프링 컨테이너 저장 영역 
+#### 3.2 스프링 컨테이너 저장 영역 
 스프링 컨테이너와 스프링 빈은 모두 결국 객체이기 때문에 `heap` 영역에 생성된다. 
 
 하지만, 싱글턴 빈은 스프링 컨테이너가 참조하고 있고, 스프링 컨테이너도 애플리케이션 어디선가 계속 참조하고 있기 때문에 GC의 대상이 되지않고 종료직전까지 사라지지 않는다.(GC의 대상이 되려면 참조하는 포인터가 없어야 하기 때문에)
-
-## 스프링 컨테이너의 장점
 
 ## 참고
 https://www.nextree.co.kr/p11247/

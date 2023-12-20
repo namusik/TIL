@@ -252,6 +252,48 @@ public class ElectricCar extends Car {
 - 추상클래스의 기본생성자는 super()를 생략하면 컴파일러가 자동으로 super()를 subclass의 생성자에서 호출해주기 때문에
   - ElectricCar(chargingTime)을 호출하면 추상클래스의 super()가 호출된다.
 
+## 추상클래스에서 @Autowired의 용례
+
+### setter 주입
+```java
+@Service
+public abstract class BallService {
+
+    private LogRepository logRepository;
+
+    @Autowired
+    public final void setLogRepository(LogRepository logRepository) {
+        this.logRepository = logRepository;
+    }
+}
+```
+- @Autowired를 사용해서 종속성이 주입되는 setter에 final을 붙여서 subClass에서 override 하지 못하게 해야한다.
+- 하지만 일반적인 케이스에서 쓰지는 않는다.
+  - 종속성 주입이 특정 메서드에만 제한되지 않기 위해 final을 쓰지 않는다
+- 아래의 생성자 주입을 쓰자.
+
+### 생성자 주입
+```java
+public abstract class BallService {
+
+    private RuleRepository ruleRepository;
+
+    public BallService(RuleRepository ruleRepository) {
+        this.ruleRepository = ruleRepository;
+    }
+}
+
+@Component
+public class BasketballService extends BallService {
+
+    @Autowired
+    public BasketballService(RuleRepository ruleRepository) {
+        super(ruleRepository);
+    }
+}
+```
+- 추상클래스의 생성자에는 @Autowired를 사용할 수 없다.
+- 대신 subClass에서 @Autowired를 사용해서 의존성을 주입받아야 한다.
 
 ## 출처
 https://www.baeldung.com/java-abstract-classes-constructors
