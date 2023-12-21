@@ -11,10 +11,25 @@
 - 인터페이스 역시 클래스와 유사한 사용자 정의 유형.
   - 대신 구현체에 의해 재정의 되는 필드와 메서드를 가진다.
 
-## interface vs abstract class
+## 언제 interface를 써야 되는가
+- 여러 상속을 사용해야 하는 경우.
+- 타사 공급업체가 구현해야 하는 경우
+- A는 이 동작을 할 수 있다.
+  - Clonable은 객체를 복제할 수 있다. Drawble을 도형을 그릴 수 있다.
 
+## 언제 abstract class를 써야 하는가
+- 상속 개념을 사용하려는 경우. 여러 관련 클래스들 간에 코드를 공유할 때. 
+- 요구사항이 지정되어 있고, 구현 세부사항만 부분적으로 있는 경우.
+- A는 B다 라는 증거가 필요할 때.
+  - 개는 동물이다. 람보르기니는 자동차이다. 
 
+## 인터페이스에 default method가 도입되었는데 abstract class와 무슨 차이가 있을까.
+### State 
+- 추상클래스는 State를 가질 수 있다. field를 말하는 듯 함.
+  - subClass는 부모 추상클래스의 field를 공유하고, 접근가능하다.
 
+- 
+- 
 
 ## 출처
 https://www.baeldung.com/java-interface-vs-abstract-class
