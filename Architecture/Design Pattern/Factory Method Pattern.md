@@ -1,10 +1,12 @@
 # Facotry Method Pattern
 
 ## 개념
-![factorymethod](../../images/architecture/facotrymethod.png)
+![factorymethod](../../images/architecture/factorymethod.png)
 
 - 구현체를 생성하는 코드와 해당 구현체를 사용하는 코드를 분리해서 결합 코드를 느슨하게 하는 것이 목표
 - 새로운 구현체를 도입하더라도 기존 코드의 수정없이 할 수 있음.
+- SRP, OCP를 따르기 위해
+- 각 공장이 있고 각 공장에서 만드는 물건이 다름. 그런데 물건들은 같은 interface를 공유한다.
 
 ## 사용법
 ```java
@@ -43,9 +45,18 @@ public abstract class MotorVehicleFactory {
     protected abstract MotorVehicle createMotorVehicle();
 }
 ```
-- 새로운 구현체를 생성하는 역할을 하는 추상클래스.
-- 특정 factory에서 특정 구현체를 만들게 하기 위해 추상클래스로 만든다.
+- 새로운 인스턴스를 생성하는 역할을 하는 추상클래스.
+- 상속받은 특정 factory에서 특정 인스턴스를 만들게 하기 위해 추상클래스로 만든다.
 
+```java
+public class MotorcycleFactory extends MotorVehicleFactory {
+    @Override
+    protected MotorVehicle createMotorVehicle() {
+        return new Motorcycle();
+    }
+}
+```
+- 이 팩토리에서는 위에서 만든 구현체 motorcycle을 생성한다.
 
 
 - 팩토리 메서드 패턴은 (new 연산자를 사용한) 객체 생성 직접 호출들을 특별한 팩토리 메서드에 대한 호출들로 대체하라고 제안
