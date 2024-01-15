@@ -33,24 +33,24 @@ public interface Electronic {
 
   //Private method
   default void bar() {
-        System.out.print("Hello");
-        baz();
-        staticBaz()
+    System.out.print("Hello");
+    baz();
+    staticBaz()
     }
 
   private void baz() {
     System.out.println(" world!");
   }
 
-    static void buzz() {
-        System.out.print("Hello");
-        staticBaz();
-        // baz()
-    }
+  static void buzz() {
+    System.out.print("Hello");
+    staticBaz();
+    // baz()
+  }
 
-    private static void staticBaz() {
-        System.out.println(" static world!");
-    }  
+  private static void staticBaz() {
+    System.out.println(" static world!");
+  }  
 }
 
 public class Computer implements Electronic {
