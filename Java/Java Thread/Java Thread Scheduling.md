@@ -66,6 +66,8 @@ Thread.sleep(long millis), wait(int timeout), thread.join(long millis), LockSupp
 
 `isAlive()`를 통해 Boolean으로 죽었는지 확인 가능.
 
+쓰레드가 중단되면 InterruptedException 발생
+
 ## 상태 메서드
 
 ### sleep(long millis)
@@ -90,7 +92,7 @@ sleep()은 항상 현재 실행 중인 쓰레드에 대해 작동한다.
 - 쓰레드가 RUNNABLE 상태일 때
   - InterruptedException이 예약된다.
   - 바로 종료시킬 순 없으니까.
-- interrupt가 예약된 쓰레드가 실행되다가 sleep, join, wait 같이 WAITING 혹은 BLOCKED 상태가 되면
+  - interrupt가 예약된 쓰레드가 실행되다가 sleep, join, wait 같이 WAITING 혹은 BLOCKED 상태가 되면
   - InterrupedException이 바로 발생
   - run()이 정상 종료된다.
 

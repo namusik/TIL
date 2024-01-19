@@ -58,6 +58,8 @@ main method에서 새로운 thread를 시작하면 이 thread를 위한 thread s
 
 > 실행중인 **user thread**(사용자 쓰레드)가 없을 때, 프로그램이 종료된다.
 
+> 스레드들은 동일한 메모리 공간에서 실행된다. 쓰레드끼리 쉽게 통신이 가능하다.
+
 ## Java에서의 Thread 구현 방법
 
 ### Runnable interface 구현
