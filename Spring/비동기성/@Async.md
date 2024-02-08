@@ -6,6 +6,9 @@
 
 ## @EnableAsync
 - @EnableAsync 어노테이션을 포함하는 설정 클래스는 스프링에게 애플리케이션에서 비동기 기능을 활성화하도록 지시
+- 사용자 정의 스레드 풀을 설정하고 구성하는 데 사용
+  - ThreadPoolTaskExecutor 클래스 Bean 등록
+- 사용자 정의 스레드 풀을 사용하려면, @Async("taskExecutor")와 같이 어노테이션에 빈 이름을 명시
 
 ```java
 @Configuration
