@@ -18,6 +18,16 @@ FileInputStream / FileOutputStream: 파일에서 데이터를 읽거나 파일�
 BufferedInputStream / BufferedOutputStream: 버퍼링을 통해 입출력 효율을 높일 수 있습니다.
 DataInputStream / DataOutputStream: 기본 타입 데이터(int, float 등)를 바이트 스트림으로 처리할 수 있습니다.
 
+## InputStream
+
+### 개념
+- 바이트 기반 입력 스트림의 모든 클래스의 슈퍼 클래스
+- 바이너리 데이터(이미지, 비디오 파일 등)와 텍스트 데이터 모두를 읽는 데 사용
+- 데이터를 바이트 단위로 읽습니다. 즉, 읽어들인 데이터는 바이트 배열로 처리되거나 바이트 단위로 처리
+
+## InputStreamReader
+- 텍스트 데이터를 처리해야 한다면 InputStreamReader를 사용하고, 바이너리 데이터를 처리해야 한다면 InputStream을 직접 사용
+
 ## 문자 기반 스트림
 - 데이터를 문자 단위로 처리
 - 주로 텍스트 데이터를 처리할 때 사용되며, 문자 인코딩을 자동으로 처리할 수 있어 다양한 텍스트 형식과 호환
@@ -29,3 +39,4 @@ PrintWriter: 파일이나 스트림에 데이터를 출력할 때 유용한 메�
 기타 중요 클래스
 RandomAccessFile: 파일에 대한 랜덤 액세스를 가능하게 합니다. 파일의 어느 부분에서나 읽기/쓰기 작업을 할 수 있습니다.
 ObjectInputStream / ObjectOutputStream: 객체 단위의 입출력을 가능하게 하는 스트림으로, 객체 직렬화에 사용됩니다.
+

@@ -86,13 +86,3 @@ BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputS
 String serverResponse = input.readLine(); // 서버로부터 한 줄의 메시지를 읽습니다.
 ```
 - 소켓으로부터 데이터를 읽기 위한 InputStream을 반환
-
-## InputStream
-
-### 개념
-- 바이트 기반 입력 스트림의 모든 클래스의 슈퍼 클래스
-- 바이너리 데이터(이미지, 비디오 파일 등)와 텍스트 데이터 모두를 읽는 데 사용
-- 데이터를 바이트 단위로 읽습니다. 즉, 읽어들인 데이터는 바이트 배열로 처리되거나 바이트 단위로 처리
-
-## InputStreamReader
-- 텍스트 데이터를 처리해야 한다면 InputStreamReader를 사용하고, 바이너리 데이터를 처리해야 한다면 InputStream을 직접 사용
