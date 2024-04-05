@@ -91,12 +91,14 @@ try (Socket socket = new Socket()) {
 ```java
 OutputStream outputStream = socket.getOutputStream();
 outputStream.write("HELLO".getBytes());
-```
-- 소켓으로 데이터를 쓰기 위한 OutputStream 반환
 
-```java
 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 out.println("hello");
+
+DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+out.writeChar(type);
+out.writeInt(data.length());
+out.write(dataInBytes);
 ```
 - 소켓으로 데이터를 쓰기 위한 PrintWriter를 반환
 
@@ -120,7 +122,29 @@ DataInputStream in = new DataInputStream(new BufferedInputStream(socket.getInput
 
 ### 소켓에서 바이너리 데이터 읽기
 - 데이터를 바이트 단위로 읽을 때는 서버와 클라이언트 간의 통신을 위한 자체 프로토콜을 정의해야 한다.
-- 가장 간단한 프로토콜을 TLV(Type Length Value)
+- 가장 간단하게 프로토콜을 TLV(Type Length Value)로 정의할 수 있다.
+- 소켓에 기록되는 모든 메시지가 타입, 길이, 값의 형태로 되어 있음을 의미.
+
+![tlv](../../images/Java/tlv.png)
+
+- Type : 데이터의 유형을 나타내는 1바이트의 문자 
+- Length : 데이터의 길이를 나타내는 4바이트의 정수
+- Value : 실제 데이터
+
+```java
+DataInputStream dataInputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
+int length = dataInputStream.readInt();
+byte[] messageByte = new byte[length];
+boolean end = false;
+StringBuilder dataString = new StringBuilder(length);
+int totalBytesRead = 0;
+int currentBytesRead = dataInputStream.read(messageByte);
+```
+-  입력 스트림(`dataInputStream`)으로부터 바이트 데이터를 읽어서 바이트 배열 `messageByte에` 저장
+   -  messageByte.length 만큼의 바이트를 읽음
+-  반환하는 int 값은 실제로 읽혀진 바이트 수
+   -  만약 입력 스트림의 끝에 도달해서 더 이상 읽을 데이터가 없다면 -1 반환
+-  데이터가 도착할 때까지 이 메소드는 호출된 스레드를 블로킹(일시 정지) 상태로 만든다.
 
 ## 출처
 https://www.baeldung.com/a-guide-to-java-sockets
