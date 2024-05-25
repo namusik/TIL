@@ -42,6 +42,11 @@ Optional<String> op = Optional.ofNullable(name)
 `ofNullable`을 사용하면
  non-null, null 모두 사용 가능하다.
 
+주진 값이 null일 수도 있고 아닐 수도 있음을 표현하는 `Optional` 객체 생성
+
+null이 아닌 값을 주면 값을 포함하는 Optional 생성.
+null을 주면, Optional.empty()를 생성하게 됨.
+
 그런데, 보통 ofNullable()에 직접적으로 null을 넣지는 않는다. empty()를 사용하면 되기 때문에.
 
 ### optional null checking
@@ -108,16 +113,15 @@ orElseGet
     null이 아니면 함수가 실행되지 않음. -> 지연 로딩 가능
 
 #### orElseThrow()
+- Optional.orElseThrow(Supplier<? extends X> exceptionSupplier)
 ~~~java
 String nullName = null;
 String name = Optional.ofNullable(nullName).orElseThrow(
     IllegalArgumentException::new);
 ~~~
 
-default value를 반환하는 것이 아니라, 
-exception을 throw한다.
-
-Java10에서 예외를 직접 던지지 않으면,  NoSuchElementException을 throw하는 기능이 추가되었다.
+- Optional에 값이 존재하면 그 값을 반환하고, Optional.empty()면 지정된 예외를 던짐.
+- Java10에서 예외를 직접 던지지 않으면,  NoSuchElementException을 throw하는 기능이 추가되었다.
 
 #### or()
 ~~~java
