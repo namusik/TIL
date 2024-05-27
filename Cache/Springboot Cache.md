@@ -18,7 +18,9 @@ public class CachingConfig {
 }
 ```
 - @EnableCaching 추가
-- Spring의 기본 내장 캐시 중 하나인 ConcurrentMapCacheManager를 사용
+- CacheManager를 지정하지하않으면 SimpleCacheManager
+- CaffeineCacheManager, ConcurrentMapCacheManager, EhCacheCacheManager, JCacheCacheManager 등등 사용 가능
+- Spring의 기본 내장 캐시 중 하나인 ConcurrentMapCacheManager를 지정해 줄 수 도 있음
   - 메모리 기반 캐시를 제공하는 캐시 매니저
   - ConcurrentMap을 사용해서 캐시를 구현
   - 애플리케이션의 JVM 메모리에 데이터를 저장하며, 설정이 매우 간단하지만, 분산 캐시나 영구 저장소를 필요로 하지 않는 경우에 유용
