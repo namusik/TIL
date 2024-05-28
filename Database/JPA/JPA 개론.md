@@ -12,16 +12,15 @@ implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 ~~~properties
 logging.level.org.hibernate.SQL=debug
 //하이버네이트 SQL 확인.
-logging.level.org.hibernate.type.descriptor.sql.BasicBinder=trace
-//SQL에 바인딩되는 파라미터 확인
+logging.level.org.hibernate.type.descriptor.sql.BasicBinder=trace ---> logging.level.org.hibernate.orm.jdbc.bind=TRACE
+// SQL에 바인딩되는 파라미터 확인
+// 스프링부트 3.0에서 오른쪽으로 바뀜.
 ~~~
 
-스프링부트 3.0에서 아래처럼 바뀜.
-~~~properties
-logging.level.org.hibernate.orm.jdbc.bind=TRACE
-~~~
+```properties
 spring.jpa.show-sql=true
-system.out으로 출력돼서 권장하지 않음.
+```
+- system.out으로 출력돼서 권장하지 않음.
 
 ## 의의
 Entity Relationship을 Object Relationship으로 바꿔주는것.

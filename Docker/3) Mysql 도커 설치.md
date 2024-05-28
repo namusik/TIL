@@ -19,7 +19,7 @@ docker run --platform linux/amd64
 
 혹은 비밀번호를 지정안하려면
 
-    docker run -d -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=yes --name mysqlCont mysql
+    docker run -d -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=yes --name local_practice mysql
 
     //맥북에서
     docker run --platform linux/amd64 -p 3308:3306 --name megabird_local -e MYSQL_ALLOW_EMPTY_PASSWORD=YES -e MYSQL_DATABASE=MEGABIRD_LOCAL -d mysql:5.6
