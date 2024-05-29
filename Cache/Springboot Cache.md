@@ -51,10 +51,24 @@ public Collection<String> getCachenNames() {
 ```
 - 다양한 방법이 있지만 간단하게 핸들러를 사용해서 cacheManager에 저장된 캐시이름을 확인할 수 있음.
 
+## 특정 캐시 데이터 확인 
+```java
+private final CacheManager cacheManager;
+
+public Map<Object, Object> getAllCaches(String cacheName) {
+    Cache cache = cacheManager.getCache(cacheName);
+    if(cache instanceof ConcurrentMapCache concurrentMapCache) {
+        return new HashMap<>(concurrentMapCache.getNativeCache());
+    }
+    return new HashMap<>();
+}
+```
+- 특정한 이름의 캐시에 저장된 모든 데이터를 조회한다.
+
 ## @Cacheable
 ```java
 // 기본 키 생성
-@Cacheable("cache1", "cache2")
+@Cacheable({"addresses", "directory"})
 public String getAddress(Customer customer) {...}
 
 // 단일 인자 키 생성
@@ -72,20 +86,76 @@ public String getUserData(User user) {...}
 // 복합 객체 필드 참조하여 키 생성
 @Cacheable(value = "exampleCache", key = "#user.username + '-' + #user.age")
 public String getUserData(User user) {}
-
 ```
+
 - @Cacheable("캐시이름")을 메서드에 붙여주면 된다.
-- 해당 메소드의 결과를 지정하누캐시에 저장
+- 해당 메소드의 결과를 지정한 캐시에 저장
 - 동일한 인자로 메소드가 다시 호출되면, 메소드를 실행하는 대신 캐시된 결과를 반환
 - key 설정을 통해 캐시 key를 커스터마이징 할 수 있다.
   - #을 붙여야하는 이유는 SpEL 표현식에서 메소드 인자나 객체의 속성을 참조하기 위해 필수적이기 때문
   - #을 붙이지 않으면 getData(parama1)의 인자값 `param1`이 키로 들어가는게 아니라 `parameter` 글자 자체가 캐시 key가 됨
-- 
+- 2 개 이상의 캐시에 저장을 하면, 적혀있는 순서 첫번 째 캐시에서 조회를 한다.
+- **주의사항**
+  - 동일한 param1을 인자로 가지지만 A 함수는 String을 반환하고, B 함수는 Object를 반환할 때,
+  - 두 함수 중 먼저 호출이 된 함수의 return type이 캐시에 param1을 key로 가지는 데이터로 저장이 된다. 
+  - 따라서, A를 먼저 호출후, B를 호출하면 DB에서 검색하는 것이 아니라, 동일한 param1을 key로 가지는 캐시에서 조회하기 때문에 오류가 발생한다.
 
+```
+// 저장된 캐시 예시
+{
+    // 인자가 하나인 함수의 자동생성 key
+    "살인의 추억": "봉준호", 
+    // 인자가 2개인 함수의 커스터마이즈 key
+    "살인의 추억-봉준호": {
+        "id": 1,
+        "title": "살인의 추억",
+        "director": "봉준호"
+    },
+    // 인자가 2개인 함수의 자동생성 key
+    "SimpleKey [살인의 추억, 봉준호]": {
+        "id": 1,
+        "title": "살인의 추억",
+        "director": "봉준호"
+    }
+}
+```
+
+## @CacheEvict
+```java
+// 지정한 캐시의 모든 데이터를 삭제
+//  value :: 지정한 캐시 이름, allEntries=true :: 모든 값 제거
+@CacheEvict(value="addresses", allEntries=true)
+public String getAddress(Customer customer) {...}
+
+
+
+```
+- 캐시에서 하나 이상의 값 또는 모든 값의 제거
+- 캐시된 데이터가 무효화되어, 다음번 데이터 요청 시 새로운 값을 가져온다.
+- 모든 메서드를 @Cacheable로 만들면 캐시는 상당히 크고 빠르게 커질 수 있으며, 오래되거나 사용하지 않는 데이터를 많이 보유하게 됨. 이를 제거하기 위해 사용
+- 조회 함수에 @Cacheable을 붙이고, 저장/수정 함수에 @CacheEvict를 붙이면 DB에 수정이 될 때마다 캐시를 삭제하고 다시 조회할 때 캐시를 갱신하는 전략을 가질 수 있다.
+- key, allEntries를 설정해주지 않으면 캐시가 삭제되지 않는다.
+
+
+{"SimpleKey [시, 이창동4]": {
+        "id": 204,
+        "title": "시",
+        "director": "이창동4"
+    },
+    "SimpleKey [올드보이, 박찬욱]": {
+        "id": 2,
+        "title": "올드보이",
+        "director": "박찬욱"
+    },
+    "SimpleKey [살인의 추억, 봉준호]": {
+        "id": 1,
+        "title": "살인의 추억",
+        "director": "봉준호"
+    }
+}
 
 
 1. @CachePut(value = "sample", key = "#sam") : 캐시 수정
-2. @CacheEvict() : 캐시 삭제 
 
 
 ## 출처
