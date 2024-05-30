@@ -123,40 +123,38 @@ public String getUserData(User user) {}
 ## @CacheEvict
 ```java
 // 지정한 캐시의 모든 데이터를 삭제
-//  value :: 지정한 캐시 이름, allEntries=true :: 모든 값 제거
-@CacheEvict(value="addresses", allEntries=true)
+//  value :: 지정한 캐시 이름, allEntries=true :: 모든 값 제거 , beforeInvocation = true :: 메서드가 호출되기전에 캐시 제거. default는 false
+@CacheEvict(value="addresses", allEntries=true, , beforeInvocation = true)
 public String getAddress(Customer customer) {...}
 
-
+// 삭제할 key를 지정
+// 현재 default key로 저장된 캐시를 삭제하는 법은 찾지 못했다.
+@CacheEvict(value="addresses", key="#oldTitle + '-' + #oldDirector")
+public String getAddress(Customer customer) {...}
 
 ```
 - 캐시에서 하나 이상의 값 또는 모든 값의 제거
 - 캐시된 데이터가 무효화되어, 다음번 데이터 요청 시 새로운 값을 가져온다.
 - 모든 메서드를 @Cacheable로 만들면 캐시는 상당히 크고 빠르게 커질 수 있으며, 오래되거나 사용하지 않는 데이터를 많이 보유하게 됨. 이를 제거하기 위해 사용
 - 조회 함수에 @Cacheable을 붙이고, 저장/수정 함수에 @CacheEvict를 붙이면 DB에 수정이 될 때마다 캐시를 삭제하고 다시 조회할 때 캐시를 갱신하는 전략을 가질 수 있다.
-- key, allEntries를 설정해주지 않으면 캐시가 삭제되지 않는다.
+- key를 지정하지 않거나, allEntries=true를 설정해주지 않으면 캐시가 삭제되지 않는다.
+- 주의사항
+  - @CacheEvict는 AOP를 통해 동작하기 때문에 같은 클래스 내에서 @CacheEvict이 붙은 메서드를 내부 호출하면 캐시 삭제가 되지 않는다. 
+  - 외부의 class에서 @CacheEvict 함수를 호출하는 방식을 사용해야 캐시 삭제가 된다.
 
+## @CachePut
+```java
 
-{"SimpleKey [시, 이창동4]": {
-        "id": 204,
-        "title": "시",
-        "director": "이창동4"
-    },
-    "SimpleKey [올드보이, 박찬욱]": {
-        "id": 2,
-        "title": "올드보이",
-        "director": "박찬욱"
-    },
-    "SimpleKey [살인의 추억, 봉준호]": {
-        "id": 1,
-        "title": "살인의 추억",
-        "director": "봉준호"
-    }
-}
-
+```
 
 1. @CachePut(value = "sample", key = "#sam") : 캐시 수정
 
+## 캐싱 전략에 대한 생각
+
+- 조회를 할 때 캐시에 저장
+- 저장을 할 때 캐싱하지 않음 (조회시 캐시에 저장하니까)
+- 수정을 할 때 캐시에서 삭제
+- 삭제를 할 때 
 
 ## 출처
 https://www.baeldung.com/spring-cache-tutorial
