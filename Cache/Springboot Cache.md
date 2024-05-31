@@ -27,6 +27,25 @@ public class CachingConfig {
   - 각 캐시는 ConcurrentMapCache로 관리됨.
   - 캐시 생성 시 캐시 이름을 명시적으로 지정 가능
 
+## NoOpCacheManager
+```java
+caching:
+  enabled: true
+
+@Value("${caching.enabled}")
+public boolean cacheEnabled;
+
+@Bean
+public CacheManager cacheManager() {
+    if(cacheEnabled) {
+        // 캐시 미사용 (false)
+        return new NoOpCacheManager();
+    }
+    return new ConcurrentMapCacheManager("director" , "title", "movie", "movie2");
+}
+```
+- 캐시 비활성화를 해주기 위해 캐싱을 수행하지 않는 캐시 매니저 **NoOpCacheManager**를 사용해준다.
+
 ## CacheManager 커스터마이징
 ```java
 @Component
@@ -50,6 +69,11 @@ public Collection<String> getCachenNames() {
 }
 ```
 - 다양한 방법이 있지만 간단하게 핸들러를 사용해서 cacheManager에 저장된 캐시이름을 확인할 수 있음.
+
+```java
+java.lang.IllegalArgumentException: Cannot find cache named 'aaaaa' for Builder[public java.lang.String com.example.cache.service.MovieService.getDirector(java.lang.String)] caches=[aaaaa] | key='' | keyGenerator='' | cacheManager='' | cacheResolver='' | condition='' | unless='' | sync='false'
+```
+- 
 
 ## 특정 캐시 데이터 확인 
 ```java
@@ -138,23 +162,104 @@ public String getAddress(Customer customer) {...}
 - 모든 메서드를 @Cacheable로 만들면 캐시는 상당히 크고 빠르게 커질 수 있으며, 오래되거나 사용하지 않는 데이터를 많이 보유하게 됨. 이를 제거하기 위해 사용
 - 조회 함수에 @Cacheable을 붙이고, 저장/수정 함수에 @CacheEvict를 붙이면 DB에 수정이 될 때마다 캐시를 삭제하고 다시 조회할 때 캐시를 갱신하는 전략을 가질 수 있다.
 - key를 지정하지 않거나, allEntries=true를 설정해주지 않으면 캐시가 삭제되지 않는다.
+
+## CacheManager.clear()
+```java
+@Autowired
+CacheManager cacheManager;
+
+public void evictSingleCacheValue(String cacheName, String cacheKey) {
+    cacheManager.getCache(cacheName).evict(cacheKey);
+}
+
+public void evictAllCacheValues(String cacheName) {
+    cacheManager.getCache(cacheName).clear();
+}
+
+// 캐시 전체 삭제
+public void evictAllCaches() {
+    cacheManager.getCacheNames().stream()
+      .forEach(cacheName -> cacheManager.getCache(cacheName).clear());
+}
+```
+- @CacheEvict 대시 직접 주입받은 cacheManager에서 clear() 메서드를 호출해서 캐시를 삭제할 수 있다.
+
+## @CachePut
+```java
+@CachePut(value = "hash", key = "#movieSaveDto.title + '-' + #movieSaveDto.director")
+public String getAddress(Customer customer) {...}
+```
+- @CachePut은 메서드를 항상 실행하고 그 결과를 캐시에 저장
+  - @Cachealbe의 캐시에 값이 존재하면 캐시된 값을 반환하고 메서드를 실행하지 않는점과 다름
+- 메서드가 항상 실행되므로 메서드 실행 비용이 높을 때 주의해야 함.
+- @Cacheable과 @CachePut을 함께 사용할 때, 동일한 키를 명시적으로 사용하여 캐시의 일관성을 유지해야 한다.
+
+## @Caching
+```java
+@Caching(
+  cacheable = {@Cacheable(value = "userCache", key = "#userId")},
+  put = {@CachePut(value = "userCache", key = "#result.id")},
+  evict = { 
+  @CacheEvict("addresses"), 
+  @CacheEvict(value="directory", key="#customer.name") })
+public String getAddress(Customer customer) {...}
+```
+- 동시에 여러개의 캐시 애노테이션을 사용하려면 @Caching으로 감싸준다.
+
+## @CacheConfig
+```java
+@CacheConfig(cacheNames={"addresses"})
+public class CustomerDataService {
+
+    @Cacheable
+    public String getAddress(Customer customer) {...}
+```
+- 클래스에 붙이는 애노테이션
+- 캐싱의 공통적인 부분을 빼서 한 번에 선언한다.
+
+
+## Caching Condition
+```java
+@CachePut(value="addresses", condition="#customer.name=='Tom'")
+public String getAddress(Customer customer) {...}
+```
+- confition 설정을 주면, 매개변수의 입력에 따라 일치할 때만 캐시에 저장한다.
+
+```java
+@CachePut(value="addresses", unless="#result.length()<64")
+public String getAddress(Customer customer) {...}
+```
+- 함수 출력의 결과에 조건을 둬서 캐싱할 수 도 있다. 
+- 결과가 64글자보다 큰경우에만 캐싱을 하는 조건이다.
+
+
+## 캐싱 TTL
+```java
+@Scheduled(fixedRateString = "${caching.movieTTL}")
+@CacheEvict(value = "movie", allEntries = true)
+public void deleteMovieCacheTTL() {
+    log.info("10초마다 캐시 삭제");
+}
+```
+- Time-to-Live
+- 캐싱 시간제한 설정하여 일정 시간마다 삭제되도록 설정할 수 있다. 
+- spring 내장 캐시에는 TTL 설정을 직접적으로 할 수 없기에 @Scheduled를 활용해야 함.
+
+## 캐싱과 AOP
 - 주의사항
   - @CacheEvict는 AOP를 통해 동작하기 때문에 같은 클래스 내에서 @CacheEvict이 붙은 메서드를 내부 호출하면 캐시 삭제가 되지 않는다. 
   - 외부의 class에서 @CacheEvict 함수를 호출하는 방식을 사용해야 캐시 삭제가 된다.
 
-## @CachePut
-```java
+## 캐싱 전략에 대한 고민
 
-```
-
-1. @CachePut(value = "sample", key = "#sam") : 캐시 수정
-
-## 캐싱 전략에 대한 생각
-
-- 조회를 할 때 캐시에 저장
-- 저장을 할 때 캐싱하지 않음 (조회시 캐시에 저장하니까)
-- 수정을 할 때 캐시에서 삭제
-- 삭제를 할 때 
+- 조회를 할 때 캐시에 저장하자
+  - 조회하지 않은 데이터를 미리 캐시에 저장할 필요는 없을 것 같다.
+- 수정을 할 때 캐시에서 삭제하고 저장해야 하나 말아야하나
+- 삭제를 할 때 캐시에서 삭제하자 
+- 만약 테이블 전체를 빈번하게 
 
 ## 출처
 https://www.baeldung.com/spring-cache-tutorial
+https://www.baeldung.com/spring-setting-ttl-value-cache
+https://www.baeldung.com/spring-boot-evict-cache
+https://www.baeldung.com/spring-boot-disable-cacheable-annotation
