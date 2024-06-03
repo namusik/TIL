@@ -1,4 +1,4 @@
-# Cache in Springboot
+# Springboot Local Cache
 
 ## 의존성
 ```gradle
@@ -88,6 +88,43 @@ public Map<Object, Object> getAllCaches(String cacheName) {
 }
 ```
 - 특정한 이름의 캐시에 저장된 모든 데이터를 조회한다.
+
+## KeyGenerator
+```java
+@Component("moveKeyGenerator")
+public class MovieKeyGenerator implements KeyGenerator {
+    @Override
+    public Object generate(Object target, Method method, Object... params) {
+        StringJoiner key = new StringJoiner("-");
+
+        for (Object param : params) {
+            key.add(param.toString());
+        }
+
+        key.add("1");
+
+        return key.toString();
+    }
+}
+```
+- 미리 정의해둔 캐시 키 생성 설정
+
+```java
+@Configuration
+@EnableCaching
+public class CacheConfig {
+    @Bean("movieKeyGenerator")
+    public MovieKeyGenerator movieKeyGenerator() {
+        return new MovieKeyGenerator();
+    }
+}
+```
+- KeyGenerator를 Bean 등록
+
+```java
+@Cacheable(value = "director", keyGenerator = "movieKeyGenerator")
+```
+- bean으로 등록한 keyGenerator 사용법
 
 ## @Cacheable
 ```java
@@ -246,9 +283,8 @@ public void deleteMovieCacheTTL() {
 - spring 내장 캐시에는 TTL 설정을 직접적으로 할 수 없기에 @Scheduled를 활용해야 함.
 
 ## 캐싱과 AOP
-- 주의사항
-  - @CacheEvict는 AOP를 통해 동작하기 때문에 같은 클래스 내에서 @CacheEvict이 붙은 메서드를 내부 호출하면 캐시 삭제가 되지 않는다. 
-  - 외부의 class에서 @CacheEvict 함수를 호출하는 방식을 사용해야 캐시 삭제가 된다.
+- Spring Cache 애노테이션은 AOP를 통해 동작하기 때문에 같은 클래스 내에서 캐시 메서드를 내부 호출하면 캐시 삭제가 되지 않는다. 
+- 외부의 class에서 캐시 함수를 호출하는 방식을 사용해야 캐시 삭제가 된다
 
 ## 캐싱 전략에 대한 고민
 
