@@ -137,6 +137,17 @@ run()을 호출하는 것은 단순히 선언된 메소드를 호출하는 것�
 
 > 한 번 실행이 종료된 쓰레드는 다시 실행할 수 없기 때문에, start()는 딱 한 번 호출될 수 있다.
 
+```java
+public synchronized void start() {
+    .....
+    try {
+        start0();
+        started = true;
+    }
+```
+- 자바 Thread 클래스의 start() 매서드 내부 코드를 보면 실제로 `start0()` 메서드를 호출하는데
+- 자바가 아닌 **네이티브 코드**로 구현되어있으며, JVM 내부에서 새로운 OS 스레드를 생성하고, 그 스레드에서 `run()`을 호출함.
+
 ## 싱글쓰레드와 멀티쓰레드
 
 ![singlevsmulti](../../Images/Java/singlevsmulti.png)
