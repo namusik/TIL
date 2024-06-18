@@ -43,10 +43,3 @@ logging.level.org.springframework.orm.jpa.JpaTransactionManager=debug
 ~~~
 트랜잭션이 커밋됐는지 롤백됐는지 확인할 수 있는 로그.
 
-
-### HTTP 요청 메세지 로깅
-~~~properties
-logging.level.org.apache.coyote.http11=debug
-~~~
-HTTP 요청 메시지를 보고 싶을 때.
-

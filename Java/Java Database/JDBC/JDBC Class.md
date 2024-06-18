@@ -31,6 +31,7 @@ public class DBConnectionUtil {
   - 커넥션 생성 완료 응답 보냄
   - DB드라이버는 응답을 받아 **Connection 구현체**를 생성해서 클라이언트(애플리케이션)에 반환
 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## insert / update / delete
 
@@ -123,6 +124,7 @@ public Member save(Member member) throws SQLException {
   - 조회한 결과를 **ResultSet**에 담아서 반환한다.
 - rs.next()를 커서를 다음으로 옮기면서 응답을 객체로 바인딩한다.
 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Connection Pool
 
@@ -137,6 +139,8 @@ public Member save(Member member) throws SQLException {
 - 이제는 애플리케이션에서 DB Driver에 Connection을 요청하는 것이 아니라 Connection Pool에서 가져다 쓰면 된다.
 - Connection 사용후, 종료가 아닌 반환을 하는 것을 변경
 - **HikariCP**를 스프링부트에서는 기본적으로 사용.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## DataSource 
 ![datasource](../../../images/DB/datasource.png)
@@ -168,10 +172,10 @@ DataSource만 주입받으면 DriverManager도 이 클래스를 통해 구현할
 HikariPool을 사용하는 datasource 구현체
 
 ### 자동 등록
-스프링부트는 application.properties에 아래 처럼 정보를 미리 입력해주면 datasource를 Bean으로 등록해준다.
 ~~~properties
 spring.datasource.url=jdbc:h2:tcp://localhost/~/test
 spring.datasource.username=sa
 spring.datasource.password=
 ~~~
+- 스프링부트는 application.properties에 아래 처럼 정보를 미리 입력해주면 datasource를 Bean으로 등록해준다.
 - 기본적으로 **HikariDataSource**를 빈으로 등록함.
