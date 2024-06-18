@@ -1,5 +1,30 @@
 # Spring Transaction 추상화
 
+<!-- TOC -->
+
+- [Spring Transaction 추상화](#spring-transaction-추상화)
+  - [개념](#개념)
+  - [PlatformTransactionManager](#platformtransactionmanager)
+    - [동작 흐름](#동작-흐름)
+    - [초기화](#초기화)
+    - [관련 method](#관련-method)
+    - [자동등록](#자동등록)
+  - [TransactionSynchronizationManager](#transactionsynchronizationmanager)
+    - [함수](#함수)
+    - [동작방식](#동작방식)
+  - [DataSourceUtils](#datasourceutils)
+    - [함수](#함수-1)
+  - [TransactionTemplate](#transactiontemplate)
+  - [@Transactional](#transactional)
+    - [사용방법](#사용방법)
+    - [선언적 트랜잭션 관리](#선언적-트랜잭션-관리)
+    - [특징](#특징)
+
+<!-- /TOC -->
+
+
+## 개념
+
 [java transactoin](../../Java/Java%20Database/Java%20Transaction.md)
 - Connection으로 트랜잭션을 직접 조절하는 코드의 문제점은 서비스계층에 순수 비즈니스로직만 있는것이 아니라 JDBC 클래스에 의존하고 혼재되어있다는 점이다.
 - JDBC의 트랜잭션 코드와 JPA의 트랜잭션 코드도 서로 다르기 때문에 DB 기술을 변경할 때마다 서비스계층의 코드도 수정되어야 하는 문제가 있다.

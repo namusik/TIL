@@ -1,15 +1,25 @@
 # Multiple DataSource
 
-## 개념
-- 일반적으로는 단일 관계형 데이터베이스에 데이터를 저장한다. 하지만 여러 데이터베이스에 액세스해야 할 때도 있다.
+<!-- TOC -->
 
-![multi](../../images/Spring/multidatasource.png)
+- [Multiple DataSource](#multiple-datasource)
+  - [PlatformTransactionManager](#platformtransactionmanager)
+  - [예제 코드](#예제-코드)
+    - [application.yml](#applicationyml)
+    - [DataSourceConfig](#datasourceconfig)
+    - [JpaConfiguration](#jpaconfiguration)
+  - [주의사항](#주의사항)
+  - [출처](#출처)
 
-- Data Source가 하나일 경우에는 자동으로 생성된다.
-- 그러나 여러개의 db에 connection을 맺어야 하는 경우에는 직접 Data Source를 생성해줘야 한다.
-  - HikariCP가 최신 스프링부트에서의 표준 DataSource 구현체
+<!-- /TOC -->
 
-## 사용법
+[DataSource 개념](../../Java/Java%20Database/JDBC/JDBC%20Class.md/)
+
+## PlatformTransactionManager
+
+[PlatformTransactionManager 개념](Spring%20Transaction.md)
+
+## 예제 코드
 
 ### application.yml
 
@@ -51,13 +61,12 @@ public class TopicDataSourceConfig {
     }
 }
 ```
-
+- 여러개의 DB에 connection을 맺기 위해서는 DataSource를 직접 Bean으로 등록해야 한다.
 - DataSourceProperties
   - 데이터소스의 프로퍼티를 담고 있는 클래스
   - db 연결을 위해 적어준 설정들은 `@ConfigurationProperties(prefix = "spring.datasource")`로 인해서 `DataSourceProperties` 인스턴스의 필드로 바인딩된다.
 - 생성한 topicsDataSourceProperties를 가지고 DataSource를 생성해서 Bean을 등록 
-- 이때 하나의 datasource에는 @Primary를 붙여줘야 한다.
-  - EntityManagerFactoryBuilder가 여러 데이터소스를 받을 때 문제를 방지하기 위해서.
+- 이때 DataSource 타입의 Bean이 여러개 등록되었으므로 하나에는 **@Primary**를 붙여줘야 한다.
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -91,21 +100,25 @@ public class TopicJpaConfiguration {
     }
 }
 ```
+- 각 DataSource에 대해 별도의 트랜잭션 매니저가 필요하기 때문에 별도로 Bean으로 등록해주는 작업이 필요하다.
 - **@EnableTransactionManagement**
   - 애플리케이션 컨텍스트에서 트랜잭션 관리 기능을 활성화
-  - Spring이 @Transactional 애노테이션을 인식하고, 해당 애노테이션이 적용된 메서드에 대해 트랜잭션 경계를 자동으로 설정할 수 있도록 함.
-  - 다중 데이터 소스를 설정할 때 각 데이터 소스에 대해 별도의 트랜잭션 관리자가 필요합니다. 
-  - @EnableTransactionManagement는 이러한 트랜잭션 관리자를 활성화하고 구성하는 데 필요한 설정을 포함하고 있다. 이로 인해 트랜잭션이 각각의 데이터 소스에 대해 올바르게 작동하도록 보장
-  - 비즈니스 로직에서 @Transactional을 사용하는 메서드가 다중 데이터 소스를 사용할 때, 각 데이터 소스에 대한 트랜잭션 매니저가 올바르게 설정되고 작동하기 위해서는 구성 파일에서 트랜잭션 관리가 활성화되어야 한다.
+    - 트랜잭션 관리자가 활성화되고, 트랜잭션 경계를 지정하는 @Transactional 애노테이션이 올바르게 동작하도록 설정
+  - 이 애노테이션을 명시적으로 사용한 이유는
+    - 다중 데이터 소스를 설정할 때 각 데이터 소스에 대해 별도의 트랜잭션 관리자가 필요하다.
+    - @EnableTransactionManagement를 사용해서 직접 설정한 트랜잭션 관리자가 올바르게 동작하도록 보장하기 위해서다.
 - **@EnableJpaRepositories**
   - JPA 리포지토리 스캐닝 및 설정을 지정
   - **basePackageClasses** :  JPA 리포지토리를 스캔할 기본 패키지를 Topic 클래스가 속한 패키지로 지정
-  - **entityManagerFactoryRef** : 이 설정이 사용할 엔티티 매니저 팩토리를 지정
-  - **transactionManagerRef** : 이 설정이 사용할 트랜잭션 매니저를 지정
+  - **entityManagerFactoryRef** : 리포지토리가 사용할 엔티티 매니저 팩토리를 지정
+  - **transactionManagerRef** : 리포지토리가 사용할 트랜잭션 매니저를 지정
 - **LocalContainerEntityManagerFactoryBean**
-  - JPA 엔티티 매니저 팩토리 생성
+  - `EntityManagerFactory`를 위한 스프링 빈을 생성하기 위해 다양한 설정 옵션을 제공하는 클래스
+  - JPA 엔티티 매니저 팩토리 생성 후 Bean 등록
+  - dataSource : 생성을 위해 필요한 datasource. TopicDataSourceConfig에서 생성한 topicsDataSource를 넣어준다.
+  - packages :  Todo.class가 속한 패키지의 모든 @Entity가 붙은 클래스를 스캔해서 등록.
 - **PlatformTransactionManager**
-  - 트랜잭션 매니저 생성
+  - 트랜잭션 매니저 Bean 등록
 
 ## 주의사항
 - 데이터소스를 분리할 Entity 및 repository, configuration 클래스들은 패키지를 서로 분리해줘야 한다.
