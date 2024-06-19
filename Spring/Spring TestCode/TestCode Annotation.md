@@ -61,3 +61,6 @@ class Test {
 }
 ```
 - @TestConfiguration에서 Bean을 정의하고, @Autowird에서 Bean을 주입받는다.
+
+## AfterEach
+- 각각의 테스트가 끝나는 시점에 호출됨

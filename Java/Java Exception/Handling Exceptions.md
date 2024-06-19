@@ -10,7 +10,7 @@ public int getPlayerScore(String playerFile)
     return Integer.parseInt(contents.nextLine());
 }
 ```
-- checked exception인 FileNotFoundException을 호출한 곳에 던져버리는 것이다.
+- checked exception을 호출한 곳에 던져버리는 것이다.
 - 가장 간단한 방법이다. 
 - 하지만, 이 메서드를 호출한 곳에서 또다시 exception을 handle 해야된다.
 
@@ -42,7 +42,7 @@ public int getPlayerScore(String playerFile) {
 
 ## finally
 
-- 예외 발생 여부와 관계없이 실행해야 하는 코드가 있을 때
+- 예외 발생 여부와 관계없이 마지막에 실행해야 하는 코드가 있을 때
 
 ```java
 public int getPlayerScore(String playerFile)
@@ -58,7 +58,7 @@ public int getPlayerScore(String playerFile)
     }
 }
 ```
-- 먼저 **lazy** 방식
+- 먼저 게으른 방식
 - 파일을 닫는 코드를 finally에 추가해주었다.
 
 ```java
@@ -87,7 +87,10 @@ public int getPlayerScore(String playerFile) {
 
 ```java
 public int getPlayerScore(String playerFile) {
-    try (Scanner contents = new Scanner(new File(playerFile))) {
+    try (
+        Scanner contents = new Scanner(new File(playerFile));
+        PrintWriter writer = new PrintWriter(new File("testWrite.txt"))
+        ) {
       return Integer.parseInt(contents.nextLine());
     } catch (FileNotFoundException e ) {
       logger.warn("File not found, resetting score.");
@@ -95,7 +98,12 @@ public int getPlayerScore(String playerFile) {
     }
 }
 ```
-- Java 7 부터는 AutoCloseable을 구현한 메서드를 사용할 때는 자동 닫기 기능을 제공하기 때문에 간소화 할 수 있다. 
+- Java 7 부터는 AutoCloseable을 구현한 클래스를 사용할 때는 자동 닫기 기능을 제공하기 때문에 간소화 할 수 있다. 
+- try 블록에서 사용할 리소스를 선언하고 해당 블록 실행 후 리소스가 닫히도록 보장해준다.
+- finally 구문을 대체해서 코드를 간소화할 수 있다.
+- 또한 try 구문 안에 ;을 사용하면 여러개의 리소스를 선언할 수 도 있다.
+  - 이때 close()되는 순서는 역순이다.
+- try-with-resources도 finally 블록을 사용할 수 있다.
 
 ## Multiple catch Blocks
 ```java
@@ -113,7 +121,6 @@ public int getPlayerScore(String playerFile) {
 ```
 - 2개 이상의 예외를 발생 시킬 때 사용
 - 각 예외마다 다른 처리를 할 수 있다.
-- 
 
 ```java
 public int getPlayerScore(String playerFile) {
@@ -149,7 +156,6 @@ public int getPlayerScore(String playerFile) {
 ## Throwing Exception
 - 예외를 직접 처리하고 싶지 않거나 다른 곳에서 처리할 수 있도록 예외를 생성하고 싶을 때 사용
 
-### throwing checked exception
 ```java
 public class TimeoutException extends Exception {
     public TimeoutException(String message) {
@@ -157,6 +163,8 @@ public class TimeoutException extends Exception {
     }
 }
 ```
+
+### throwing checked exception
 
 ```java
 public List<Player> loadAllPlayers(String playersFile) throws TimeoutException {
@@ -228,3 +236,5 @@ http://4comprehension.com/sneakily-throwing-exceptions-in-lambda-expressions-in-
 
 ## 출처
 https://www.baeldung.com/java-exceptions
+
+https://www.baeldung.com/java-try-with-resources
