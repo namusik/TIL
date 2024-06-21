@@ -50,6 +50,7 @@ logging.level.hello.itemservice.repository.mybatis=trace
 
 
 ```properties
-
 mybatis.mapper-locations=classpath:mappers/*.xml
 ```
+- 만약 XML 파일을 다른 경로에 두고싶다면 해당 설정을 추가해주자
+- MyBatis에게 XML 파일을 위의 경로에서 찾도록 지정해주는 설정
