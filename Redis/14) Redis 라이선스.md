@@ -23,3 +23,6 @@
 ## 출처
 - https://www.inflearn.com/pages/infmation-67-20240409
 - https://www.itworld.co.kr/news/332633
+- https://peterica.tistory.com/617
+- https://tech.kakao.com/posts/456
+- https://www.inflearn.com/pages/weekly-inflearn-40-20220125
