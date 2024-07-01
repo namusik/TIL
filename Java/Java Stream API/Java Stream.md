@@ -34,6 +34,13 @@ Arrays.stream(request.getCookies())
     .orElse(null);
 ~~~
 
+## flatMap
+```java
+<R> Stream<R> flatMap(Function<? super T, ? extends Stream<? extends R>> mapper);
+```
+- 여러 레벨의 스트림을 단일한 평면 스트림으로 합치는 데 사용
+
+
 
 
 ## 참고
@@ -43,3 +50,5 @@ https://futurecreator.github.io/2018/08/26/java-8-streams/
 https://zangzangs.tistory.com/171
 
 https://www.baeldung.com/java-stream-findfirst-vs-findany
+
+https://www.baeldung.com/java-difference-map-and-flatmap
