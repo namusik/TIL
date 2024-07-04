@@ -66,7 +66,7 @@ public class Computer implements Electronic {
   - interface의 field는 상수로 취급된다. 초기값이 있어야 한다.
   - interface의 field는 자동으로 `public`, `static`, `final이` 붙는다. 
 - **추상 메서드**
-  - `abstract` 키워드는 **생략 가능**하다. 컴파일러가 알아서 메서드에 붙여줌.
+  - `abstract` 와 `public` 키워드는 **생략 가능**하다. 컴파일러가 자동으로 메서드에 붙여줌.
 - **static 메서드**
   - Java8 부터 가능.
   - 인터페이스 자체에 속해있기 때문에, 인터페이스 이름을 사용해서 호출해야 한다. Electronic.isEnergyEfficient()
@@ -74,7 +74,7 @@ public class Computer implements Electronic {
   - 객체를 만들지 않고도 관련 메서드를 한곳에 모아서 디자인의 응집력을 높일 수 있는 간단한 메커니즘 제공
 - **default 메서드**
   - Java 8 부터 가능
-  - 암시적으로 `public` 키워드가 붙는다.
+  - `public` 키워드는 생략되어 있다.
   - `default` 키워드를 붙이면 됨.
   - 구현클래스에서 재정의할 수 있다.
   - 인터페이스에 새로운 메서드를 추가해도 구현체의 코드는 바꾸지 않기 때문에 도입되었다. 구현체에서 구현할 필요 없이 가져다 쓸 수 있음.
