@@ -21,7 +21,7 @@
 > lpush mylist first
 (integer) 3
 
-// list 범위 가져오기 0(시작) -1(가장 오른쪽)
+// list 범위 가져오기 0(시작) -1(가장 오른쪽). 왼쪽부터 오른쪽 순서로
 > lrange mylist 0 -1
 1) "first"
 2) "A"

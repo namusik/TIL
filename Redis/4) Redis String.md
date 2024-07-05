@@ -2,18 +2,18 @@
 
 ## 특징
 - 가장 기본적인 데이터 타입
-- 바이트 배열을 저장 (binary-safe)
+- 문자열이 바이트 배열려 저장됨 (binary-safe)
   - 모든 문자를 표현할 수 있음
   - 바이너리로 변환할 수 있는 모든 데이터를 저장가능
-  - JPG와 같은 파일도 가능
+    - JPG와 같은 파일도 가능
 - 최대 크기 512  MB 
 ## Redis Strings
 ```sh
 // key에 데이터 저장. 기존 값 덮어씌울 수 있음
-> set mykey somevalue
+> set myname hello
 OK
 //해당 key의 값 가져오기
-> get mykey
+> get myname
 "somevalue"
 
 -------------------
@@ -21,7 +21,7 @@ OK
 > set counter 100
 OK
 // 특정 키의 값을 Integer로 취급하여 1씩 증가시킴
-// atomic 명령어. 동시에 여러 서버에 incr, decr 명령어를 하여도 안전하다
+// atomic 명령어. 동시에 여러 서버에서 incr, decr 명령어를 하여도 안전하다
 > incr counter
 (integer) 101
 

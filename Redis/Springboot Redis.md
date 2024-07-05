@@ -1,4 +1,31 @@
-# Java에서 Redis 사용 
+# Springboot에서 Redis
+
+## Lettuce
+- 가장 많이 사용되는 라이브러리
+- Spring Data Redis 안에 들어있음.
+- RedisTemplate이라는 추상화된 클래스를 제공해줌.
+  - Lettuce를 직접 쓰지 않는 이유는, 추후에 Lettuce가 아닌 다른 라이브러리로 바뀌더라고 대응할 수 있도록 추상화된 클래스 의존.
+
+## yml
+```yml
+spring:
+  data:
+    redis:
+      host: localhost
+      port: 6379
+```
+- springboot 3.3.1 기준 redis host와 port 설정방법
+
+## StringRedisTemplate 
+
+- Redisdml String data type을 다루는 클래스
+
+```java
+ValueOperations<String, String> ops = redisTemplate.opsForValue();
+ops.set("fruit", name);
+ops.get("fruit");
+```
+-  simplevalue를 가지고 operation을 수행할 수 있는 객체
 
 ## Redis에 LocalDateTime 저장하기 
 
