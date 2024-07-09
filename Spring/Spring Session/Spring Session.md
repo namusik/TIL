@@ -1,12 +1,15 @@
-# 자바에서의 Session
+# Spring Session
 
 ## Httpsession
 
-    둘 이상의 page request에서 사용자를 식별하거나, 웹 사이트를 방문하고 해당 사용자에 대한 정보를 Server에 저장.
+![httpsession](../../Images/Java/Httpsession.png)
 
-    Servlet은 HTTP 클라이언트와 서바 사이에 세션을 생성.
+- 세션을 손쉽게 생성하고 관리할 수 있게 해주는 인터페이스
+- UUID로 session id를 생성
+- JSESSIONID 라는 이름의 cookie를 설정해서 내려줌
+  - 다음 요청부터 HTTP header에 JSESSIONID가 전달됨.
 
-    세션은 한 명의 사용자에 해당.
+![jsessionid](../../Images/Spring/JsessionID.png)
 
 #### 관련 메서드
 
