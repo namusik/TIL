@@ -21,4 +21,8 @@
 
 ## HttpSession
 
-[HttpSession 개념](../Java/세션/자바에서의%20Session.md)
+[HttpSession 개념](../Spring/Spring%20Session/Spring%20Session.md)
+
+## Springboot에서 redis session 사용하기
+
+[개념](../Spring/Spring%20Session/Spring%20Sessin%20Redis.md)

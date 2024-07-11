@@ -69,6 +69,10 @@ get key1
 // 성능에 좋지 않기에 쓰지 않도록
 keys *
 
+// 특정 캐시의 key 조회
+keys userAgeCache*
+1) "userAgeCache::A"
+
 // key 개수 조회
 dbsize
 
