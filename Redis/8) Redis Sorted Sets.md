@@ -56,4 +56,15 @@
     // 특정 값의 내림차순 기준 위치 반환
     > zrevrank myrank apple
     (integer) 1
+
+    // 총 min max score 사이의 개수 확인
+    > zcount myrank 0 100 
 ```    
+
+
+
+## 리더보드 
+
+- Sorted-Set 자료구조의 특성으로 데이터 조회가 빠름.
+  - 범위 검색, 특정 값이 순위 검색
+- 랭킹 조회는 빈번한 액세스를 호출.

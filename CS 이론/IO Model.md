@@ -1,6 +1,4 @@
-# 동기/비동기 & 블로킹&논블로킹
-
-![blockin](../images/Cs/blocking.png)
+# I/O Model
 
 ## 동기/비동기
 ### 동기(Synchronous) 
@@ -44,7 +42,6 @@
 
 ## 예제코드 참고
 
-
 ## 블로킹/논블로킹
 
 ### 블로킹 I/O 
@@ -85,9 +82,14 @@
 ## 예지 코드 참고 
 
 
-## 결합 
+## I/O 모델
 
-### 동기-블로킹
+![iomodel](../images/Cs/blocking.png)
+
+### 동기-블로킹 I/O
+![syncblock](../images/Cs/syncblock.png)
+- 가장 보편적인 모델
+- 동기 : 
 
 
 ### 동기-넌블로킹
@@ -97,3 +99,11 @@
 ### 비동기-블로킹
 
 ### 비동기-넌블로킹
+
+
+
+## 출처
+https://blog.leaphop.co.kr/blogs/58/Spring_WebClient___MVC__1__Sync__Async__Blocking__Non_Blocking
+
+https://developer.ibm.com/articles/l-async/#introduction-to-aio0
+

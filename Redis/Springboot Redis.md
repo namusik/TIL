@@ -5,6 +5,12 @@
 - Spring Data Redis 안에 들어있음.
 - RedisTemplate이라는 추상화된 클래스를 제공해줌.
   - Lettuce를 직접 쓰지 않는 이유는, 추후에 Lettuce가 아닌 다른 라이브러리로 바뀌더라고 대응할 수 있도록 추상화된 클래스 의존.
+- 장점
+  - 비차단 I/O 사용
+    - 고성능 및 높은 동시성 시나리오에 적합.
+  - 반응형 프로그래밍에 대해 지원
+  - 포괄적인 고급 Redis 기능 제공
+    - pub/sub, redis stream, cluster
 
 ## yml
 ```yml
@@ -18,7 +24,7 @@ spring:
 
 ## StringRedisTemplate 
 
-- Redisdml String data type을 다루는 클래스
+- Redis의 String data type을 다루는 클래스
 
 ```java
 ValueOperations<String, String> ops = redisTemplate.opsForValue();

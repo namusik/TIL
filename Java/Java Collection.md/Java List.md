@@ -1,13 +1,16 @@
 # Java List
 
 ## List 생성 방법 
-### new ArrayList
+### ArrayList
 
 ~~~java
 List<String> lists = new ArrayList<>();
 ~~~
 
-`ArrayList`를 인스턴스로 만들어 쓰는 방법이다.
+- List 인터페이스의 크기 조정 가능한 배열 구현
+- ArrayList 인스턴스 반환
+- 변경이 가능하다.
+  - add, remove, set 가능
 
 
 
@@ -47,10 +50,10 @@ List<String> list = Stream.of("foo", "bar")
 List<String> list = List.of("foo", "bar", "baz");
 ```
 - Java9에서 도입됨.
-- 변경불가능한 list를 반환한다.
-  - ImmutableCollections 클래스의 list를 반환
+- ImmutableCollections 클래스의 list를 반환
 - ArrayList에 비해 공간 효율적일 수 있음. 불변이기 때문에 JVM에 의해 내부적으로 최적화될 수 있으므로 정확한 메모리 공간은 더 작을 수 있다.
 - 불변이기 때문에 본질적으로 스레드로부터 안전하다. 여러 스레드가 동기화 문제 없이 해당 상태에 액세스할 수 있음.
+  - add, remove, set 불가능
 
 ------------------------------------
 
@@ -62,8 +65,7 @@ public static <T> List<T> singletonList(T o) {
 }
 ~~~
 - Collections의 내부 정적 클래스인 SingletonList 인스턴스를 반환.
-- 불면이면서 하나의 객체를 가질 수 있는 리스트. 불변이기 때문에 add, remove 불가능.
-- set으로 단일 요소 수정은 가능하다.
+- 불면이면서 하나의 객체를 가질 수 있는 리스트. 불변이기 때문에 add, remove, set 불가능.
 - 메모리를 효율적으로 사용하기 때문에, 단일 요소 리스트를 만들 때는 `Arrays.asList` 보다 `Collections.singletonList`를 권장
 - List.of()와 비교한다면 효율성 측면에서 별 차이는 없다.
 
