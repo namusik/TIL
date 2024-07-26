@@ -6,6 +6,17 @@
 - 소스는 C로 되어있음
 - 주로 Linux에 설치해 사용
 
+```sh
+// redis 이미지 불러오기
+docker pull redis
+
+// redis 실행
+docker run --name my-redis -d -p 6379:6379 redis
+
+// redis 중단
+docker stop my-redis
+```
+
 ## Redis Docker에 설치하기 다른버전
 
 1. Docker Hub에서 redis 이미지 다운
@@ -32,20 +43,6 @@
 ```
 5. redis-cli가 실행되서 redis 명령어 사용가능.
 
-
-## 참고
-https://giles.tistory.com/38
-
-```sh
-// redis 이미지 불러오기
-docker pull redis
-
-// redis 실행
-docker run --name my-redis -d -p 6379:6379 redis
-
-// redis 중단
-docker stop my-redis
-```
 
 ## redis-cli 명령어
 ![rediscli](../images/Redis/rediscli.png)

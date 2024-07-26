@@ -18,8 +18,6 @@ int[] anArray = new int[] {5, 2, 1, 4, 8};
 Arrays.sort(anArray); // anArray is now {1, 2, 4, 5, 8}
 ```
 
-
-
 ##  출처
 
 https://www.baeldung.com/java-arrays-guide

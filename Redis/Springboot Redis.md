@@ -22,6 +22,17 @@ spring:
 ```
 - springboot 3.3.1 기준 redis host와 port 설정방법
 
+
+```yml
+spring:
+  data:
+    redis:
+      sentinel:
+        master: mymaster
+        nodes: 127.0.0.1:26379,127.0.0.1:26380,127.0.0.1:26381
+```
+- redis sentinel 사용시
+
 ## StringRedisTemplate 
 
 - Redis의 String data type을 다루는 클래스
