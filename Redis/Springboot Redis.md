@@ -33,6 +33,15 @@ spring:
 ```
 - redis sentinel 사용시
 
+```yml
+spring:
+  data:
+    redis:
+      cluster:
+        nodes: 127.0.0.1:7000,127.0.0.1:7001,127.0.0.1:7002,127.0.0.1:7003,127.0.0.1:7004,127.0.0.1:7005
+```
+- redis cluster 사용시
+
 ## StringRedisTemplate 
 
 - Redis의 String data type을 다루는 클래스
