@@ -1,6 +1,6 @@
 # Facade Pattern
 
-![facade](../../images/Cs/facade.jpg)
+![facade](../../../../images/Cs/facade.jpg)
 
 - 파사드 패턴
 - 가장 쉬운 패턴

@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "YouTube Downloader",
+  "version": "1.0",
+  "description": "Download YouTube videos via a Python backend.",
+  "permissions": ["storage", "activeTab", "scripting"],
+  "background": {
+    "service_worker": "popup.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png"
+    }
+  }}

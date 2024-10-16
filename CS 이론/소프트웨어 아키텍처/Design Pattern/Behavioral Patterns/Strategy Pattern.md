@@ -1,4 +1,4 @@
-# Strategy Pattern
+# Strategy Pattern (전략 패턴)
 
 
 ## 배경
@@ -8,15 +8,17 @@
 
 ## 개념
 - 행동(알고리즘)을 캡슐화하여 동적으로 객체에 주입할 수 있다.
-- 즉, 각 알고리즘을 별도의 클래스로 분리하고, 이러한 알고리즘을 사용하는 컨텍스트(Context)는 변경에 영향을 받지 않게된다.
+- 즉, 각 알고리즘을 별도의 클래스로 분리하고, 이러한 알고리즘을 사용하는 컨텍스트(Context)는 알고리즘의 변경에 영향을 받지 않게된다.
 
 ## 구조
+![strategypattern](../../../../images/Cs/strategy-pattern-diagram.png)
 
 ### Strategy 인터페이스
 - 공통의 알고리즘을 정의하는 인터페이스 또는 추상 클래스
 
 ### ConcreteStrategy 클래스
 - 인터페이스를 구현하여 실제 알고리즘을 정의하는 클래스
+- Strategy 인터페이스의 자리에 들어갈 수 있게됨.
 
 ### Context 클래스
 - Strategy 객체를 사용.
@@ -24,4 +26,15 @@
 - 따라서 새로운 알고리즘을 추가하더라도 Context 클래스는 변경되지 않는다.
 
 ## 장점
-- OCP 
+- OCP
+  - 새로운 알고리즘을 추가할 때 기존 코드를 수정하지 않고도 새로운 알고리즘(ConcreteStrategy 클래스)을 추가할 수 있음
+- SRP
+  - 알고리즘이 별도의 클래스로 분리되어 있기 때문에, 각 클래스는 하나의 책임만 갖게됨.
+
+
+## 예시
+- Collections.sort(), Java Streams API
+
+## 출처
+https://refactoring.guru/design-patterns/strategy
+https://www.youtube.com/watch?v=xlaAiHrZN3U&t=116s
