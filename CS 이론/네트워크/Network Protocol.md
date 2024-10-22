@@ -1,3 +1,32 @@
+<!-- TOC -->
+
+- [Network Protocol](#network-protocol)
+  - [정의](#정의)
+  - [구성 요소](#구성-요소)
+  - [특징](#특징)
+  - [종류](#종류)
+    - [Ethernet](#ethernet)
+      - [이더넷 프레임 구조](#이더넷-프레임-구조)
+    - [IP (Internet Protocol)](#ip-internet-protocol)
+      - [역할](#역할)
+      - [특징](#특징-1)
+      - [IP 패킷 구조](#ip-패킷-구조)
+        - [IP 주소](#ip-주소)
+    - [HTTP/HTTPS](#httphttps)
+      - [SSL/TLS](#ssltls)
+      - [HTTPS](#https)
+      - [Resource](#resource)
+      - [URI](#uri)
+    - [TCP](#tcp)
+    - [UDP](#udp)
+    - [FTP](#ftp)
+    - [SMTP](#smtp)
+  - [출처](#출처)
+
+<!-- /TOC -->
+<!-- /TOC -->
+<!-- /TOC -->
+
 # Network Protocol
 
 ## 정의
@@ -87,17 +116,48 @@
   - 4개의 8비트 세그먼트(옥텟)로 나뉘며, 각각은 0에서 255 사이의 10진수로 표시됨
   - 192.168.0.1과 같은 형식
   - CIDR 표기법
+    - IP 주소 뒤에 /숫자 형태
+    - 서브넷 마스크의 1이 연속된 개수를 의미
+    - IP 주소를 이진수로 표현한 후, CIDR 표기법에서 지정한 자리수까지는 그대로 유지하고 나머지 자리는 모두 0으로 바꾸면 시작 IP 주소
+    - 마지막 IP주소 구하는 법은 CIDR 표기법에서 지정된 자리수까지는 그대로 유지하고, 나머지 자리는 모두 1로 채우면 된다.
     - /24 표기법
+      - IP 주소의 앞 24비트는 네트워크를 나타내고, 나머지 8비트는 호스트
       - IP 주소 256개
       - '192.168.1.0/24'와 같은 IP의 경우 범위는 '192.168.1.0'에서 '192.168.1.255'
     - /32 표기법
       - IP 주소 1개
       - '192.168.1.1/32'와 같은 IP의 경우 '192.168.1.1' IP만 지정
+    - **ipcalc** 명령어를 쓰면 쉽게 알 수 있다.
+        ```sh
+        ipcalc 10.10.1.2/26
+        Address:   10.10.1.2            00001010.00001010.00000001.00 000010
+        Netmask:   255.255.255.192 = 26 11111111.11111111.11111111.11 000000
+        Wildcard:  0.0.0.63             00000000.00000000.00000000.00 111111
+        =>
+        Network:   10.10.1.0/26         00001010.00001010.00000001.00 000000
+        HostMin:   10.10.1.1            00001010.00001010.00000001.00 000001
+        HostMax:   10.10.1.62           00001010.00001010.00000001.00 111110
+        Broadcast: 10.10.1.63           00001010.00001010.00000001.00 111111
+        Hosts/Net: 62                    Class A, Private Internets
+        ```
 - IPv6
   - 128비트 주소 체계를 사용하여 IPv4의 주소 부족 문제를 해결
   - ex) 2001:0db8:85a3:0000:0000:8a2e:0370:7334
 
 ### HTTP/HTTPS
+- HyperText Transfer Protocol
+
+#### SSL/TLS
+- Secure Sockey Layer/Transfer Layer Security
+- 데이터를 안전하게 전송하기 위한 인터넷 암호화 통신 프로토콜
+- 전자상거래의 보안을 위해 netscape에서 개발
+- SSL을 표준화하여 만든 것이 TLS
+
+#### HTTPS
+- HyperText Transfer Protocol over Secure Socket
+- HTTP의 보안이 강화된 버전
+- SSL/TLS 프로토콜로 세션 데이터 암호화
+
 ####  Resource
 - 클라이언트는 특정 resource와 관련된 요청을 보낸다.
 - resource는 HTML 웹사이트, 파일, 코드 등등 일 수 있다.
@@ -105,13 +165,6 @@
 
 #### URI
 ![uri](../../images/Cs/uri.png)
-
-## 출처
-https://brunch.co.kr/@growthminder/79
-
-https://www.baeldung.com/cs/rest-architecture
-
-https://www.baeldung.com/cs/rest-vs-http
 
 ### TCP
 
@@ -121,3 +174,9 @@ https://www.baeldung.com/cs/rest-vs-http
 
 ### SMTP 
 
+## 출처
+https://brunch.co.kr/@growthminder/79
+
+https://www.baeldung.com/cs/rest-architecture
+
+https://www.baeldung.com/cs/rest-vs-http
