@@ -169,3 +169,46 @@ ansible [core 2.15.3]
   jinja version = 3.1.4
   libyaml = True
 ```
+
+
+### 스트레스 패키지 설치
+
+```sh
+# 설치
+sudo dnf install stress-ng
+
+# 부하 테스트 백그라운드 실행
+# -c 또는 --cpu 옵션은 CPU에 부하를 줄 스레드의 개수를 지정합니다. 여기서 1은 CPU 1개에만 부하를 줄 것을 의미
+stress-ng -c 1&
+[1] 425906
+stress-ng: info:  [425906] defaulting to a 86400 second (1 day, 0.00 secs) run per stressor
+stress-ng: info:  [425906] dispatching hogs: 1 cpu
+
+# 실행 확인
+ps -ef | grep stress
+ec2-user  425906  402513  0 09:50 pts/1    00:00:00 stress-ng -c 1
+ec2-user  425907  425906 99 09:50 pts/1    00:00:39 stress-ng-cpu [run]
+ec2-user  425909  402513  0 09:50 pts/1    00:00:00 grep --color=auto stress
+
+# 부하 확인
+top
+top - 09:51:37 up 8 days, 23:40,  2 users,  load average: 0.80, 0.32, 0.12
+Tasks: 105 total,   2 running, 103 sleeping,   0 stopped,   0 zombie
+%Cpu(s):100.0 us,  0.0 sy,  0.0 ni,  0.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+MiB Mem :    949.5 total,    409.6 free,    152.3 used,    387.5 buff/cache
+MiB Swap:      0.0 total,      0.0 free,      0.0 used.    651.3 avail Mem
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+ 425907 ec2-user  20   0   70648   6156   4028 R  99.7   0.6   1:24.76 stress-ng-cpu
+
+# 부하 종료
+[ec2-user@ip-10-1-1-52 ~]$ jobs
+[1]+  Running                 stress-ng -c 1 &
+[ec2-user@ip-10-1-1-52 ~]$ kill %1 
+
+# CPU 4개를 사용하여 60초 동안 부하를 주는 명령어
+stress-ng --cpu 4 --timeout 60s
+
+# 메모리를 2GB 사용하여 60초 동안 부하를 주는 명령어
+stress-ng --vm 1 --vm-bytes 2G --timeout 60s 
+```
