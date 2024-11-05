@@ -6,10 +6,17 @@
 -	select_type: SELECT 문의 유형 (예: SIMPLE, PRIMARY, SUBQUERY 등).
 -	table: 쿼리에 사용되는 테이블 이름.
 -	partitions: 사용된 파티션 정보 (사용하지 않음).
-- type: 조인 유형 또는 액세스 방식 (예: ALL, index, range, ref, eq_ref 등)
+### type: 조인 유형 또는 액세스 방식 (예: ALL, index, range, ref, eq_ref 등)
+- NULL
+  - 쿼리가 테이블에 접근할 필요가 없는 경우
+  - 상수 또는 함수만을 사용하여 결과를 도출할 때 발생
+```sql
+SELECT NOW();
+```
   - ALL: **전체 테이블 스캔**을 의미하며, 가장 비용이 큰 유형입니다.
   - index: **인덱스 전체를 스캔**하며, ALL보다는 효율적이지만 여전히 비용이 높을 수 있습니다.
-  - range, ref, eq_ref, const, system, NULL: 이 순서대로 효율성이 높아집니다.
+  - range : **인덱스 범위 스캔**. BETWEEN, >, <, IN 등의 연산자를 사용하는 조건에서 발생. 사용 시기: 주로 날짜나 숫자 범위를 조회할 때 사용
+  - ref, eq_ref, const, system, NULL: 이 순서대로 효율성이 높아집니다.
 -	possible_keys: 옵티마이저가 사용할 수 있는 인덱스 목록.
 -	key: 실제로 선택된 인덱스.
 -	key_len: 사용된 인덱스 키의 길이 (바이트 단위).

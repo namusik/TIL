@@ -50,9 +50,12 @@ curl -v localhost:3000
 ## maven 설치
 
 ```sh
+# java-devel은 Java 개발 도구 키트(JDK: Java Development Kit)와 관련된 패키지
 sudo dnf install java-11-amazon-corretto java-11-amazon-corretto-devel maven
 
-# java-devel은 Java 개발 도구 키트(JDK: Java Development Kit)와 관련된 패키지
+# 혹은
+sudo yum install -y maven
+
 
 # 설치 확인
 mvn -version
@@ -118,6 +121,9 @@ git --version
 
 # 리포지토리 pull
 git clone 리포지터리 주소
+
+# private 리포지토리 clone
+git clone https://<GIT_USERNAME>:<GIT_TOKEN>@리포지토리 주소
 ```
 
 ## jenkins 설치
