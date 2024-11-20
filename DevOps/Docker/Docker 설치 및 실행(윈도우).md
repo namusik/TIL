@@ -15,9 +15,9 @@ https://hub.docker.com/search?type=image
 
 ## 도커 설치 
 
-    https://docs.docker.com/desktop/windows/install/
+https://docs.docker.com/engine/install/ubuntu/
 
-    받은 후, 실행
+받은 후, 실행
 
 !!wsl 미설치시 아래 설명에 따라 설치해주기
 

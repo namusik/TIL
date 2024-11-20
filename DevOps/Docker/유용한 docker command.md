@@ -15,3 +15,10 @@ This command works by:
 8. **sort -u** sorts the list of used image IDs and removes duplicates.
 
 This will output a list of Docker image names in the "repository:tag" format that are not in use by any running or stopped containers.
+
+
+## ecr에서 특정 태그를 가진 이미지를 제외한 나머지 이미지들 삭제하는 command
+
+~~~sh
+aws ecr list-images --repository-name <repository-name> --filter "tagStatus=UNTAGGED" --query 'imageIds[?imageTag!=`<tag>`].[imageDigest]' --output text | xargs aws ecr batch-delete-image --repository-name <repository-name> --image-ids
+~~~
