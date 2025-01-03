@@ -20,7 +20,7 @@ brew install kubectl
 brew link --overwrite kubernetes-cli
 ```
 
-## config 파일
+## kubeconfig 파일
 - kubectl이 Kubernetes 클러스터에 연결할 때 사용하는 설정 파일
 - 클러스터 정보, 사용자 인증 정보, 컨텍스트 등을 포함하여 kubectl이 어떤 클러스터에 어떻게 연결할지를 결정
 
@@ -39,7 +39,7 @@ clusters:
         provider: minikube.sigs.k8s.io        # 클러스터 제공자 정보
         version: v1.34.0                      # Minikube의 버전
       name: cluster_info
-    server: https://127.0.0.1:55497 # Kubernetes API 서버의 주소. 로컬에서 실행 중인 Minikube 클러스터
+    server: https://127.0.0.1:55497 # Kubernetes Master Node API 서버의 주소. (로컬에서 실행 중인 Minikube 클러스터)
   name: minikube    # 클러스터 이름
 # 클러스터와 사용자, 네임스페이스를 연결한 컨텍스트 정보
 contexts:

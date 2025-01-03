@@ -183,10 +183,10 @@ docker run -d --network=hello --net-alias=hello nginx
 
 ## 도커 볼륨
 ```sh
-# 호스트 볼륨 마운트
+# 호스트 볼륨 마운트 방식
 docker run -d -v $(pwd)/html:/usr/share/nginx/html -p 80:80 nginx
 
-# 볼륨 컨테이너
+# 볼륨 컨테이너 방식
 docker run -d -it -v $(pwd)/html:/usr/share/nginx/html --name web-volue ubuntu:focal
 docker run -d --name nginx1 --volumes-from web-volume
 
@@ -228,21 +228,17 @@ docker volume inspect db
 docker run -d --name mysql2 -e MYSQL_DATABASE=root -e MYSQL_ROOT_PASSWORD=root -v db:/var/lib/mysql -p 3306:3306 mysql
 ```
 
-## 엔트리포인트 (EntryPoint)
-- 도커 컨테이너가 실행할 떄 고정적으로 실행되는 스크립트 혹은 명령어
-- 생략될 수 있다.
-- 생략되면 커맨드에 지정된 명령어로 수행됨
-- 덧붙여서 실행할 인자를 추가 가능
 
-## 커맨드
-- 기본적으로 실행할 명령어와 인자를 정의
-- docker run 명령어에서 추가로 지정된 명령어가 있으면 그 명령어로 덮어씌워진다.
-- ENTRYPOINT가 설정되어 있으면 CMD는 ENTRYPOINT의 **인자로 사용됨**.
+## 도커 시스템
+```sh
+docker system events
 
-```dockerfile
-ENTRYPOINT ["python3", "app.py"]
-CMD ["--help"]
+docker system df
+TYPE            TOTAL     ACTIVE    SIZE      RECLAIMABLE(도커데몬이 회수할 수 있는 자원)
+Images          19        6         4.915GB   2.55GB (51%)
+Containers      12        0         3.435MB   3.435MB (100%)
+Local Volumes   6         6         4.94GB    0B (0%)
+Build Cache     47        0         4.61MB    4.61MB
+
+docker stats
 ```
-- ENTRYPOINT는 python3 app.py를 실행하도록 설정
-- CMD는 기본적으로 --help를 인자로 전달
-- 컨테이너를 실행할 때 docker run <container> --version과 같이 명령어를 추가하면 CMD의 --help 대신 --version을 인자로 사용
