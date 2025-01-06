@@ -20,63 +20,43 @@ brew install kubectl
 brew link --overwrite kubernetes-cli
 ```
 
-## kubeconfig 파일
-- kubectl이 Kubernetes 클러스터에 연결할 때 사용하는 설정 파일
-- 클러스터 정보, 사용자 인증 정보, 컨텍스트 등을 포함하여 kubectl이 어떤 클러스터에 어떻게 연결할지를 결정
-
+## 기본 명령어
 ```sh
+# 쿠버네티스 클러스터에서 사용할 수 있는 오브젝트 목록 조회
+kubectl api-resources 
 
-> cat ~/.kube/config
-# 설정 파일의 API 버전
-apiVersion: v1
-# 연결 가능한 Kubernetes 클러스터들의 정보 목록
-clusters:
-- cluster:
-    certificate-authority: /Users/ioi01-ws_nam/.minikube/ca.crt # 클러스터 인증에 사용되는 CA 인증서 경로
-    extensions: # 추가적인 확장 정보
-    - extension:
-        last-update: Thu, 28 Nov 2024 20:05:12 KST  # 마지막 업데이트 시간
-        provider: minikube.sigs.k8s.io        # 클러스터 제공자 정보
-        version: v1.34.0                      # Minikube의 버전
-      name: cluster_info
-    server: https://127.0.0.1:55497 # Kubernetes Master Node API 서버의 주소. (로컬에서 실행 중인 Minikube 클러스터)
-  name: minikube    # 클러스터 이름
-# 클러스터와 사용자, 네임스페이스를 연결한 컨텍스트 정보
-contexts:
-- context:
-    cluster: minikube # 연결할 클러스터의 이름
-    extensions:
-    - extension: # 추가적인 확장 정보
-        last-update: Thu, 28 Nov 2024 20:05:12 KST
-        provider: minikube.sigs.k8s.io
-        version: v1.34.0
-      name: context_info
-    namespace: default # 기본적으로 사용할 네임스페이스
-    user: minikube # 클러스터에 접근할 때 사용할 사용자 이름
-  name: minikube # 컨텍스트의 이름
-# 현재 활성화된 컨텍스트
-current-context: minikube
-# 리소스의 종류
-kind: Config
-# 사용자 선호 설정으로, 일반적으로 비어 있다.
-preferences: {}
-# 클러스터에 접근할 때 사용하는 사용자 인증 정보
-users:
-- name: minikube  # 사용자의 이름
-  user:
-    client-certificate: /Users/ioi01-ws_nam/.minikube/profiles/minikube/client.crt # 클라이언트 인증서의 경로
-    client-key: /Users/ioi01-ws_nam/.minikube/profiles/minikube/client.key         # 클라이언트 키 파일의 경로
-```
-### config 명령어
-```sh
-# 현재 사용 중인 컨텍스트 확인
-kubectl config current-context
+kubectl api-resources | grep pod
 
-# 사용 가능한 컨텍스트 목록 확인
-kubectl config get-contexts
+# 쿠버네티스 오브젝트의 설명과 1레벨 속성들의 설명
+# apiVersion, kind, metadata, spec, status
+kubectl explain pod
+kubectl explain deployment
 
-# 컨텍스트 전환
-kubectl config use-context <context 이름 >
+# 쿠버네티스 오브젝트 속성들의 구체적인 설명 (Json 경로)
+# kubectl explain <type>.<fieldName>[.<fieldName>]
+kubectl explain pods.spec.containers
+
+# 쿠버네티스 오브젝트 생성/변경
+kubectl apply -f 01_06_deployment.yaml
+
+# 애플리케이션 배포 개수를 조정 (replicas: 복제본)
+kubectl scale -f deployment.yaml --replicas=3
+
+# 현재 실행 중인 오브젝트 설정과 입력한 파일의 차이점 분석
+kubectl diff -f deployment.yaml
+
+# 쿠버네티스 오브젝트의 spec을 editor로 편집 (replicas를 4로 변경)
+kubectl edit deployment/nginx-deployment: 
+
+# 로컬 포트는 파드에서 실행 중인 컨테이너 포트로 포워딩
+# 개발중에 사용
+kubectl port-forward pod/nginx-deployment-74bfc88f4d-fkfjc 8080:80
+
+# 현재 실행중인 컨테이너 프로세스에 접속하여 로그 확인
+kubectl attach deployment/nginx-deployment -c nginx
+
+# 현재 실행중인 컨테이너 프로세스에 모든 로그 출력 (-f: watch 모드)
+kubectl logs deployment/nginx-deployment -c nginx -f
 ```
 
 ## cluster 명령어
@@ -103,4 +83,22 @@ kubectl get nodes
 # VERSION : 노드에서 실행 중인 Kubernetes의 버전
 NAME       STATUS   ROLES           AGE   VERSION
 minikube   Ready    control-plane   17h   v1.24.1
+```
+
+## pods 명령어 
+```sh
+# 실행 중인 Pod(컨테이너) 목록 조회 
+kubectl get pods --all-namespaces
+
+NAMESPACE : 해당 파드가 속한 네임스페이스를 표시
+NAME   : 파드의 이름
+READY : 파드 내에서 실행 중인 컨테이너 중 몇 개가 준비 상태인지
+STATUS :  파드의 현재 상태        
+-	Running: 파드가 실행 중이며 모든 컨테이너가 정상입니다.
+-	Pending: 파드가 스케줄되었지만 아직 실행되지 않은 상태입니다. 자원 부족 등의 이유로 실행되지 않을 수 있습니다.
+-	Succeeded: 파드의 컨테이너가 정상적으로 종료되어 더 이상 실행되지 않는 상태입니다.
+-	Failed: 파드의 컨테이너가 오류로 종료된 상태입니다.
+-	CrashLoopBackOff: 파드의 컨테이너가 계속해서 충돌하여 재시작되고 있는 상태입니다.
+RESTARTS :  파드의 컨테이너가 얼마나 자주 재시작되었는지를 표시. 컨테이너가 충돌하거나 수동으로 재시작되면 카운트가 증가
+AGE : 파드가 생성된 후 경과한 시간
 ```
