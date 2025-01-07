@@ -10,4 +10,8 @@
    1. 클러스터 연결 명령어 확인 가능
    2. cloud shell 에서 실행 가능
    3. Fetching cluster endpoint and auth data. kubeconfig entry generated for my-cluster.
+6. 로컬에 google cloud sdk 설치
+   1. brew install --cask google-cloud-sdk
+   2. 구글 로그인
+   3. gcloud components install gke-gcloud-auth-plugin
    4. 

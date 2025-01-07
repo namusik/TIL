@@ -41,18 +41,19 @@ kubectl apply -f 01_06_deployment.yaml
 
 # 애플리케이션 배포 개수를 조정 (replicas: 복제본)
 kubectl scale -f deployment.yaml --replicas=3
+> deployment.apps/nginx-deployment scaled
 
 # 현재 실행 중인 오브젝트 설정과 입력한 파일의 차이점 분석
 kubectl diff -f deployment.yaml
-
-# 쿠버네티스 오브젝트의 spec을 editor로 편집 (replicas를 4로 변경)
-kubectl edit deployment/nginx-deployment: 
+   progressDeadlineSeconds: 600
+-  replicas: 3
++  replicas: 2
 
 # 로컬 포트는 파드에서 실행 중인 컨테이너 포트로 포워딩
 # 개발중에 사용
 kubectl port-forward pod/nginx-deployment-74bfc88f4d-fkfjc 8080:80
 
-# 현재 실행중인 컨테이너 프로세스에 접속하여 로그 확인
+# 현재 실행중인 컨테이너 프로세스에 접속하여 로그 확인 (-c : container 이름 옵션)
 kubectl attach deployment/nginx-deployment -c nginx
 
 # 현재 실행중인 컨테이너 프로세스에 모든 로그 출력 (-f: watch 모드)
@@ -69,6 +70,16 @@ Kubernetes control plane is running at https://127.0.0.1:55497  # 클러스터�
 CoreDNS is running at https://127.0.0.1:55497/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy # 클러스터 내에서 DNS 서비스를 제공하는 CoreDNS가 실행되고 있는 주소
 
 To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
+```
+
+## deployment 명령어
+```sh
+kubectl get deployment
+NAME               READY   UP-TO-DATE   AVAILABLE   AGE
+nginx-deployment   3/3     3            3           5m16s
+
+# 쿠버네티스 오브젝트의 spec을 editor로 편집 (replicas를 4로 변경)
+kubectl edit deployment/nginx-deployment: 
 ```
 
 ## node 명령어
@@ -101,4 +112,6 @@ STATUS :  파드의 현재 상태
 -	CrashLoopBackOff: 파드의 컨테이너가 계속해서 충돌하여 재시작되고 있는 상태입니다.
 RESTARTS :  파드의 컨테이너가 얼마나 자주 재시작되었는지를 표시. 컨테이너가 충돌하거나 수동으로 재시작되면 카운트가 증가
 AGE : 파드가 생성된 후 경과한 시간
+
+
 ```
