@@ -1,5 +1,0 @@
-# JDK Memory
-
-## Stack
-
-## Heap

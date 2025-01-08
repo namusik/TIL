@@ -80,6 +80,10 @@ nginx-deployment   3/3     3            3           5m16s
 
 # 쿠버네티스 오브젝트의 spec을 editor로 편집 (replicas를 4로 변경)
 kubectl edit deployment/nginx-deployment: 
+
+# pod 복제본 개수 조정 가능
+kubectl scale deployment orderapp --replicas 3
+deployment.apps/nginx-deployment scaled
 ```
 
 ## node 명령어
@@ -96,7 +100,7 @@ NAME       STATUS   ROLES           AGE   VERSION
 minikube   Ready    control-plane   17h   v1.24.1
 ```
 
-## pods 명령어 
+## pod 명령어 
 ```sh
 # 실행 중인 Pod(컨테이너) 목록 조회 
 kubectl get pods --all-namespaces
