@@ -41,3 +41,10 @@
 7. `Scheduler`가 node 정보가 없는 pod만 고름
 8. node의 리소스를 파악해서 pod에 적잘한 node 정보를 기입
 9. `kubelet` 자기가 실행되고 있는 Worker Node에 할당받은 pod 이벤트를 수신
+10. pod 생성, container 실행의 역할을 `Container Runtime`에 위임
+11. 생성된 container가 종료되거나 하면 `kubelet`은 container에 주기적으로 health check를 보냄
+12. 상태결과를 API Server에 보고
+
+## Pod 한계
+- ReplicaSet 오브젝트를 써야 pod이 종료되도 유지됨
+- 

@@ -38,6 +38,7 @@ packages들 사이에 `circular dependencies`가 없도록 clean code structure�
 스프링이 없어도 돌아가는 코드로 만들게 되자.
 
 
+https://blog.leaphop.co.kr/blogs/68/Spring%EC%9D%98_%EC%A3%BC%EC%9A%94_%EB%94%94%EC%9E%90%EC%9D%B8_%ED%8C%A8%ED%84%B4
 
 
 
