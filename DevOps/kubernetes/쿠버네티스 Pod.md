@@ -47,4 +47,5 @@
 
 ## Pod 한계
 - ReplicaSet 오브젝트를 써야 pod이 종료되도 유지됨
-- 
+- Pod IP는 생성될 때마다 변경됨.
+  - service 오브젝트를 통해 Pod 집합의 고정된 엔드포인트 제공
