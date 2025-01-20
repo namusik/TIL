@@ -63,21 +63,22 @@
 
 ## 브로커(Broker)
 
-- Kafa Cluster는 여러대의 Broker로 구성
+![topic](../images/kafka/topic.png)
+
+- Kafka Cluster는 여러대의 Broker로 구성
 - `Kafka Server`라고도 불림. 
-- Partition에 대한 Read, Write를 관리하는 소프트웨어
 - Topic 내의 Partition들을 분산배치, 유지, 관리하는 역할
 - 각 broker는 고유한 id(숫자)로 식별됨.
 - 특정 topic의 partition들을 가지고 있다.
 - Broker ID와 Partition ID는 관계가 없음.
 - 동일한 Topic의 Partition들은 여러 Broker에 분산돼서 배치된다.
 - Client(producer, consumer)는 특정 Broker에만 연결하면 전체 Cluster에 연결가능함.
-  - Client는 **Bootstrap Server** 라는 파라미터를 가지고 접속함.
+  1. Client는 **Bootstrap Server** 라는 파라미터를 가지고 접속함.
     - kafka cluster 내의 전체 Broker를 부르는 말
-  - 하나의 Broker에 연결을 하면
-  - 이 Broker는 Cluster 내의 전체 Broker의 리스트를 전달해줌
-  - Client는 topic의 Partition들이 어느 Broker에 있는지 알게돼서 그 Broker들에 접속하게 됨.
-  - 그런데 일반적으로 최초 접속하려는 Broker가 죽어버리면 접속할 수 없어져서 그냥 전체 Broker를 ,로 구분해서 다 집어넣음
+  2. 하나의 Broker에 연결을 하면
+  3. 이 Broker는 Cluster 내의 전체 Broker의 리스트를 전달해줌
+  4. Client는 topic의 Partition들이 어느 Broker에 있는지 알게돼서 그 Broker들에 접속하게 됨.
+  5. 그런데 일반적으로 최초 접속하려는 Broker가 죽어버리면 접속할 수 없어져서 그냥 전체 Broker를 ,로 구분해서 다 집어넣음
 - 최소 3대 이상의 Broker로 하나의 Cluster를 구성해야 하며 안정성을 위해 `4대` 이상을 권장한다.
 
 ## Zookeeper
@@ -91,30 +92,28 @@
 
 ## 토픽(Topic)
 
-![topic](../images/kafka/topic.png)
-
 - kafka 안에서 메시지가 저장되는 장소
-- 논리적인 표현 단위 (눈으로 보이는 물리적 공간이 아님)
+- **논리적인 표현 단위** (눈으로 보이는 물리적 공간이 아님)
 - 브로커에서 데이터를 관리할 때 기준이 되는 개념
 - 토픽 이름으로 구분됨.
 - Topic 생성시에 Partition 개수를 지정한다
-  - 운영 도중에 변경을 권장하지 않음.
+  - **운영 도중에 변경을 권장하지 않음.**
 
 ### Partition 파티션
 
-- 눈에 보이는 디렉토리, 파일
-- Partition이 곧 Commit Log
+- Topic을 **물리적으로** 분할한 단위
 - 하나의 Topic은 하나 이상의 Partition으로 구성됨
-  - 병렬처리가 가능해짐
-- 하나의 Partition은 여러개의 `Segment`로 구성됨
+  - **병렬처리**가 가능해짐
+- 하나의 Partition이 하나의 `Commit Log`로 동작
+- 하나의 Partition은 여러개의 **Segment**로 구성됨
   - 실제 데이터가 저장되는 물리적 file
   - 지정된 크기보다 크거나 지정된 기간보다 오래되면 새 file이 열리고 메시지는 새 file에 추가됨.
   - segment0, segment1. segment2 등등등 계속 생성됨. 과거의 segment0, 1에는 데이터가 write 되지 않음.
   - segment 롤링 기준은 용량(default 1G) 혹은 시간(default 168H)
 - Topic 생성시 Partition 개수를 지정하면, 각 Partition들은 Broker에 분산돼서 배치됨.
-- 즉, 같은 Topic의 Partition일지라도 서로 다른 Broker에 배치될 수 있다.
+- 즉, 같은 Topic의 Partition일지라도 **서로 다른 Broker에 배치**될 수 있다.
   - 분산 기준은 Broker cluster가 최적으로 배치
-- Partition 번호는 0부터 오름차순
+- Partition 번호는 **0부터 오름차순**
 - Topic 내의 Partition 들은 서로 독립적
   - 어떤 Partition은 3번 offset, 어떤 partition은 1번 offset
 - 같은 Partition 내에서의 Event 순서는 보장된다.
@@ -139,13 +138,13 @@
 
 ![offset](../Images/kafka/offset.png)
 
-- Partition에서 Event의 위치 
+- Partition에서 각 메시지의 **고유한 위치**를 나타내는 숫자
   - 위 그림에서 0~10번의 위치
 - Producer가 Write하는 `LOG-END-OFFSET`
 - Consumer가 Read하고 여기까지 읽어갔다고 Commit한 위치가 `CURRENT-OFFSET`
 - 이 둘의 offset 위치 차이를 `Consuemr Lag`이라고 부름
 - 각 파티션 내에서 0으로 시작해서 순차적으로 증가함
-- 서로 다른 Partition에서 offset은 아무 의미가 없다.
+- ㄴ서로 다른 Partition에서 offset은 아무 의미가 없다.
   - Partition 0의 1번 offset과 Partition 1의 1번 offset은 아무 관계가 없음.
 - 전체 메시지의 순서를 보장하고 싶다면, 파티션은 1개로만 설정해야 함
 
