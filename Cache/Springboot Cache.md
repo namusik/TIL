@@ -152,9 +152,14 @@ public String getUserData(User user) {}
 - @Cacheable("캐시이름")을 메서드에 붙여주면 된다.
 - 해당 메소드의 결과를 지정한 캐시에 저장
 - 동일한 인자로 메소드가 다시 호출되면, 메소드를 실행하는 대신 캐시된 결과를 반환
-- key 설정을 통해 캐시 key를 커스터마이징 할 수 있다.
-  - #을 붙여야하는 이유는 SpEL 표현식에서 메소드 인자나 객체의 속성을 참조하기 위해 필수적이기 때문
-  - #을 붙이지 않으면 getData(parama1)의 인자값 `param1`이 키로 들어가는게 아니라 `parameter` 글자 자체가 캐시 key가 됨
+- **value**
+  - 캐시의 이름을 지정
+  - 이 이름을 사용하여 특정 캐시 공간(**네임스페이스**)을 구분
+  - 일종의 prefix 역할
+- **key**
+  - **캐시 key**를 **함수의 파라미터**로 커스터마이징 할 수 있다.
+  - **#을 붙여야**하는 이유는 SpEL 표현식에서 메소드 인자나 객체의 속성을 참조하기 위해 필수적이기 때문
+  - #을 붙이지 않으면 getData(parama1)의 파라미터 `param1`이 키로 들어가는게 아니라 `parameter` 글자 자체가 캐시 key가 됨
 - 2 개 이상의 캐시에 저장을 하면, 적혀있는 순서 첫번 째 캐시에서 조회를 한다.
 - **주의사항**
   - 동일한 param1을 인자로 가지지만 A 함수는 String을 반환하고, B 함수는 Object를 반환할 때,
@@ -184,7 +189,7 @@ public String getUserData(User user) {}
 ## @CacheEvict
 ```java
 // 지정한 캐시의 모든 데이터를 삭제
-//  value :: 지정한 캐시 이름, allEntries=true :: 모든 값 제거 , beforeInvocation = true :: 메서드가 호출되기전에 캐시 제거. default는 false
+// value :: 지정한 캐시 이름, allEntries=true :: 모든 값 제거 , beforeInvocation = true :: 메서드가 호출되기전에 캐시 제거. default는 false
 @CacheEvict(value="addresses", allEntries=true, , beforeInvocation = true)
 public String getAddress(Customer customer) {...}
 

@@ -143,6 +143,11 @@ Forwarding from [::1]:8080 -> 8080
 kubectl delete pod hello-app
 pod "hello-app" deleted
 
+# pod 즉시 강제 종료
+kubectl delete pod my-pod --grace-period=0 --force --namespace=default
+-	--grace-period=0: 종료 유예 기간을 0으로 설정하여 즉시 종료를 시도. 기본적으로 쿠버네티스는 파드가 정상적으로 종료될 수 있도록 유예 기간을 제공
+-	--force: 강제 삭제 플래그로, 쿠버네티스에게 파드를 강제로 삭제하도록 지시
+
 # pod 전체 삭제
 kubectl delete pod --all
 
