@@ -33,13 +33,13 @@
 ### External Heap으로서의 Redis
 - 외부 메모리
 - Application이 장애가 나도 Redis의 데이터는 보존됨 (단기적으로)
-![externalheap](../images/redis/externalheap.png)
+![externalheap](../../images/redis/externalheap.png)
 
 ### DBMS로의 Redis
 - Redis의 영속화 수단을 이용해 DBMS처럼 이용
 - 속도를 희생해야되는 비효울.
-![dbms](../images/Redis/dbms.png)
+![dbms](../../images/Redis/dbms.png)
 
 ### middleware로서의 Redis
 - redis가 제공하는 자료구조를 활용해 복잡한 로직을 쉽게 구현
-![middleware](../images/Redis/middleware.png)
+![middleware](../../images/Redis/middleware.png)

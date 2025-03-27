@@ -32,13 +32,13 @@ public interface Electronic {
       System.out.println("Electronic Description");
   }
 
-  //Private method
   default void bar() {
     System.out.print("Hello");
     baz();
     staticBaz()
     }
 
+  //Private method
   private void baz() {
     System.out.println(" world!");
   }

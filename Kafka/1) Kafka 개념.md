@@ -79,16 +79,27 @@
   3. 이 Broker는 Cluster 내의 전체 Broker의 리스트를 전달해줌
   4. Client는 topic의 Partition들이 어느 Broker에 있는지 알게돼서 그 Broker들에 접속하게 됨.
   5. 그런데 일반적으로 최초 접속하려는 Broker가 죽어버리면 접속할 수 없어져서 그냥 전체 Broker를 ,로 구분해서 다 집어넣음
-- 최소 3대 이상의 Broker로 하나의 Cluster를 구성해야 하며 안정성을 위해 `4대` 이상을 권장한다.
+- **최소 3대 이상**의 Broker로 하나의 Cluster를 구성해야 하며 안정성을 위해 `4대` **이상을 권장**한다.
 
 ## Zookeeper
+
+![zookeeper](../images/kafka/zookeeper.png)
+
 - Broker 목록/설정을 관리해주는 소프트웨어
+- 분산 작업을 제어하기 위한 Tree 형태의 데이터 저장소
 - 변경사항에 대해 Broker에게 알려줌
   - topic 생성/제거, broker 추가/제거
 - KIP-500을 통해서 Zookeeper 제거가 진행중
 - 홀수개수의 서버로 작동
   - 최소3, 권장5
-- 
+- Leader(write)
+- Follower(read)
+  - Leader에서 데이터를 가져와서 동기화
+- **Zookeeper Ensemble**
+  - zookeeper 서버의 클러스터
+  - **Quorum** 기반 알고리즘
+    - 3대로 구성되어있으면, Quorum은 2. 과반수인 2대만 동작해도 정상
+    - 그래서 홀수로 구성되어야 함
 
 ## 토픽(Topic)
 

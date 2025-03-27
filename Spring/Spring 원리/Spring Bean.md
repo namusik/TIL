@@ -106,3 +106,11 @@ implementation 'jakarta.inject:jakarta.inject-api:2.0.1'
   * 웹소켓과 동일한 생명주기
 
 #### Request Scope
+
+
+### @ConditionalOnProperty
+```java
+@ConditionalOnProperty(name = "bean.enabled", havingValue = "true", matchIfMissing = false)
+```
+- 플리케이션 프로퍼티 bean.enabled의 값이 "true"일 때만 이 빈이 등록
+- 값이 없거나 "true"가 아닐 경우, 이 클래스를 빈으로 등록하지 않음.
