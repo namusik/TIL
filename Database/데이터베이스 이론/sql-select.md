@@ -26,6 +26,10 @@ AND PROJECT.leader_id = EMPLOYEE.id
     - 2개의 테이블을 join시키는 조건
 - 동일한 이름의 attribute가 서로 다른 테이블에 있으면 테이블 명을 명시해준다.
 
+## SQL 논리 순서
+- FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT 
+- WHERE 안의 배치 순서는 의미가 없다
+
 ### AS
 
 - table 이나 attribute에 별칭을 붙일 때 사용
@@ -88,6 +92,21 @@ name LIKE '\%%'
 ### \*(asterisk)
 
 - 선택된 tuple의 모든 attribute를 보여줄 때 사용
+
+### ORDER BY
+```sql
+SELECT  MSG_GRP_NO
+FROM    TMG_MSG_GRP
+WHERE   MIGRATION_YN = 'N'
+  AND   MSG_SND_STS_CD = 'MGC'
+  AND   MB_ID IN (…)
+ORDER BY MSG_GRP_NO
+LIMIT   10000;
+```
+
+- 인덱스 ORDER BY에 들어간 컬럼을 넣어주면 인덱스가 정렬을 대신한다.
+  - B-Tree 리프를 앞→뒤로만 읽어도 결과가 이미 원하는 순서
+  - 옵티마이저는 filesort 단계 생략 =Using filesort 없음
 
 ### 주의 사항
 

@@ -1,4 +1,9 @@
-# 서블릿 
+# Spring Boot 에서의 Servlet
+
+## 개념
+
+
+
 
 ## 동작
 1. 스프링 부트 실행
@@ -7,6 +12,7 @@
 4. 서블릿 컨테이너 안에 서블릿들을 생성해줌. 
 5. Http 요청이 오면 메시지를 기반으로 request, response 객체를 생성해서 서블릿에 넘겨줌. 
 6. 서블릿에서 작업을 하면 response객체를 가지고 HTTP 응답을 만들어서 웹에 응답.
+7. 
 ## 사용법
 
 ### @ServletComponentScan

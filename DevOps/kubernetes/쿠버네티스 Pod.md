@@ -45,6 +45,27 @@
 11. 생성된 container가 종료되거나 하면 `kubelet`은 container에 주기적으로 health check를 보냄
 12. 상태결과를 API Server에 보고
 
+### Kubernetes 스케줄러의 pod 배포 전략
+
+#### 필터 단계 (Predicates)
+- 자원 적합성(ResourceFit)
+  - requests 기반 필터: 스케줄러는 각 노드의 **allocatable** 자원(총량)에서 **이미 예약된(requested) 자원**(현재 노드에 배포된 파드들의 requests 합계)을 차감한 뒤, 
+    - capacity: 노드가 물리적으로 제공할 수 있는 총량
+    - **allocatable**: 시스템 데몬(kubelet, kube-proxy 등)에 예약된 자원을 뺀, 팟에 할당 가능한 실제 자원 .
+  - 파드의 requests.cpu 및 requests.memory 요구량이 남은 자원보다 작거나 같은 노드를 대상으로 합니다.
+  - actual usage 미반영: 실시간 CPU/메모리 사용량(cAdvisor 지표)이나 limits 설정은 배치 판단에 전혀 사용되지 않습니다.
+  - 그 외 필터: nodeSelector, nodeAffinity, taints/tolerations, volume binding 등 다른 조건도 모두 만족해야 후보 노드로 남습니다.
+
+#### 점수 매김 단계 (Priority)
+
+- NodeResourcesLeastRequested
+  - 최소 요청 우선: 기본 프로파일에서는 NodeResourcesLeastRequested 우선순위 플러그인을 사용해, (남은 자원 ÷ 전체 allocatable) 비율이 높은 노드에 더 높은 점수를 부여합니다.
+  - 이는 결과적으로 “가장 여유로운” 노드를 선택하도록 유도하며, 자원 파편화를 줄입니다.
+
+- 기타 우선순위 플러그인
+  - Pod Priority: priorityClassName이 높은 파드를 우선으로 스케줄링하며, 필요 시 저우선 파드를 선점(preempt)할 수 있습니다.
+  - TopologySpread, Affinity/Anti-Affinity 등 추가 플러그인을 통해 사용자 정의 점수 매김도 가능합니다.
+
 ## Pod 한계
 - ReplicaSet 오브젝트를 써야 pod이 종료되도 유지됨
 - Pod IP는 생성될 때마다 변경됨.
