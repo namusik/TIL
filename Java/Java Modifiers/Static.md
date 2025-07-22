@@ -4,6 +4,78 @@
 
 따라서, 별도의 인스턴스화가 필요없이 사용 가능하다.
 
+## Static Class 
+- 내부 클래스로 사용 가능
+- 외부 클래스에 의존하지 않으면 Static을 붙인다.
+- 메모리를 덜 쓰고 더 효율적
+
+```java
+public class OuterClass {
+    private String outerField = "외부 필드";
+    
+    // ❌ Non-Static: 외부 클래스 멤버 사용
+    private class NonStaticInner {
+        public void method() {
+            System.out.println(outerField);  // 외부 필드 접근!
+        }
+    }
+    
+    // ✅ Static: 외부 클래스 멤버 사용 안함
+    private static class StaticInner {
+        public void method() {
+            System.out.println("독립적으로 동작");  // 외부 의존 없음
+        }
+    }
+}
+```
+
+### Static Class 사용 케이스 
+1. 데이터 홀더 클래스
+```java
+public class ApiResponse {
+    // ✅ 단순히 데이터만 담는 경우
+    private static class ErrorInfo {
+        private final String code;
+        private final String message;
+        // 외부 클래스와 무관한 순수 데이터
+    }
+}
+```
+2. Builder 패턴
+```java
+public class User {
+    // ✅ Builder는 독립적으로 동작
+    public static class Builder {
+        // 외부 User 클래스의 인스턴스 멤버 접근 안함
+    }
+}
+```
+3. Utility/Helper 클래스
+```java
+public class StringUtils {
+    // ✅ 유틸리티 기능들
+    public static class Validator {
+        public static boolean isEmail(String email) {
+            // 독립적인 검증 로직
+        }
+    }
+}
+```
+4. 상수 그룹
+```java
+public class GameConfig {
+    // ✅ 관련 상수들 묶기
+    public static class Difficulty {
+        public static final int EASY = 1;
+        public static final int HARD = 3;
+    }
+}
+```
+
+### Static 내부 클래스의 장점
+- 메모리 효율성
+  - 
+
 ## Static 변수 (정적 변수)
 
 - 클래스 자체에 소속된 공용 데이터
