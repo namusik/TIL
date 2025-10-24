@@ -1,0 +1,141 @@
+version: "3.9" # (1) Compose 파일의 버전. 최신 구문을 사용하기 위해 "3.9" 지정
+
+services: # (2) 여러 개의 컨테이너 서비스를 정의하는 루트 키
+  # ─────────────────────────────
+  # ① KRaft Controller Quorum (3대)
+  # ─────────────────────────────
+  controller1:
+    image: apache/kafka:4.1.0 # (3) 사용할 Kafka 공식 이미지 (KRaft 내장)
+    container_name: controller1 # (4) 컨테이너 이름 (디버깅 시 편리)
+    restart: no # (5) 컨테이너가 중단되면 자동 재시작 no
+    environment: # (6) 컨테이너 내부 환경변수 설정
+      KAFKA_PROCESS_ROLES: "controller" # (7) Kafka 4.x에서 역할 지정. controller-only 모드
+      KAFKA_NODE_ID: "1" # (8) 이 노드의 고유 ID (Raft에서 식별자 역할)
+      KAFKA_LISTENERS: "CONTROLLER://:9093" # (9) 컨트롤러 통신용 리스너 (내부 포트). Kafka 프로세스가 어떤 네트워크 포트로 어떤 프로토콜을 리스닝할지(즉, 어디서 요청을 받을지) 를 정의. CONTROLLER라는 이름의 리스너(listener) 를 개설하고, 9093 포트에서 대기하도록 지정
+      KAFKA_CONTROLLER_LISTENER_NAMES: "CONTROLLER" # (10) 컨트롤러 리스너 이름 지정. 반드시 KAFKA_LISTENERS 에 존재하는걸 써야됨. 그 중 어떤 문을 컨트롤러 전용으로 쓸지” 지정하는 개념
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@controller1:9093,2@controller2:9093,3@controller3:9093" # (11) Raft 합의 그룹 정의. Kafka 클러스터 내의 모든 “Controller 노드”를 전부 명시. <node.id>@<hostname>:<controller-port>
+      KAFKA_LOG_DIRS: "/var/lib/kafka/data" # (12) 메타데이터 로그 저장 경로
+      CLUSTER_ID: "MkU3OEVBNTcwNTJENDM2Qk" # (13) 클러스터 고유 ID (모든 노드에서 동일해야 함). “같은 Kafka 클러스터”에 속한다는 걸 구분하기 위한 고유 식별자
+    volumes:
+      - controller1-data:/var/lib/kafka/data # (14) 데이터 영속화용 볼륨. <볼륨이름>:<컨테이너 내부 경로>. “왼쪽 → 오른쪽” 방향으로 마운트한다는 뜻
+  controller2:
+    image: apache/kafka:4.1.0
+    container_name: controller2
+    restart: no
+    environment:
+      KAFKA_PROCESS_ROLES: "controller"
+      KAFKA_NODE_ID: "2"
+      KAFKA_LISTENERS: "CONTROLLER://:9093"
+      KAFKA_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@controller1:9093,2@controller2:9093,3@controller3:9093"
+      KAFKA_LOG_DIRS: "/var/lib/kafka/data"
+      CLUSTER_ID: "MkU3OEVBNTcwNTJENDM2Qk"
+    volumes:
+      - controller2-data:/var/lib/kafka/data
+
+  controller3:
+    image: apache/kafka:4.1.0
+    container_name: controller3
+    restart: no
+    environment:
+      KAFKA_PROCESS_ROLES: "controller"
+      KAFKA_NODE_ID: "3"
+      KAFKA_LISTENERS: "CONTROLLER://:9093"
+      KAFKA_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@controller1:9093,2@controller2:9093,3@controller3:9093"
+      KAFKA_LOG_DIRS: "/var/lib/kafka/data"
+      CLUSTER_ID: "MkU3OEVBNTcwNTJENDM2Qk"
+    volumes:
+      - controller3-data:/var/lib/kafka/data
+
+  # ─────────────────────────────
+  # ② Kafka Brokers (3대)
+  # ─────────────────────────────
+  kafka1:
+    image: apache/kafka:4.1.0
+    container_name: kafka1
+    restart: no
+    depends_on: # (15) 컨트롤러들이 먼저 시작되어야 함. 서비스 의존성(dependency) 제어 구문
+      - controller1
+      - controller2
+      - controller3
+    ports:
+      # 호스트 머신의 19092 포트 → 컨테이너 내부의 9092 포트로 트래픽을 전달. Docker 네트워크 계층에서 “건물 외부 문을 열어주는 역할”.
+      # KAFKA_LISTENERS 에 정의된 포트(9092)와 매칭되어야 함.
+      - "19092:9092" # (16) 외부 접근 포트 매핑 (호스트→컨테이너). 외부(클라이언트)가 접근해야 하는 주체는 broker뿐이고, controller는 내부 통신 전용(= Raft 합의용) 이기 때문 에 broker 포트(9092)만 노출
+    environment:
+      KAFKA_PROCESS_ROLES: "broker" # (17) 브로커 전용 프로세스
+      KAFKA_NODE_ID: "11" # (18) 브로커 고유 ID
+      KAFKA_LISTENERS: "INTERNAL://:9093,EXTERNAL://:9092" # (19) “Kafka 서버가 어떤 이름과 포트로 어떤 프로토콜로 리스닝할지”를 정의. Kafka 클라이언트 및 브로커 간 통신용 리스너 (내부/외부 모두)
+      KAFKA_ADVERTISED_LISTENERS: "EXTERNAL://localhost:19092" # (20) 클라이언트에 “공개할” 주소·포트 목록. 가장 중요한 개념 중 하나. <listener_name>://<host>:<port>. KAFKA_LISTENERS에 정의한 리스너 이름과 동일해야 함
+      KAFKA_INTER_BROKER_LISTENER_NAME: "INTERNAL" # (21) 브로커 간 복제(replication) 트래픽에 어떤 리스너를 쓸지 지정. "<listener_name>". 반드시 KAFKA_LISTENERS 안에 정의된 리스너 이름 중 하나
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@controller1:9093,2@controller2:9093,3@controller3:9093" # (22) 연결할 컨트롤러 목록. 브로커는 직접 Raft 합의에 참여하지 않지만, 어떤 컨트롤러들이 존재하는지 알아야 “누구에게 메타데이터를 요청할지” 알 수 있음.
+      KAFKA_LOG_DIRS: "/var/lib/kafka/data" # (23) 데이터 로그 경로
+      # 내부 시스템 토픽 복제/내구성 설정 (운영 수준)
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "3" # (24) __consumer_offsets 토픽 복제본 수
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: "3" # (25) __transaction_state 토픽 복제본 수
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: "2" # (26) 최소 ISR (2 이상이어야 합의 가능)
+      CLUSTER_ID: "MkU3OEVBNTcwNTJENDM2Qk" # (27) 클러스터 ID (컨트롤러와 동일해야 함)
+    volumes:
+      - kafka1-data:/var/lib/kafka/data
+
+  kafka2:
+    image: apache/kafka:4.1.0
+    container_name: kafka2
+    restart: no
+    depends_on:
+      - controller1
+      - controller2
+      - controller3
+    ports:
+      - "29092:9092"
+    environment:
+      KAFKA_PROCESS_ROLES: "broker"
+      KAFKA_NODE_ID: "12"
+      KAFKA_LISTENERS: "INTERNAL://:9093,EXTERNAL://:9092"
+      KAFKA_ADVERTISED_LISTENERS: "EXTERNAL://localhost:29092"
+      KAFKA_INTER_BROKER_LISTENER_NAME: "INTERNAL"
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@controller1:9093,2@controller2:9093,3@controller3:9093"
+      KAFKA_LOG_DIRS: "/var/lib/kafka/data"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "3"
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: "3"
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: "2"
+      CLUSTER_ID: "MkU3OEVBNTcwNTJENDM2Qk"
+    volumes:
+      - kafka2-data:/var/lib/kafka/data
+
+  kafka3:
+    image: apache/kafka:4.1.0
+    container_name: kafka3
+    restart: no
+    depends_on:
+      - controller1
+      - controller2
+      - controller3
+    ports:
+      - "39092:9092"
+    environment:
+      KAFKA_PROCESS_ROLES: "broker"
+      KAFKA_NODE_ID: "13"
+      KAFKA_LISTENERS: "INTERNAL://:9093,EXTERNAL://:9092"
+      KAFKA_ADVERTISED_LISTENERS: "EXTERNAL://localhost:39092"
+      KAFKA_INTER_BROKER_LISTENER_NAME: "INTERNAL"
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@controller1:9093,2@controller2:9093,3@controller3:9093"
+      KAFKA_LOG_DIRS: "/var/lib/kafka/data"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "3"
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: "3"
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: "2"
+      CLUSTER_ID: "MkU3OEVBNTcwNTJENDM2Qk"
+    volumes:
+      - kafka3-data:/var/lib/kafka/data
+
+# ─────────────────────────────
+# ③ 데이터 볼륨 정의 (Docker Volume)
+# ─────────────────────────────
+volumes: # (28) 볼륨 정의 블록 (컨테이너 재시작 시 데이터 유지)
+  controller1-data:
+  controller2-data:
+  controller3-data:
+  kafka1-data:
+  kafka2-data:
+  kafka3-data:

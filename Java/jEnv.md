@@ -32,29 +32,36 @@ $ echo 'eval "$(jenv init -)"' >> ~/.bash_profile
 source ~/.bash_profile
 ~~~
 
-3. 설치된 JDK jEnv에 등록하기
+3. 자바 설치
+```sh
+brew install --cask temurin@21
+```
+
+4. 설치된 JDK jEnv에 등록하기
 
 먼저, 설치된 JDK의 경로를 알아보자 
 ~~~sh
- ioi01-ws_nam@cpe-172-90-11-155  /  /usr/libexec/java_home -V
+$ /usr/libexec/java_home -V
 Matching Java Virtual Machines (2):
     17.0.6 (arm64) "Eclipse Adoptium" - "OpenJDK 17.0.6" /Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home
     11.0.19 (arm64) "Eclipse Adoptium" - "OpenJDK 11.0.19" /Library/Java/JavaVirtualMachines/temurin-11.jdk/Contents/Home
 /Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home
 ~~~
-상위 디렉토리로 이동 후, 위에서 확인한 JDK 경로를 적어주자. 뒤에 Contents/Home은 동일
+위에서 확인한 JDK 경로를 적어주자. 뒤에 Contents/Home은 동일
 ~~~sh
 $ jenv add Library/Java/JavaVirtualMachines/{jdk 이름}/Contents/Home
    added
 $ jenv add Library/Java/JavaVirtualMachines/{jdk 이름}/Contents/Home
    added
+
+jenv rehash # 새로 등록하거나 제거한 JDK의 실행 파일(java, javac, keytool 등)에 대한 심볼릭 링크를 jenv 내부에 다시 생성하는 명령
 ~~~
 
 아래처럼 나오면 성공.
 
 ![jenv](../images/Java/jenv.png)
 
-4. JAVA_HOME 등록하기
+5. JAVA_HOME 등록하기
 ~~~sh
 jenv doctor
 [OK]	No JAVA_HOME set
@@ -76,7 +83,7 @@ export plugin을 enable해주면
 
 위처럼 모두 OK가 뜨게 된다. 
 
-5. jenv에 등록된 jdk 확인
+6. jenv에 등록된 jdk 확인
 ~~~sh
 jenv versions
 ~~~
@@ -86,11 +93,12 @@ jenv versions
 
 add 해준 JDK가 보이게 된다. 
 
-5. Global 버전 변경해주기
+7. Global 버전 변경해주기
 
 mac OS 전체에 적용되는 JAVA_HOME 값을 바꾼다.
 ~~~sh
 jenv global {version 이름}
+
 ~~~
 
 JAVA_HOME 확인
@@ -101,7 +109,7 @@ java -version
 
 {}안에 위에 versions 했을 때, 뜨는 이름을 적어주면 된다. 적용이 되면 옆에 set이 붙는다.
 
-6. Local 적용
+8. Local 적용
 특정 프로젝트에만 특정 자바 버전을 적용시키고 싶을 때 사용한다. 
 프로젝트가 있는 경로에서 명령어를 실행한다.
 ~~~sh

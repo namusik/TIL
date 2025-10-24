@@ -8,6 +8,12 @@
 - 스레드 안전성 
   - 여러 스레드가 동시에 동일한 ThreadLocal 변수를 접근하더라도, 각 스레드는 자신의 로컬 변수에만 접근하기 때문에 동기화 문제를 신경 쓸 필요가 없어짐
 
+## 동작 구조
+
+- ThreadLocal은 실제 값을 `ThreadLocalMap`이라는 구조 안에 저장
+- ThreadLocalMap은 **Thread 객체 안에** 붙어 있습니다. 즉, ThreadLocal 값은 Thread에 귀속됨.
+- 따라서 Thread가 살아있는 동안에는 그 ThreadLocal 값도 같이 살아있음.
+
 ## 예제
 ```java
 public class ThreadLocalExample {
@@ -44,6 +50,8 @@ public class ThreadLocalExample {
 - 메모리 누수 방지: 
   - ThreadLocal은 스레드가 종료될 때 자동으로 정리되지 않을 수 있다.
   - 특히, 스레드 풀을 사용하는 경우, 스레드가 재사용되면서 이전 스레드의 ThreadLocal 값이 남아 있을 수 있음.
+  - JVM 프로세스를 완전히 종료하면 모든 객체는 사라지고 OS에서 메모리가 해제되지만, JVM은 그대로 쓰고 hot deploy 같이 WAR 파일만 교체를 하면 Thrad가 그대로 남아있음.
+  - Thread-1 객체: 톰캣이 계속 사용하므로 GC 안됨 -> threadLocals 맵: Thread-1이 살아있어서 GC 안됨 -> 객체A: threadLocals에서 참조하고 있어서 GC 안됨
   - 이를 방지하기 위해 작업이 끝난 후 remove() 메서드를 호출하여 값을 제거하는 것이 좋다.
   - threadLocal.remove();
 - 초기화
