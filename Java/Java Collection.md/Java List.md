@@ -1,7 +1,40 @@
 # Java List
 
-## List 생성 방법 
+
+## List
+
+### 개념
+- 인터페이스
+- 구현체(ArrayList, LinkedList, CopyOnWriteArrayList 등)의 “행동 규약”만 정의
+
+### 다이아몬드 연산자 (< >)
+- Java 7+부터 도입
+- 우측 제네릭 타입을 생략해도 컴파일러가 추론 할 수 있게됨.
+
+```java
+Java 6 : List<List<Animal>> list = new ArrayList<List<Animal>>();
+
+Java 7+ : List<List<Animal>> list = new ArrayList<>();
+```
+
+### 실무 팁
+- 왼쪽 타입은 인터페이스로 선언하라
+  - 선언부는 **인터페이스**(List, Map, Set) 로 하고
+  - 생성부만 **구현체**(ArrayList, HashMap, HashSet) 로 한다.
+
+
+## List 구현체
 ### ArrayList
+
+#### 개념
+- List 인터페이스의 구체 구현체입니다.
+- 내부적으로 배열 기반으로 데이터를 저장
+- 장점:
+  - 인덱스 접근이 O(1)
+  - 대부분의 일반적인 리스트 작업이 빠름
+- 단점:
+  - 중간 삽입/삭제는 느림
+  - 크기 변경 시 전체 복사 발생 가능
 
 ~~~java
 List<String> lists = new ArrayList<>();
@@ -69,8 +102,93 @@ public static <T> List<T> singletonList(T o) {
 - 메모리를 효율적으로 사용하기 때문에, 단일 요소 리스트를 만들 때는 `Arrays.asList` 보다 `Collections.singletonList`를 권장
 - List.of()와 비교한다면 효율성 측면에서 별 차이는 없다.
 
+------------------------------------
+
+## ListUtils.partition(List, int)
+
+- Apache Commons Collections
+- 주어진 리스트를 지정한 크기(size)만큼 잘라 여러 개의 “독립된(sub-list 복사)” 리스트로 나누는 기능
+- Java 표준 라이브러리에는 없는 기능이므로, 범용 배치 처리나 chunk 작업에서 많이 활용됨.
+
+### 의존성
+```gradle
+implementation 'org.apache.commons:commons-collections4:4.4'
+```
+
+### 동작방식
+```java
+List<Integer> numbers = Arrays.asList(1,2,3,4,5,6,7,8,9,10);
+
+List<List<Integer>> partitions = ListUtils.partition(numbers, 3);
+
+for (List<Integer> part : partitions) {
+    System.out.println(part);
+}
+
+[1, 2, 3]
+[4, 5, 6]
+[7, 8, 9]
+[10]
+```
+
+### 특징
+- “복사 기반”으로 서브 리스트를 만든다 (독립된 리스트)
+  - 결과 리스트(List<List<T>>)의 각 원소는 원본 리스트의 요소를 새로운 ArrayList로 복사한 독립된 리스트
+  - **즉, 원본 리스트를 수정해도 partition 결과는 바뀌지 않는다.**
+  - **동시성 환경**(EKS Worker thread, AWS Lambda, Kafka Listener)에서도 안전하게 쓰기 좋다.
+- 마지막 파티션은 size보다 작을 수 있음
+- 원본 리스트가 null이면 NullPointerException 발생
+- size < 1 이면 IllegalArgumentException 발생
+
+### 복잡도
+시간 복잡도 O(N)
+→ 내부적으로 모든 요소를 복사하기 때문에 총 N개 요소를 그대로 순회합니다.
+
+공간 복잡도 O(N)
+→ 복사 기반이므로 N개의 요소가 새 리스트들 안에 다시 저장됩니다.
+
+### 실무 사용 패턴
+- 대량 데이터를 외부 API 호출에 배치 처리할 때
+  - 외부 요건(API 제한, Kafka batch produce 등)에서 “**최대 N개씩 처리**”가 필요할 때 적합하다.
+```java
+List<Order> orders = loadOrders();
+
+List<List<Order>> chunks = ListUtils.partition(orders, 100);
+
+for (List<Order> batch : chunks) {
+    externalApi.send(batch);
+}
+```
+
+- DB Bulk Insert / jOOQ batchBind 단계
+```java
+for (List<MyEntity> batch : ListUtils.partition(entities, 100)) {
+    dsl.batchInsert(batch).execute();
+}
+```
+
+- 스레드 풀에서 병렬 처리 시
+```java
+ExecutorService executor = Executors.newFixedThreadPool(4);
+
+for (List<Task> group : ListUtils.partition(tasks, 200)) {
+    executor.submit(() -> process(group));
+}
+```
+
+### Apache partition 선택 기준
+1. 원본 리스트를 변경할 가능성이 있거나
+2. 멀티스레드 환경에서 파티션을 안전하게 넘겨야 하거나
+3. “독립된 리스트”가 필요한 경우
+
+### Guava Lists.partiont과의 비교
+1. 원본에 대한 뷰(view)만 필요하고
+2. 메모리 효율이 중요한 환경이라면
+Guava Lists.partition 고려
+
 
 ## 출처
 https://www.baeldung.com/java-init-list-one-line
 https://www.baeldung.com/java-aslist-vs-singletonlist
 https://www.baeldung.com/java-arraylist
+

@@ -64,7 +64,7 @@
 | Streams (Kafka Streams API) | 스트림 처리용 Java 라이브러리 (window, join 등) | 애플리케이션 내부 | kafka-streams 라이브러리 버전
 | Connect (Kafka Connect) | 외부 시스템(DB, Elasticsearch 등)과 데이터를 연동하는 런타임 | 별도 JVM 프로세스 (plugin 기반) | Broker와 동일 버전으로 빌드되는 서버
 
-## Kafka 시작 순서
+## Kafka 구동 순서
 - Controller 1, 2, 3
   - Raft 합의 그룹을 먼저 형성 (Leader Controller 선출)
 - Leader Controller
@@ -125,6 +125,7 @@
   5. 그런데 일반적으로 최초 접속하려는 Broker가 죽어버리면 접속할 수 없어져서 그냥 전체 Broker를 ,로 구분해서 다 집어넣음
 - **최소 3대 이상**의 Broker로 하나의 Cluster를 구성해야 하며 안정성을 위해 `4대` **이상을 권장**한다.
   - 최소 3대 브로커 + replication.factor=3 구성을 권장
+  - 
 
 ## 토픽(Topic)
 
@@ -145,11 +146,23 @@
 - 각 Consumer Group 이 “토픽-파티션을 어디까지 읽었는지”(committed offset)와 그룹 메타데이터를 저장·관리하는 내부 토픽
 - 첫 오프셋 커밋이 발생하면 자동 생성됩니다(브로커가 관리)
 - 파티션 수: 기본적으로 다수(예: 수십 개)로 생성되어 그룹별로 분산 저장됩니다.
+  - 기본값 50개의 partition 생성됨.
   - 어떤 그룹의 상태를 어느 파티션에 기록할지는 해시로 결정됩니다(그룹명 → 해시 → 파티션 index).
+- replication factor
+  - 기본값 3
 - 정책: cleanup.policy=compact(로그 컴팩션).
   - 동일 키의 가장 최신 커밋만 남기고, 예전 레코드는 정리됩니다(디스크 효율성/조회 속도 확보).
   - 삭제를 의미하는 tombstone 레코드(값 null)도 사용됩니다.
 
+#### __transaction_state
+
+- 프로듀서가 여러 메시지를 하나의 원자적 단위(Atomic Unit) 로 묶어서 보내고, 일부만 전송된 상태로 “커밋(commit)”되지 않도록 보장하는 기능
+- Kafka 트랜잭션은 정확히 한 번 전달(Exactly-Once Semantics, EOS) 을 구현하는 핵심 요소
+- 
+- 각 트랜잭션의 상태를 저장하기 위한 전용 토픽
+- Kafka는 트랜잭션 상태의 내구성을 보장하기 위해 아래 두 가지 설정을 세트로 사용
+  - KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR : __transaction_state 복제본 수
+  - KAFKA_TRANSACTION_STATE_LOG_MIN_ISR : 트랜잭션 커밋이 유효하려면 동기(In-Sync) 상태여야 하는 최소 replica 수
 
 ## Partition 파티션
 

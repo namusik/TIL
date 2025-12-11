@@ -1,14 +1,16 @@
 # Kafka 도커에 설치하기
 
-JDK Temurin 21
-Spring Boot 3.4.10
-Spring for Apache Kafka 3.3.10
-kafka-clients (Spring 관리) 3.8.x
-Kafka Broker (Docker 서버) 4.1.x (최신)
-Kafka Mode KRaft (Zookeeper 없이 단일 프로세스)
-
-
 ## 도커 카프카 구성
+- 카프카 버전
+https://kafka.apache.org/downloads
+
+- 카프카 버전 호환성
+  - https://kafka.apache.org/40/documentation/compatibility.html
+
+- 카프라 도커 이미지
+  - https://hub.docker.com/r/apache/kafka?utm_source=chatgpt.com
+
+
 - 단일 브로커
 [docker-compose](./docker-compose.yml)
 
