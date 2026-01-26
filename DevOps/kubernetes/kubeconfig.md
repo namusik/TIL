@@ -3,7 +3,7 @@
 - 클러스터 정보, 사용자 인증 정보, 컨텍스트 등을 포함하여 kubectl이 어떤 클러스터에 어떻게 연결할지를 결정
 
 ```sh
-
+# kubeconfig 기본 경로
 > cat ~/.kube/config
 # 설정 파일의 API 버전
 apiVersion: v1
@@ -46,13 +46,34 @@ users:
     client-key: /Users/ioi01-ws_nam/.minikube/profiles/minikube/client.key         # 클라이언트 키 파일의 경로
 ```
 ## config 명령어
+
 ```sh
-# 현재 사용 중인 컨텍스트 확인
+# 현재 사용중인 kubeconfig 파일 확인
+echo $KUBECONFIG
+
+# 현재 컨텍스트 확인
 kubectl config current-context
 
-# 사용 가능한 컨텍스트 목록 확인
+# kubeconfig 전체 정보 출력
+kubectl config view
+
+# 등록된 모든 컨텍스트 목록 확인
 kubectl config get-contexts
 
-# 컨텍스트 전환
-kubectl config use-context <context 이름 >
+# 특정 컨텍스트 전환
+kubectl config use-context <context-name>
+
+# 현재 context 상세 정보
+kubectl config describe-context <context-name>
+```
+
+
+## 실무 권장 운영 패턴
+
+- 환경별 kubeconfig 분리
+
+```sh
+~/.kube/config-dev
+~/.kube/config-stg
+~/.kube/config-prod
 ```
