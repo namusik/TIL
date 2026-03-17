@@ -1,6 +1,14 @@
 # Quartz Scheduler
 
 ## 개념
+- Quartz는 Java 기반의 오픈소스 Job 스케줄링 라이브러리로, 특정 시간 또는 주기에 따라 작업(Job)을 자동 실행할 수 있다.
+- 주요 구성 요소:
+  - **Scheduler**: Job과 Trigger를 관리하고 실행을 조율하는 핵심 엔진
+  - **Job**: 실행할 작업의 단위. `Job` 인터페이스의 `execute()` 메서드를 구현
+  - **JobDetail**: Job의 메타데이터(이름, 그룹, JobDataMap 등)를 정의
+  - **Trigger**: Job의 실행 시점/주기를 결정. SimpleTrigger(단순 반복)와 CronTrigger(Cron 표현식 기반) 등이 있음
+  - **JobStore**: Job과 Trigger 정보를 저장하는 저장소. RAMJobStore(메모리)와 JDBCJobStore(DB 기반)가 있음
+- DB 기반 스케줄링(JDBCJobStore)을 사용하면 애플리케이션 재시작 후에도 스케줄 정보가 유지되며, 클러스터 환경에서 여러 인스턴스 간 작업 분산이 가능하다.
 
 ## 코드 설명
 ### build.gradle
@@ -11,7 +19,28 @@ dependencies {
 ```
 ### application.yml
 ```yaml
-
+spring:
+  quartz:
+    job-store-type: jdbc                # jdbc | memory (기본값: memory)
+    scheduler-name: MyScheduler
+    wait-for-jobs-to-complete-on-shutdown: true  # 종료 시 실행 중인 Job 완료 대기
+    overwrite-existing-jobs: true       # 기존 Job 덮어쓰기 허용
+    properties:
+      org.quartz:
+        scheduler:
+          instanceId: AUTO              # 클러스터 환경에서 인스턴스 자동 식별
+        jobStore:
+          class: org.quartz.impl.jdbcjobstore.JobStoreTX
+          driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+          tablePrefix: QRTZ_
+          isClustered: true             # 클러스터 모드 활성화
+          clusterCheckinInterval: 15000 # 클러스터 체크인 간격 (ms)
+          misfireThreshold: 60000       # misfire 판단 임계값 (ms)
+        threadPool:
+          threadCount: 10               # 동시 실행 가능한 Job 스레드 수
+          threadPriority: 5
+    jdbc:
+      initialize-schema: always         # always | never | embedded (Quartz 테이블 자동 생성)
 ```
 
 ### QuartzTriggerListener
@@ -127,14 +156,12 @@ public class QuartzJobListener implements JobListener {
 -  Quartz 스케줄러에서 Job과 Trigger가 실행되거나 misfire되는 등의 이벤트가 발생할 때 이를 감지하여 로깅하거나 후속 처리를 수행할 수 있도록, 두 종류의 리스너(QuartzJobListener와 QuartzTriggerListener)를 스케줄러에 등록
 
 ```java
-import com.mz.message.common.schedule.common.listener.QuartzJobListener;
-import com.mz.message.common.schedule.common.listener.QuartzTriggerListener;
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct; // Spring Boot 3.x 기준 (Boot 2.x는 javax.annotation.PostConstruct)
 import lombok.RequiredArgsConstructor;
 import org.quartz.ListenerManager;
+import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
 @Configuration
 @RequiredArgsConstructor
@@ -182,14 +209,14 @@ public class ScheduleJobService {
      *                       (예: "0 0 12 ? * *" - 매일 정오에 실행)
      * @throws SchedulerException
      */
-    public void scheduleJob(String jobName, String groupName, Date startTime, int intervalInSec)
+    public void scheduleJob(String jobName, String groupName, String cronExpression)
             throws SchedulerException {
 
         // JobDetail 생성: 실행할 job 클래스와 고유의 jobKey 지정
         JobDetail jobDetail = JobBuilder.newJob(SampleJob.class)
                 .withIdentity(jobName, groupName)
                 .usingJobData("jobSays", "Hello Quartz") // 예시: JobDataMap에 데이터 저장
-                storeDurably(true) 
+                .storeDurably(true)
                 .build();
 
         // CronTrigger 생성: CronScheduleBuilder를 사용하여 cron 표현식을 설정
@@ -227,8 +254,95 @@ public class ScheduleJobService {
         // scheduler.rescheduleJob()는 기존 trigger를 새로운 trigger로 대체하고, 다음 실행 시간을 반환합니다.
         return scheduler.rescheduleJob(triggerKey, newTrigger);
     }
+
+    /**
+     * 예약 작업 삭제
+     */
+    public boolean deleteJob(String jobName, String groupName) throws SchedulerException {
+        JobKey jobKey = new JobKey(jobName, groupName);
+        return scheduler.deleteJob(jobKey);
+    }
+
+    /**
+     * 예약 작업 일시정지
+     */
+    public void pauseJob(String jobName, String groupName) throws SchedulerException {
+        JobKey jobKey = new JobKey(jobName, groupName);
+        scheduler.pauseJob(jobKey);
+    }
+
+    /**
+     * 일시정지된 예약 작업 재개
+     */
+    public void resumeJob(String jobName, String groupName) throws SchedulerException {
+        JobKey jobKey = new JobKey(jobName, groupName);
+        scheduler.resumeJob(jobKey);
+    }
 }
 ```
+### ScheduleController
+```java
+import lombok.RequiredArgsConstructor;
+import org.quartz.SchedulerException;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/schedule")
+@RequiredArgsConstructor
+public class ScheduleController {
+
+    private final ScheduleJobService scheduleJobService;
+
+    @PostMapping
+    public ResponseEntity<String> createJob(
+            @RequestParam String jobName,
+            @RequestParam String groupName,
+            @RequestParam String cronExpression
+    ) throws SchedulerException {
+        scheduleJobService.scheduleJob(jobName, groupName, cronExpression);
+        return ResponseEntity.ok("Job 등록 완료");
+    }
+
+    @PutMapping
+    public ResponseEntity<String> updateJob(
+            @RequestParam String jobName,
+            @RequestParam String groupName,
+            @RequestParam String cronExpression
+    ) throws SchedulerException {
+        scheduleJobService.updateJobTrigger(jobName, groupName, cronExpression);
+        return ResponseEntity.ok("Job 수정 완료");
+    }
+
+    @DeleteMapping
+    public ResponseEntity<String> deleteJob(
+            @RequestParam String jobName,
+            @RequestParam String groupName
+    ) throws SchedulerException {
+        scheduleJobService.deleteJob(jobName, groupName);
+        return ResponseEntity.ok("Job 삭제 완료");
+    }
+
+    @PostMapping("/pause")
+    public ResponseEntity<String> pauseJob(
+            @RequestParam String jobName,
+            @RequestParam String groupName
+    ) throws SchedulerException {
+        scheduleJobService.pauseJob(jobName, groupName);
+        return ResponseEntity.ok("Job 일시정지");
+    }
+
+    @PostMapping("/resume")
+    public ResponseEntity<String> resumeJob(
+            @RequestParam String jobName,
+            @RequestParam String groupName
+    ) throws SchedulerException {
+        scheduleJobService.resumeJob(jobName, groupName);
+        return ResponseEntity.ok("Job 재개");
+    }
+}
+```
+
 - JobDetail
   - 생성할 때 **QRTZ_JOB_DETAILS** 테이블에 저장
 - storeDurably()
@@ -262,8 +376,11 @@ public class SampleJob implements Job {
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
-        // Job 실행시 처리할 로직
-        logger.info("SampleJob 실행! 실행 시간: {}", context.getFireTime());
+        // JobDataMap에서 데이터 꺼내기
+        JobDataMap dataMap = context.getJobDetail().getJobDataMap();
+        String jobSays = dataMap.getString("jobSays");
+
+        logger.info("SampleJob 실행! 실행 시간: {}, message: {}", context.getFireTime(), jobSays);
         // 필요한 작업 수행...
     }
 }
@@ -393,4 +510,53 @@ public class SampleJob implements Job {
 4. Quartz 스케줄러는 해당 JobDetail에 지정된 ReservationMessageSendJob 인스턴스를 생성(또는 재사용)합니다. (스프링의 경우, JobFactory를 통해 스프링 빈 관리 하에 필요한 의존성이 자동 주입됩니다.)
 5. Quartz의 내부 로직에 따라 ReservationMessageSendJob 클래스에 구현된 execute(JobExecutionContext jobExecutionContext) 메서드를 호출
 6. 이때 jobExecutionContext를 통해 JobDataMap 등 추가 데이터(예, msgGrpNo)나 Trigger/Job 관련 정보를 전달
-7. 
+
+-----------
+
+## Misfire 정책
+- Misfire란 스케줄러가 예정된 실행 시점에 Job을 실행하지 못한 경우를 의미 (예: 서버 다운, 스레드풀 부족 등)
+- `misfireThreshold` (기본 60초): 이 시간 이내의 지연은 misfire로 간주하지 않음
+
+### CronTrigger Misfire 정책
+| 정책 | 설명 |
+|---|---|
+| `MISFIRE_INSTRUCTION_FIRE_ONCE_NOW` | misfire 발생 시 즉시 1회 실행 후 다음 정상 스케줄부터 이어감 |
+| `MISFIRE_INSTRUCTION_DO_NOTHING` | misfire된 실행은 무시하고 다음 정상 스케줄 시점까지 대기 |
+| `MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY` | 놓친 모든 실행을 즉시 연속 실행 (주의 필요) |
+
+### SimpleTrigger Misfire 정책
+| 정책 | 설명 |
+|---|---|
+| `MISFIRE_INSTRUCTION_FIRE_NOW` | 즉시 1회 실행 |
+| `MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT` | 즉시 실행하고 남은 반복 횟수만큼 이어감 |
+| `MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT` | 다음 스케줄 시점에 남은 횟수만큼 실행 |
+
+### 설정 예시
+```java
+Trigger trigger = TriggerBuilder.newTrigger()
+        .withSchedule(CronScheduleBuilder.cronSchedule("0 0 12 * * ?")
+                .withMisfireHandlingInstructionFireAndProceed()) // FIRE_ONCE_NOW에 해당
+        .build();
+```
+
+-----------
+
+## Cron 표현식 참고
+| 필드 | 허용 값 | 특수 문자 |
+|---|---|---|
+| 초 | 0-59 | , - * / |
+| 분 | 0-59 | , - * / |
+| 시 | 0-23 | , - * / |
+| 일 | 1-31 | , - * ? / L W |
+| 월 | 1-12 또는 JAN-DEC | , - * / |
+| 요일 | 1-7 또는 SUN-SAT | , - * ? / L # |
+| 연도(선택) | 비우거나 1970-2099 | , - * / |
+
+### 자주 쓰는 예시
+| 표현식 | 설명 |
+|---|---|
+| `0 0 12 * * ?` | 매일 정오 |
+| `0 0/30 * * * ?` | 30분마다 |
+| `0 0 9-17 * * MON-FRI` | 평일 매시 정각 (9시~17시) |
+| `0 0 0 1 * ?` | 매월 1일 자정 |
+| `0 0 2 ? * SAT` | 매주 토요일 새벽 2시 |

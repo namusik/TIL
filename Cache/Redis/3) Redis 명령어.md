@@ -68,6 +68,43 @@ cc3afee46df762bf69f779771cd9fb7101703030 10.0.128.249:6379@16379 slave 8353277ea
 c28a638151fda937a99d8eac37d82f372b636369 10.0.129.92:6379@16379 master - 0 1741756730290 3 connected 10923-16383
 
 
+# 노드별 slot 확인
+redis-cli -c cluster slots
+1) 1) (integer) 0 -> 시작 슬롯
+   2) (integer) 5460 -> 끝 슬롯
+   3) 1) "10.0.137.56" -> 마스터
+      2) (integer) 6379
+      3) "d624f759aebaeced6e10c261ef386af8d57ad0e6"
+      4) (empty array)
+   4) 1) "10.0.153.75" -> 레플리카
+      2) (integer) 6379
+      3) "18b9756a61bbd545ba3c8e23dbfeac454abe7a63"
+      4) (empty array)
+2) 1) (integer) 5461
+   2) (integer) 10922
+   3) 1) "10.0.136.164"
+      2) (integer) 6379
+      3) "a41afdbcc5a76b530d097ff94be2b769da502bf3"
+      4) (empty array)
+   4) 1) "10.0.141.101"
+      2) (integer) 6379
+      3) "010c68db942d7da954b76afccee089828607cfa2"
+      4) (empty array)
+3) 1) (integer) 10923
+   2) (integer) 16383
+   3) 1) "10.0.150.38"
+      2) (integer) 6379
+      3) "4e0ccc58b02152538facd1190107f061c9a09b01"
+      4) (empty array)
+   4) 1) "10.0.149.223"
+      2) (integer) 6379
+      3) "0313309158b8566fa11a8917485d827c9ec99492"
+      4) (empty array)
+
+# redis key slot 확인
+redis-cli cluster keyslot dev-mbp-api::MEMBER::APIKEY_STATUS::c1ee666ff70441dbb4f04008b56aa4e3
+(integer) 5924
+
 // --raw 옵션을 사용하면 실제 바이너리 데이터를 그대로 출력. 한글 인코딩 안깨지도록
 redis-cli --raw
 

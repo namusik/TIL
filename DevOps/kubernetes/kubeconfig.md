@@ -64,7 +64,25 @@ kubectl config get-contexts
 kubectl config use-context <context-name>
 
 # 현재 context 상세 정보
-kubectl config describe-context <context-name>
+kubectl config view --minify --context=<context-name>
+
+# 컨텍스트 생성/수정
+kubectl config set-context <name> --cluster=<cluster> --user=<user> --namespace=<ns>
+
+# 현재 컨텍스트의 기본 네임스페이스 변경
+kubectl config set-context --current --namespace=<ns>
+
+# 컨텍스트 삭제
+kubectl config delete-context <context-name>
+
+# 클러스터 등록
+kubectl config set-cluster <name> --server=<url> --certificate-authority=<path>
+
+# 사용자 인증 정보 등록
+kubectl config set-credentials <name> --client-certificate=<path> --client-key=<path>
+
+# 특정 kubeconfig 파일 지정하여 실행
+kubectl --kubeconfig=/path/to/config get pods
 ```
 
 
@@ -76,4 +94,42 @@ kubectl config describe-context <context-name>
 ~/.kube/config-dev
 ~/.kube/config-stg
 ~/.kube/config-prod
+```
+
+- 여러 kubeconfig 동시 로드 (콜론으로 구분)
+
+```sh
+export KUBECONFIG=~/.kube/config-dev:~/.kube/config-stg:~/.kube/config-prod
+
+# 병합된 결과를 하나의 파일로 저장
+KUBECONFIG=~/.kube/config-dev:~/.kube/config-prod kubectl config view --flatten > ~/.kube/config-merged
+```
+
+## exec 기반 인증 (클라우드 환경)
+- EKS, GKE 등 클라우드 클러스터에서는 exec 플러그인을 통해 토큰을 동적으로 발급받는 방식이 표준
+
+```yaml
+users:
+- name: eks-user
+  user:
+    exec:
+      apiVersion: client.authentication.k8s.io/v1beta1
+      command: aws
+      args:
+        - eks
+        - get-token
+        - --cluster-name
+        - my-cluster
+```
+- GKE: `gke-gcloud-auth-plugin`, EKS: `aws eks get-token`을 exec로 호출
+
+## proxy-url
+- 클러스터에 프록시를 통해 접근할 때 사용
+
+```yaml
+clusters:
+- cluster:
+    server: https://k8s-api.example.com
+    proxy-url: http://proxy.example.com:8080
+  name: prod-cluster
 ```
