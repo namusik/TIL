@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:dejavuhyo.github.io)",
+      "WebFetch(domain:apidocs.rcsbizcenter.com)",
+      "mcp__atlassian__searchAtlassian",
+      "mcp__atlassian__getConfluencePage",
+      "Bash(find:*)"
+    ]
+  }
+}

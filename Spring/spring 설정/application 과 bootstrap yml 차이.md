@@ -1,38 +1,88 @@
 # application.yml과 bootstrap.yml 차이
 
-## 로드 순서와 컨텍스트
--	**bootstrap.yml**
-	-	**먼저 로드됨**: 애플리케이션이 기동될 때, **부트스트랩 컨텍스트(bootstrap context)** 가 먼저 생성되며 이때 bootstrap.yml 파일이 로드됩니다.
-	-	**부모 컨텍스트**: 부트스트랩 컨텍스트는 메인 애플리케이션 컨텍스트의 상위 컨텍스트로 동작하며, 이후에 불러올 설정(예: 원격 설정) 준비를 담당합니다.
-	-	**초기 설정**: 외부 구성 서버(Spring Cloud Config)와 통신하기 위한 기본 정보(예: spring.application.name, spring.cloud.config.uri)를 정의하는 데 주로 사용됩니다.
--	**application.yml**
-	-	**후에 로드됨**: 부트스트랩 컨텍스트 이후, 메인 애플리케이션 컨텍스트가 생성될 때 application.yml 파일이 로드됩니다.
-	-	메인 설정: 서버 포트, 데이터베이스 연결, 로깅 설정 등 애플리케이션 전반에 걸친 설정 정보를 담습니다.
-## 사용 목적 및 적용 시나리오
--	bootstrap.yml 사용 시나리오
-	-	Spring Cloud Config 사용 시:
-		-	외부 설정 서버에서 원격으로 설정 정보를 가져오려면, 초기 접속 정보(예: config 서버 URI, 애플리케이션 이름)를 bootstrap.yml에 정의해야 합니다.
-		-	또한, 암호화/복호화 관련 설정이나 기타 초기화에 필요한 설정들도 이곳에 포함됩니다.
-	-	초기 부트스트랩 설정:
-		-	부트스트랩 컨텍스트는 애플리케이션 시작 전 필수적인 초기 설정들을 처리하므로, 이러한 정보들은 application.yml보다 먼저 읽혀져야 합니다.
--	application.yml 사용 시나리오
-	-	일반 애플리케이션 설정:
-	-	서버 포트, 데이터소스, 캐싱, 로깅 등 대부분의 애플리케이션 구성은 application.yml에 정의합니다.
-	-	프로파일별 설정 관리:
-	-	여러 환경(예: 개발, 운영)에서의 세부 설정을 프로파일 별로 관리할 때 주로 사용됩니다.
-## 우선순위 및 상호 관계
--	우선순위:
-	-	부트스트랩 과정에서 로드된 설정(bootstrap.yml)을 바탕으로 원격 설정 정보가 먼저 확보됩니다.
-	-	이후 application.yml에 정의된 설정이 메인 애플리케이션 컨텍스트에 적용되지만, Spring Cloud Config를 사용하는 경우 원격 설정(부트스트랩 단계에서 가져온 값)이 application.yml의 값을 덮어쓸 수 있습니다.
--	설정 병합:
-	-	스프링 부트 2.4 이후부터는 상황에 따라 bootstrap.yml의 기능이 application.yml에 통합될 수도 있지만, 외부 설정 서버를 사용하는 경우 여전히 별도로 bootstrap.yml을 사용하는 것이 일반적입니다.
-	-	필요에 따라 spring.cloud.bootstrap.enabled=false를 설정하여 부트스트랩 과정을 비활성화할 수도 있습니다.#
-## 요약
--	bootstrap.yml:
-	-	애플리케이션 시작 전에 부트스트랩 컨텍스트에서 로드됨
-	-	주로 Spring Cloud Config와 같이 외부 설정을 가져오기 위한 초기화 정보(예: config 서버 URI, 애플리케이션 이름, 암호화 설정 등)를 정의
-	-	메인 컨텍스트보다 먼저 로드되어 원격 설정 정보를 준비
--	application.yml:
-	-	메인 애플리케이션 컨텍스트가 생성될 때 로드됨
-	-	서버 포트, 데이터베이스, 로깅 등 일반 애플리케이션 설정을 관리
-	-	환경별, 프로파일별 세부 설정을 포함
+> 최종 업데이트: 2026-03-23 | 기준: Spring Boot 3.4, Spring Cloud 2024.0
+
+## 개요
+
+| 구분 | 컨텍스트 | 로드 시점 | 주요 용도 |
+|------|----------|-----------|-----------|
+| `bootstrap.yml` | 부트스트랩 컨텍스트 (부모) | 먼저 로드 | 외부 설정 서버 접속, 암호화 설정 |
+| `application.yml` | 메인 애플리케이션 컨텍스트 | 이후 로드 | 서버 포트, DB, 로깅 등 일반 설정 |
+
+- Spring Boot 3.x에서는 bootstrap.yml이 자동 로드되지 않으며, `spring.config.import` 방식이 권장된다.
+
+## application.yml
+
+애플리케이션 전반의 설정을 정의한다.
+
+```yaml
+server:
+  port: 8080
+
+spring:
+  profiles:
+    active: dev
+  datasource:
+    url: jdbc:mysql://localhost:3306/mydb
+    username: root
+    password: password
+  config:
+    import: "configserver:http://config-server:8888"  # Config 서버 연동 (권장 방식)
+
+logging:
+  level:
+    root: INFO
+    com.example: DEBUG
+```
+
+`spring.config.import`는 Config 서버 외에도 다양한 소스를 지원한다.
+
+```yaml
+spring:
+  config:
+    import:
+      - "configserver:http://config-server:8888"
+      - "vault://secret/my-app"          # HashiCorp Vault
+      - "consul:localhost:8500"           # Consul
+      - "optional:file:./extra.yml"       # 로컬 파일 (없어도 에러 안남)
+```
+
+## bootstrap.yml (레거시)
+
+메인 컨텍스트 로드 전에 필요한 초기 설정을 정의한다. Spring Boot 3.x에서 사용하려면 별도 의존성이 필요하다.
+
+```xml
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-bootstrap</artifactId>
+</dependency>
+```
+
+```yaml
+spring:
+  application:
+    name: my-service
+  cloud:
+    config:
+      uri: http://config-server:8888
+      fail-fast: true
+
+encrypt:
+  key: my-secret-key
+```
+
+## 원격 설정 우선순위
+
+bootstrap.yml 또는 `spring.config.import`를 통해 Config 서버에서 가져온 원격 설정은 `PropertySource` 우선순위가 높게 등록된다. 따라서 application.yml에 동일한 키가 있어도 원격 설정값이 우선 적용된다.
+
+| 속성 | 기본값 | 설명 |
+|------|--------|------|
+| `spring.cloud.config.override-none` | `false` | `true` 시 로컬 설정이 원격보다 우선 |
+| `spring.cloud.config.allow-override` | `true` | `false` 시 원격 설정을 로컬에서 재정의 불가 |
+
+```yaml
+spring:
+  cloud:
+    config:
+      override-none: true  # 로컬 설정 우선 적용
+```

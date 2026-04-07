@@ -1,40 +1,159 @@
 # Strategy Pattern (전략 패턴)
 
-
-## 배경
-객체가 여러 알고리즘이나 행동 중 하나를 선택하여 실행해야 할 때가 있습니다. 이 경우, 모든 알고리즘을 하나의 클래스에 담으면 그 클래스는 책임이 너무 많아지고 변경에 취약해집니다. 변경할 때마다 해당 클래스의 소스를 수정해야 하므로 유지보수가 어려워지죠.
-
-예를 들어, 어떤 소프트웨어에서 결제 방식을 구현해야 한다고 생각해봅시다. 결제 방식으로는 신용카드, 페이팔, 암호화폐 등이 있을 수 있습니다. 결제 클래스에 모든 결제 방식을 직접 구현하면 코드가 복잡해지고 새로운 결제 방식이 추가될 때마다 결제 클래스를 수정해야 하는 문제점이 발생합니다.
+> 최종 업데이트: 2026-03-24 | 분류: GoF Behavioral Pattern
 
 ## 개념
-- 행동(알고리즘)을 캡슐화하여 동적으로 객체에 주입할 수 있다.
-- 즉, 각 알고리즘을 별도의 클래스로 분리하고, 이러한 알고리즘을 사용하는 컨텍스트(Context)는 알고리즘의 변경에 영향을 받지 않게된다.
+
+행동(알고리즘)을 별도의 클래스로 캡슐화하여, 런타임에 동적으로 교체할 수 있게 하는 패턴.
+
+- Context는 알고리즘의 구체적인 구현을 모른 채 Strategy 인터페이스를 통해 실행한다
+- 새로운 알고리즘 추가 시 기존 코드를 수정하지 않는다 (**OCP**)
+- 각 알고리즘이 별도 클래스로 분리되어 하나의 책임만 갖는다 (**SRP**)
+
+## 쉽게 이해하기
+- 네비게이션 앱을 떠올리면 됨
+  - 같은 목적지라도 "최단 경로", "최소 요금", "최소 환승" 등 **경로 탐색 알고리즘을 사용자가 선택**
+  - 앱(Context)은 어떤 알고리즘이 쓰이는지 몰라도 되고, 선택된 전략에게 위임만 하면 됨
+  - 새로운 경로 옵션이 추가돼도 앱 코드를 수정할 필요 없이 전략 클래스만 추가
+- State 패턴과 구조가 거의 같지만, **Strategy는 클라이언트가 직접 전략을 골라 꽂아주는 것**이고 State는 내부 상태에 따라 자동 전환되는 것
 
 ## 구조
-![strategypattern](../../../../images/Cs/strategy-pattern-diagram.png)
 
-### Strategy 인터페이스
-- 공통의 알고리즘을 정의하는 인터페이스 또는 추상 클래스
+```
+┌──────────────────┐       ┌──────────────────────┐
+│     Context      │       │  <<interface>>        │
+│                  │──────→│     Strategy          │
+│ - strategy       │       │ + execute()           │
+│ + setStrategy()  │       └──────────────────────┘
+│ + doWork()       │               △
+└──────────────────┘       ┌───────┼───────┐
+                           │       │       │
+                    ┌──────┴──┐ ┌──┴─────┐ ┌┴─────────┐
+                    │StrategyA│ │StrategyB│ │StrategyC │
+                    │+execute│ │+execute │ │+execute  │
+                    └────────┘ └─────────┘ └──────────┘
+```
 
-### ConcreteStrategy 클래스
-- 인터페이스를 구현하여 실제 알고리즘을 정의하는 클래스
-- Strategy 인터페이스의 자리에 들어갈 수 있게됨.
+| 구성 요소 | 역할 |
+|----------|------|
+| Strategy (인터페이스) | 알고리즘의 공통 인터페이스 정의 |
+| ConcreteStrategy | Strategy를 구현한 실제 알고리즘 클래스 |
+| Context | Strategy를 사용하는 객체. 구체적 구현을 알지 못함 |
 
-### Context 클래스
-- Strategy 객체를 사용.
-- Strategy 인터페이스를 통해 알고리즘을 실행하고, 알고리즘의 구체적인 구현을 모름
-- 따라서 새로운 알고리즘을 추가하더라도 Context 클래스는 변경되지 않는다.
+## 코드 예시
 
-## 장점
-- OCP
-  - 새로운 알고리즘을 추가할 때 기존 코드를 수정하지 않고도 새로운 알고리즘(ConcreteStrategy 클래스)을 추가할 수 있음
-- SRP
-  - 알고리즘이 별도의 클래스로 분리되어 있기 때문에, 각 클래스는 하나의 책임만 갖게됨.
+### 결제 시스템
 
+```java
+// Strategy 인터페이스
+public interface PaymentStrategy {
+    void pay(int amount);
+}
 
-## 예시
-- Collections.sort(), Java Streams API
+// ConcreteStrategy
+public class CreditCardPayment implements PaymentStrategy {
+    private final String cardNumber;
 
-## 출처
-https://refactoring.guru/design-patterns/strategy
-https://www.youtube.com/watch?v=xlaAiHrZN3U&t=116s
+    public CreditCardPayment(String cardNumber) {
+        this.cardNumber = cardNumber;
+    }
+
+    @Override
+    public void pay(int amount) {
+        System.out.println(amount + "원 신용카드 결제 (카드: " + cardNumber + ")");
+    }
+}
+
+public class KakaoPayPayment implements PaymentStrategy {
+    @Override
+    public void pay(int amount) {
+        System.out.println(amount + "원 카카오페이 결제");
+    }
+}
+
+// Context
+public class PaymentService {
+    private PaymentStrategy strategy;
+
+    public void setStrategy(PaymentStrategy strategy) {
+        this.strategy = strategy;
+    }
+
+    public void checkout(int amount) {
+        strategy.pay(amount);
+    }
+}
+```
+
+```java
+// 사용
+PaymentService service = new PaymentService();
+
+service.setStrategy(new CreditCardPayment("1234-5678"));
+service.checkout(50000);  // 50000원 신용카드 결제
+
+service.setStrategy(new KakaoPayPayment());
+service.checkout(30000);  // 30000원 카카오페이 결제
+```
+
+- 새로운 결제 방식 추가 시 `PaymentStrategy` 구현체만 만들면 된다
+- `PaymentService`는 수정할 필요 없음
+
+### Spring에서의 활용
+
+Spring의 DI 자체가 Strategy 패턴과 동일한 구조이다.
+
+```java
+@Service
+public class OrderService {
+    private final PaymentStrategy paymentStrategy;
+
+    // 생성자 주입으로 전략 교체
+    public OrderService(PaymentStrategy paymentStrategy) {
+        this.paymentStrategy = paymentStrategy;
+    }
+
+    public void order(int amount) {
+        paymentStrategy.pay(amount);
+    }
+}
+
+@Configuration
+public class PaymentConfig {
+    @Bean
+    public PaymentStrategy paymentStrategy() {
+        return new KakaoPayPayment();  // 설정으로 전략 교체
+    }
+}
+```
+
+## Java 표준 라이브러리의 Strategy 패턴
+
+| 사용처 | Strategy | 설명 |
+|--------|----------|------|
+| `Collections.sort(list, comparator)` | `Comparator<T>` | 정렬 알고리즘을 외부에서 주입 |
+| `Stream.sorted(comparator)` | `Comparator<T>` | 스트림 정렬 전략 |
+| `Arrays.sort(arr, comparator)` | `Comparator<T>` | 배열 정렬 전략 |
+| `ExecutorService` | `RejectedExecutionHandler` | 작업 거부 전략 |
+
+```java
+// Comparator = Strategy
+List<String> names = List.of("Charlie", "Alice", "Bob");
+
+// 전략 1: 알파벳 순
+names.stream().sorted(Comparator.naturalOrder());
+
+// 전략 2: 길이 순
+names.stream().sorted(Comparator.comparingInt(String::length));
+
+// 전략 3: 역순
+names.stream().sorted(Comparator.reverseOrder());
+```
+
+## Strategy vs 다른 패턴 비교
+
+| 패턴 | 차이점 |
+|------|--------|
+| **Template Method** | 상속으로 알고리즘의 일부를 변경. Strategy는 조합(위임)으로 전체 알고리즘을 교체 |
+| **State** | 구조는 유사하지만, State는 상태에 따라 자동 전환. Strategy는 클라이언트가 명시적으로 선택 |
+| **Command** | 요청 자체를 객체로 캡슐화. Strategy는 같은 목적의 다른 알고리즘을 캡슐화 |
