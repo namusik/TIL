@@ -1,6 +1,6 @@
 # Git 멀티 계정 SSH 설정
 
-> 최종 업데이트: 2026-04-07
+> 최종 업데이트: 2026-04-08
 
 ## 개념
 
@@ -435,3 +435,7 @@ Windows OpenSSH (PowerShell):
 └── personal-repo/           ← remote: git@github-personal:me/repo.git
     └── .git/config          ← user.name/email = 개인
 ```
+
+## 더 알아보기
+
+Deploy Key, SSH Key 로테이션, 키 관리 도구(1Password, Secretive, Yubikey) 등 SSH Key 보안 운영에 대해서는 [Git SSH Key 관리](Git%20SSH%20Key%20관리.md) 참고.

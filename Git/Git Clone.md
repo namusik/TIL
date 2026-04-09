@@ -1,6 +1,6 @@
 # Git Clone
 
-> 최종 업데이트: 2026-04-07
+> 최종 업데이트: 2026-04-08
 
 ## 개념
 
@@ -114,6 +114,87 @@ git clone --bare git@github.com:user/repo.git
 | `--mirror` | 모든 refs 포함 완전 복제 | 저장소 백업/이전 |
 | `--recurse-submodules` | 서브모듈도 함께 clone | 서브모듈 포함 프로젝트 |
 | `--filter=blob:none` | 파일 내용 없이 구조만 (부분 clone) | 초대형 모노레포 |
+| `--no-checkout` | clone 후 파일 체크아웃 안 함 | sparse-checkout과 조합 |
+
+## Sparse Checkout (부분 체크아웃)
+
+대형 모노레포에서 **특정 디렉토리만** 로컬에 체크아웃할 때 사용한다. 저장소 전체를 받지 않으므로 디스크와 시간을 절약할 수 있다.
+
+> 비유: 도서관에서 책 전체를 빌리는 게 아니라, 필요한 챕터만 복사해오는 것과 같다.
+
+```bash
+# 1. 빈 clone (파일을 체크아웃하지 않음)
+git clone --no-checkout git@github.com:company/monorepo.git
+cd monorepo
+
+# 2. sparse-checkout 활성화
+git sparse-checkout init --cone
+
+# 3. 원하는 디렉토리만 지정
+git sparse-checkout set backend/api shared/libs
+
+# 4. 체크아웃 실행
+git checkout main
+```
+
+| 명령 | 설명 |
+|---|---|
+| `git sparse-checkout init --cone` | cone 모드로 초기화 (디렉토리 단위 지정) |
+| `git sparse-checkout set <경로>` | 체크아웃할 디렉토리 지정 |
+| `git sparse-checkout list` | 현재 설정된 경로 확인 |
+| `git sparse-checkout disable` | 전체 파일로 복원 |
+
+- `--filter=blob:none`과 함께 쓰면 필요한 파일만 네트워크로 받아 더 빠르다
+- 모노레포에서 자기 팀 서비스 디렉토리만 작업할 때 유용
+
+## CI/CD 파이프라인에서의 clone 활용
+
+CI/CD에서는 빌드 속도가 중요하므로 불필요한 데이터를 최소화하는 것이 핵심이다.
+
+### GitHub Actions
+
+```yaml
+# 기본 checkout (shallow clone, depth=1)
+- uses: actions/checkout@v4
+
+# 전체 이력 필요 시 (버전 태그 기반 릴리즈 등)
+- uses: actions/checkout@v4
+  with:
+    fetch-depth: 0
+
+# 특정 브랜치만
+- uses: actions/checkout@v4
+  with:
+    ref: develop
+    fetch-depth: 1
+```
+
+> `actions/checkout`은 내부적으로 `git clone --depth`와 `--single-branch`를 조합한다.
+
+### Jenkins
+
+```groovy
+// Jenkinsfile - shallow clone
+checkout([
+    $class: 'GitSCM',
+    branches: [[name: '*/main']],
+    extensions: [[$class: 'CloneOption', depth: 1, shallow: true]],
+    userRemoteConfigs: [[url: 'git@github.com:company/project.git']]
+])
+```
+
+### CI/CD clone 최적화 팁
+
+| 전략 | 적용 방법 | 절약 효과 |
+|---|---|---|
+| Shallow clone | `--depth 1` | 히스토리 전송량 대폭 감소 |
+| Single branch | `--single-branch` | 불필요한 브랜치 제외 |
+| Partial clone | `--filter=blob:none` | 파일 내용을 필요 시에만 다운로드 |
+| Sparse checkout | `sparse-checkout set <경로>` | 필요한 디렉토리만 체크아웃 |
+| CI 캐시 활용 | `.git` 디렉토리를 캐시로 보관 | 매번 전체 clone 불필요 |
+
+- 빌드만 필요하면 `--depth 1 --single-branch`가 가장 실용적
+- 릴리즈 태그나 changelog 생성 등 이력이 필요하면 `fetch-depth: 0`으로 전체 이력을 받아야 한다
 
 ## clone 후 초기 설정
 
@@ -171,4 +252,11 @@ git push --mirror
 
 # 서브모듈 포함 프로젝트
 git clone --recurse-submodules git@github.com:company/project.git
+
+# 모노레포에서 특정 디렉토리만 (sparse-checkout)
+git clone --no-checkout --filter=blob:none git@github.com:company/monorepo.git
+cd monorepo
+git sparse-checkout init --cone
+git sparse-checkout set my-service/ shared/
+git checkout main
 ```

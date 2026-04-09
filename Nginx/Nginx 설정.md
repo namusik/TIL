@@ -1,247 +1,370 @@
-# Nginx 다양한 설정들
+# Nginx 설정 파일 구조
 
-## 마스터 프로세스와 워커 프로세스
+> 최종 업데이트: 2026-04-08
+
+## 개념
+
+Nginx의 동작은 **설정 파일(Configuration File)** 하나로 결정된다. 레스토랑에 비유하면, `nginx.conf`는 레스토랑의 운영 매뉴얼이다. 직원 수(worker), 어떤 손님(요청)을 어디로 안내할지(라우팅), 메뉴판(응답) 등 모든 규칙이 이 한 곳에 정의된다.
+
+설정의 개별 항목을 **디렉티브(Directive)**라고 부른다. 디렉티브는 두 종류로 나뉜다.
+
+| 종류 | 형태 | 예시 |
+|------|------|------|
+| **간단 디렉티브** | `이름 값;` (세미콜론으로 종료) | `worker_processes auto;` |
+| **블록 디렉티브** | `이름 { ... }` (중괄호로 감쌈) | `http { }`, `server { }` |
+
+블록 디렉티브 안에 다른 디렉티브를 포함할 수 있으며, 이때 바깥 블록을 **컨텍스트(context)**라고 한다. 어떤 블록에도 속하지 않는 디렉티브는 **메인 컨텍스트**에 있다고 표현한다.
+
+## 프로세스 구조
 
 ![nginxprocess](../images/nginx/process.png)
 
-명령어를 통해 현재 열려있는 프로세스를 확인할 수 있음. 
-~~~
-ps aux --forest 
-~~~
+Nginx는 **마스터 프로세스** 1개와 **워커 프로세스** N개로 동작한다.
 
-## conf.d 폴더
+```
+Master Process (설정 읽기, Worker 관리)
+├── Worker Process 1 (실제 요청 처리)
+├── Worker Process 2
+└── Worker Process N
+```
 
-보통 nginx.conf에서 include하는 conf파일들을 보관하는 곳.
+| 프로세스 | 역할 |
+|----------|------|
+| Master | 설정 파일 파싱, Worker 생성/종료, 시그널 수신 |
+| Worker | 클라이언트 요청의 실제 처리 (이벤트 루프 기반) |
 
-## nginx.conf
+현재 프로세스 확인 명령어:
 
-/etc/nginx/nginx.conf
+```bash
+ps aux --forest | grep nginx
+```
 
-nginx의 설정이 들어가는 핵심 파일
-
-nginx의 configuration 옵션을 디렉티브(directives)로 부름.
+## 설정 파일 계층 구조
 
 ![nginxframe](../images/nginx/nginxframe.png)
 
+`nginx.conf`의 전체 구조를 트리로 표현하면 다음과 같다. 건물에 비유하면 `http`가 건물 전체, `server`가 각 층, `location`이 각 방이다.
 
-간단 디렉티브 
+```
+nginx.conf
+├── Core (메인 컨텍스트)
+│   ├── worker_processes
+│   ├── error_log
+│   ├── pid
+│   └── ...
+├── events { }
+│   └── worker_connections
+└── http { }
+      ├── upstream { }
+      ├── server { }
+      │     ├── listen
+      │     ├── server_name
+      │     └── location { }
+      │           ├── proxy_pass
+      │           ├── root / alias
+      │           ├── try_files
+      │           └── return
+      └── include conf.d/*.conf
+```
 
-    user nginx; 처럼 {}으로 안감싸져 있는 것들.
-
-블럭 디렉티브 
-
-    http{} 처럼 블록으로 감싸져 있는 것들
-
-설정의 끝은 세미콜론;
-
-include를 사용해서 설정파일을 분리해서 관리 
-
-    include /etc/nginx/conf.d/*.conf;
-
-## Core 모듈 설정
-
-nginx.conf 맨 윗부분들. 
-
-nginx 설정값을 정해준다. 
+## Core 모듈 (메인 컨텍스트)
 
 ![forest](../images/nginx/forest.png)
 
-worker_process 
+`nginx.conf` 최상위에 위치하는 디렉티브들. Nginx 프로세스 자체의 동작을 결정한다.
 
-    몇개의 워크 프로세스를 생성할 것인지 지정하는 지시어. 
+| 디렉티브 | 설명 | 권장값 |
+|----------|------|--------|
+| `worker_processes` | 생성할 워커 프로세스 수 | `auto` (CPU 코어 수만큼) |
+| `error_log` | 에러 로그 파일 경로와 레벨 | `/var/log/nginx/error.log warn` |
+| `pid` | 마스터 프로세스의 PID 파일 경로 | `/run/nginx.pid` |
+| `user` | 워커 프로세스 실행 사용자 | `nginx` |
 
-    1이면 모든 요청을 하나의 프로세스로 실행하겠다는 뜻. 보통 auto로 함. 
+```nginx
+user nginx;
+worker_processes auto;
+error_log /var/log/nginx/error.log warn;
+pid /run/nginx.pid;
+```
 
+## events 블록
 
-## Events block 
+네트워크 이벤트 처리 방식을 설정한다. 전화 교환원이 동시에 몇 통화를 받을 수 있는지 정하는 것과 같다.
 
-네트워크 동작방법과 관련된 설정
+```nginx
+events {
+    worker_connections 1024;    # 워커 하나당 최대 동시 커넥션
+    use epoll;                  # Linux 이벤트 모델 (보통 자동 선택)
+}
+```
 
-worker_connections : 하나의 프로세스가 처리할 수 있는 커넥션의 수
+**최대 동시 접속 수** = `worker_processes` x `worker_connections`
 
-최대 동시접속 = worker_process * worker_connections
+예: `worker_processes 4` + `worker_connections 1024` = 최대 4,096 동시 커넥션
 
-## http block 
+## http 블록
 
-http 프로토콜을 사용하겠다는 블록
+HTTP 프로토콜 관련 설정의 **루트 블록**. 하위에 `server`, `location`, `upstream` 블록을 포함한다.
 
-하위에 server, location block을 가지는 **루트 블록**
+`conf.d/*.conf` 파일들은 `http` 블록 안에 include되므로, 별도 conf 파일 작성 시 `http { }`를 다시 감쌀 필요가 없다.
 
-*.conf는 http블록 안에 include 되어있기 때문에 자동으로 http block을 자동으로 내포하고 있음.
+```nginx
+http {
+    include       /etc/nginx/mime.types;
+    default_type  application/octet-stream;
 
-## Server block
+    sendfile    on;
+    keepalive_timeout 65;
 
-서버 기능을 설정하는 블록
+    include /etc/nginx/conf.d/*.conf;   # 개별 서버 설정 로드
+}
+```
 
-하나의 웹사이트를 선언하는데 사용
+### conf.d 디렉터리
 
-서버블록이 여러개면 한대의 호스트에서 여러 웹사이트를 서빙할 수 있음. 
+`/etc/nginx/conf.d/` 폴더에 `*.conf` 파일을 두면 자동으로 `http` 블록 안에 포함된다. 서비스별로 파일을 분리하여 관리하는 것이 일반적이다.
 
-    일종의 가상 호스트. 
+```
+/etc/nginx/conf.d/
+├── default.conf        # 기본 서버 설정
+├── api.conf            # API 서버
+└── admin.conf          # 관리자 페이지
+```
 
-    각각의 사이트는 같은 IP 머신으로 연결되지만 다른 페에지를 보여주도록 설정 가능.
-
-어떤 주소 port로 요청을 받을지 결정
+## server 블록
 
 ![serverblock](../images/nginx/serverblock.png)
 
-listen : 포트번호 설정
-server_name : 클라이언트가 접속하는 서버. request의 header값과 일치여부 확인함.
+하나의 **가상 호스트(virtual host)**를 정의한다. 같은 IP의 서버에서 여러 도메인/포트를 서빙할 수 있다. 아파트 한 건물에 여러 세대가 있는 것과 같다.
 
-#### 연습. 
+| 디렉티브 | 역할 | 예시 |
+|----------|------|------|
+| `listen` | 수신할 IP:포트 | `listen 80;`, `listen 443 ssl;` |
+| `server_name` | 매칭할 도메인명 (Host 헤더 기준) | `server_name example.com;` |
+| `root` | 정적 파일의 기본 경로 | `root /var/www/html;` |
 
-conf.d 다렉토리에 새로운 hello.conf 파일 만들어주기. default.conf 복사해서 위에 바꿔줌.
-
-~~~
+```nginx
 server {
-	listen   82;
-    listen  [::]82
-	server_name helloworld.com;
-        .
-        .
-        .
-        .
-        .
+    listen 80;
+    server_name api.example.com;
+
+    location / {
+        proxy_pass http://localhost:8080;
+    }
 }
-~~~
+```
 
-helloworld.com의 82번 포트로 연결이 들어오면 nginx를 열어준다는 뜻.
-</br>
-~~~ 
-curl helloworld.com:82
-~~~
-를 호출하면 아무런 응답이 없음. 
+### server_name 매칭 우선순위
 
-왜냐면, helloworld.com은 실제 있는 도메인이기에 82포트로 들어가는 것이 불가.
+여러 server 블록이 있을 때, 요청의 Host 헤더와 `server_name`을 비교하여 처리할 블록을 결정한다.
 
-우리 nginx를 호출해야 하기때문에 hosts 파일 변경 필요 
+| 우선순위 | 유형 | 예시 |
+|----------|------|------|
+| 1 | 정확한 이름 | `server_name example.com;` |
+| 2 | 와일드카드 시작 | `server_name *.example.com;` |
+| 3 | 와일드카드 끝 | `server_name www.example.*;` |
+| 4 | 정규식 | `server_name ~^www\d+\.example\.com$;` |
+| 5 | default_server | `listen 80 default_server;` |
 
-~~~
-vi /etc/hosts
-~~~
-
-~~~
-127.0.0.1 helloworld.com
-~~~
-
-를 추가해준다. 이러면 localhost의 ip주소의 이름을 helloworld.com으로 지정해줘서 
-
-helloworld.com을 요청하면 자동으로 localhost가 열리게 됨.
-
-
-## 문법 검사 
-
-해당 디렉토리에서 nginx -t
-
-## location block
-
-요청 URI 파라미터에 대한 세부 설정
+## location 블록
 
 ![location](../images/nginx/locationblock.png)
 
-Server block 안에 location block을 만들어 주면 됨.
+요청 URI에 따라 처리 방식을 분기한다. 건물 안내 데스크에서 "어느 방으로 가세요"를 결정하는 역할이다.
 
-http://helloworld.com:82   ->   helloworld 리턴
-http://helloworld.com:82/a/ ->  helloworld-a 리턴
+### location 매칭 우선순위
 
-새로운 conf.d 파일을 만들어준다.
-~~~
-server{
-    listen *:82;
-    server_name "helloworld.com";
+| 우선순위 | 수정자 | 의미 | 예시 |
+|----------|--------|------|------|
+| 1 | `=` | 정확히 일치 (Exact Match) | `location = /api { }` |
+| 2 | `^~` | 접두사 일치 시 정규식 검사 안 함 | `location ^~ /static/ { }` |
+| 3 | `~` | 정규식 (대소문자 구분) | `location ~ \.php$ { }` |
+| 4 | `~*` | 정규식 (대소문자 무시) | `location ~* \.(jpg\|png)$ { }` |
+| 5 | (없음) | 접두사 매칭 (Prefix Match) | `location /api/ { }` |
 
-    location / {
-        return 200 "helloworld";
-    }
+```
+요청: /api/users
+  1. = /api/users        → 정확히 일치하면 즉시 선택
+  2. ^~ /api/            → 접두사 일치하면 정규식 스킵, 즉시 선택
+  3. ~ ^/api/.*          → 정규식 매칭 시도
+  4. ~* ^/api/.*         → 대소문자 무시 정규식 매칭 시도
+  5. /api/               → 가장 긴 접두사 매칭 선택
+```
 
-    location /a/ {
-        return 200 "helloworld-a";
-    }
-    
-    location /b/ {
-        return 200 "helloworld-b";
-    }
-}
-~~~
+### location 내 주요 디렉티브
 
-현재 상태에서는 문제가 있음. 
+| 디렉티브 | 역할 | 예시 |
+|----------|------|------|
+| `proxy_pass` | 요청을 백엔드 서버로 전달 | `proxy_pass http://backend;` |
+| `root` | 정적 파일 루트 경로 (URI가 붙음) | `root /var/www;` → `/var/www/images/a.jpg` |
+| `alias` | 정적 파일 경로 (URI 대체) | `alias /data/images/;` |
+| `try_files` | 파일 존재 여부에 따라 순차 시도 | `try_files $uri $uri/ =404;` |
+| `return` | 즉시 상태 코드/문자열 반환 | `return 200 "OK";` |
+| `rewrite` | URI 변환 | `rewrite ^/old /new permanent;` |
 
-helloworld.com:82/a/aa로 요청해도 helloworld-a를 리턴하게 됨. 
+### 예시: Exact Match
 
-exact match를 사용해야 함. 
-
-~~~
-server{
-    listen *:82;
-    server_name "helloworld.com";
+```nginx
+server {
+    listen 80;
+    server_name example.com;
 
     location = / {
-        return 200 "helloworld";
+        return 200 "home";
     }
 
-    location = /a/ {
-        return 200 "helloworld-a";
+    location = /health {
+        return 200 "ok";
     }
-    
-    location = /b/ {
-        return 200 "helloworld-b";
+
+    location /api/ {
+        proxy_pass http://localhost:8080;
     }
 }
-~~~
+```
 
-curl helloworld.com:82/a/aa 를 접속하면 NOT FOUND가 발생.
+`=`를 사용하면 `/health`는 정확히 매칭되지만, `/health/check`는 매칭되지 않는다.
 
-#### 쿠버네티스
-
-쿠버네티스 ingress에서도 경로 유형을 정할 수있다. 
-
-## file return
-
-문자열이 아닌 파일을 리턴하기
+## 파일 서빙 (root, alias, try_files)
 
 ![filereturn](../images/nginx/filereturn.png)
 
-root 파일경로
+정적 파일을 반환할 때 `root`와 `try_files`를 조합한다.
 
-file.conf 만들어줌.
-~~~
+| 디렉티브 | 동작 |
+|----------|------|
+| `root /tmp;` + URI `/images/a.jpg` | `/tmp/images/a.jpg` 반환 (root + URI) |
+| `alias /tmp/;` + URI `/images/a.jpg` | `/tmp/a.jpg` 반환 (alias가 location 경로를 대체) |
+
+```nginx
 server {
-    listen *:82;
+    listen 80;
 
-    location = / {
-        return 200 "helloworld";
-    }
-
-    # case1: 정규식(대소문자 구분 x)
-    # 준비 mkdir -p /tmp/images
-    #      touch /tmp/images/a.jpg    
-    # curl helloworld.com:82/images/a.jpg
-    location /images {
+    location /images/ {
         root /tmp;
-        try_files $uri =404;
+        try_files $uri =404;    # 파일 없으면 404 반환
     }
 }
-~~~
+```
 
-만들어준 a.jpg에 내용을 추가해줌. 
-
-##upstream block
+## upstream 블록
 
 ![upstream](../images/nginx/upstream.png)
 
-origin 서버. 
+백엔드(origin) 서버 그룹을 정의한다. 여러 WAS 인스턴스에 요청을 분산(로드 밸런싱)할 때 사용한다.
 
+```nginx
+upstream backend_servers {
+    least_conn;
+    server 10.0.0.1:8080;
+    server 10.0.0.2:8080;
+    server 10.0.0.3:8080 backup;    # 다른 서버 장애 시에만 사용
+}
 
- 
+server {
+    listen 80;
 
-## 참고 
+    location / {
+        proxy_pass http://backend_servers;
+    }
+}
+```
 
-https://www.youtube.com/watch?v=hA0cxENGBQQ
+로드 밸런싱 알고리즘 상세는 [Nginx 개념](Nginx%20개념.md)의 로드 밸런싱 섹션 참고.
 
-https://sonman.tistory.com/25
+## 주요 내장 변수
 
-https://juneyr.dev/nginx-basics
+Nginx는 요청 정보를 변수로 제공한다. `proxy_set_header` 등에서 활용한다.
 
-https://architectophile.tistory.com/12
+| 변수 | 설명 |
+|------|------|
+| `$host` | 요청의 Host 헤더값 |
+| `$remote_addr` | 클라이언트 IP |
+| `$uri` | 현재 요청 URI (정규화된 경로) |
+| `$request_uri` | 원본 요청 URI (쿼리 스트링 포함) |
+| `$args` | 쿼리 스트링 파라미터 |
+| `$scheme` | 프로토콜 (`http` 또는 `https`) |
+| `$server_name` | 매칭된 server_name |
+| `$proxy_add_x_forwarded_for` | X-Forwarded-For 헤더에 클라이언트 IP 추가 |
 
-https://hhseong.tistory.com/218
+```nginx
+proxy_set_header Host $host;
+proxy_set_header X-Real-IP $remote_addr;
+proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+proxy_set_header X-Forwarded-Proto $scheme;
+```
+
+## 설정 검증과 반영
+
+설정을 변경한 뒤에는 반드시 **문법 검사 후 reload** 하는 흐름을 따른다. 식당의 레시피를 바꿨으면, 먼저 검수한 뒤 주방에 공지하는 것과 같다.
+
+```
+설정 파일 수정 → nginx -t (문법 검사) → nginx -s reload (무중단 반영)
+```
+
+| 명령어 | 동작 |
+|--------|------|
+| `nginx -t` | 설정 파일 문법 검사 (실제 반영 안 함) |
+| `nginx -s reload` | 새 Worker 생성, 기존 Worker는 요청 완료 후 종료 (무중단) |
+| `nginx -s stop` | 즉시 종료 |
+| `nginx -s quit` | 현재 요청 처리 완료 후 종료 (Graceful) |
+| `nginx -T` | 전체 설정 내용 출력 (디버깅용) |
+
+### reload 동작 흐름
+
+```
+nginx -s reload
+    ↓
+Master Process: 설정 파일 다시 읽기
+    ↓
+새 Worker Process 생성 (새 설정 적용)
+    ↓
+기존 Worker Process: 현재 요청 완료 후 종료
+    ↓
+무중단 설정 반영 완료
+```
+
+## Timeout 설정
+
+timeout 관련 디렉티브(`proxy_read_timeout`, `proxy_connect_timeout` 등)는 별도 문서에서 상세히 다룬다.
+
+-> [Nginx timeout.md](Nginx%20timeout.md)
+
+## 쿠버네티스 Ingress와의 관계
+
+쿠버네티스에서는 **Ingress** 리소스가 Nginx 설정 파일의 역할을 대신한다. Ingress Controller(주로 nginx-ingress-controller)가 Ingress 리소스를 읽어 자동으로 `nginx.conf`를 생성한다.
+
+| Nginx 설정 | K8s Ingress 대응 |
+|-------------|-------------------|
+| `server_name` | `spec.rules[].host` |
+| `location` | `spec.rules[].http.paths[].path` |
+| `= (exact match)` | `pathType: Exact` |
+| 접두사 매칭 | `pathType: Prefix` |
+| `proxy_pass` (upstream) | `backend.service.name` + `port` |
+
+```yaml
+# Ingress 예시 (Nginx location과 동일한 역할)
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: api-ingress
+spec:
+  rules:
+  - host: api.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: api-service
+            port:
+              number: 8080
+```
+
+## 참고
+
+- https://nginx.org/en/docs/
+- https://www.youtube.com/watch?v=hA0cxENGBQQ
+- https://juneyr.dev/nginx-basics
+- https://architectophile.tistory.com/12
