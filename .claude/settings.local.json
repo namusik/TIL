@@ -7,7 +7,23 @@
       "mcp__atlassian__getConfluencePage",
       "Bash(find:*)",
       "Bash(git:*)",
-      "Bash(wc:*)"
+      "Bash(wc:*)",
+      "Bash(curl -s \"https://spring.io/blog\")",
+      "Bash(curl -sL \"https://api.github.com/repos/spring-projects/spring-boot/releases?per_page=30\")",
+      "Bash(python3 -c \" import json, sys data = json.load\\(sys.stdin\\) for r in data: print\\(f\\\\\"{r['tag_name']} | {r['published_at']} | prerelease={r['prerelease']} | draft={r['draft']}\\\\\"\\) \")",
+      "Bash(curl -sL \"https://api.github.com/repos/spring-projects/spring-boot/milestones?state=all&per_page=30\")",
+      "Bash(python3 -c \" import json, sys data = json.load\\(sys.stdin\\) for m in data: print\\(f\\\\\"{m['title']} | state={m['state']} | due_on={m.get\\('due_on'\\)} | open={m['open_issues']} closed={m['closed_issues']}\\\\\"\\) \")",
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:spring.io)",
+      "WebFetch(domain:www.baeldung.com)",
+      "WebFetch(domain:endoflife.date)",
+      "WebFetch(domain:www.javacodegeeks.com)",
+      "WebFetch(domain:stevenpg.com)",
+      "WebFetch(domain:aws.amazon.com)",
+      "WebFetch(domain:missing.csail.mit.edu)",
+      "WebFetch(domain:www.warp.dev)",
+      "WebFetch(domain:www.freecodecamp.org)"
     ]
   }
 }
