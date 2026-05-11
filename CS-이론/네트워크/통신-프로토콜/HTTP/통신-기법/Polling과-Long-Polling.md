@@ -172,7 +172,7 @@ loop();
 WebSocket/SSE가 표준화되기 전, 2000년대 중반~2010년대 초반에 **"Comet"** 이라는 이름으로 **Long Polling**과 **HTTP Streaming**(서버가 응답을 끊지 않고 계속 흘려보내는 기법 — SSE의 전신)이 실시간 웹의 거의 유일한 수단이었다.
 
 - **Gmail 채팅**, **Facebook 초기 알림**이 Long Polling으로 구현됨
-- HTTP/1.1의 한계를 극복하려는 여러 기법(`iframe streaming`, `multipart/x-mixed-replace` 등)도 등장 → 자세한 건 [HTTP Streaming.md](HTTP%20Streaming.md) 참고
+- HTTP/1.1의 한계를 극복하려는 여러 기법(`iframe streaming`, `multipart/x-mixed-replace` 등)도 등장 → 자세한 건 [HTTP Streaming.md](HTTP-Streaming.md) 참고
 - WebSocket(2011) · SSE(2011)가 표준화되며 점차 대체됨
 - 현재는 **SockJS 같은 폴백 라이브러리** 안에서만 주로 쓰임
 
@@ -193,7 +193,7 @@ WebSocket/SSE가 표준화되기 전, 2000년대 중반~2010년대 초반에 **"
 
 ## 관련 문서
 
-- [HTTP Streaming.md](HTTP%20Streaming.md) — Comet 시대의 또 다른 축, SSE의 전신
+- [HTTP Streaming.md](HTTP-Streaming.md) — Comet 시대의 또 다른 축, SSE의 전신
 - [WebHook.md](WebHook.md)
 - [../../SSE/SSE (Server-Sent Events).md](../../SSE/SSE%20%28Server-Sent%20Events%29.md)
 - [../../WebSocket/WebSocket.md](../../WebSocket/WebSocket.md)

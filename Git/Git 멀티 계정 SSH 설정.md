@@ -8,7 +8,7 @@
 
 - 회사 계정과 개인 계정을 동시에 쓸 때, 같은 `github.com`으로 접속하면 어떤 계정인지 구분할 수 없어서 IntelliJ 등 IDE에서 계정 전환 팝업이 계속 뜸
 - `~/.ssh/config`에 **Host 별명**을 만들어 각 계정에 다른 SSH Key를 매핑하면 해결
-- SSH Key 자체에 대한 설명은 [SSH Key 문서](../../CS%20이론/네트워크/SSH%20Key.md) 참고
+- SSH Key 자체에 대한 설명은 [SSH Key 문서](../../CS-이론/네트워크/SSH-Key.md) 참고
 
 ```
 문제 (하나의 키 또는 HTTPS):

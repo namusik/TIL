@@ -143,4 +143,4 @@ BSD의 정체성을 이해하려면 **라이선스**부터.
 
 - [서버 OS 개요.md](서버%20OS%20개요.md)
 - [Unix 계열 (Linux AIX HP-UX Solaris).md](Unix%20%EA%B3%84%EC%97%B4%20%28Linux%20AIX%20HP-UX%20Solaris%29.md)
-- [Windows Server.md](Windows%20Server.md)
+- [Windows Server.md](Windows-Server.md)

@@ -7,7 +7,7 @@
 Git 원격 저장소(GitHub, GitLab 등) 인증에 사용하는 **SSH Key의 종류, 보안 관리, 운영 방법**을 다룬다.
 
 - SSH Key를 이용한 멀티 계정 설정은 [Git 멀티 계정 SSH 설정](Git%20멀티%20계정%20SSH%20설정.md) 참고
-- SSH Key 자체의 암호학적 원리는 [SSH Key 문서](../../CS%20이론/네트워크/SSH%20Key.md) 참고
+- SSH Key 자체의 암호학적 원리는 [SSH Key 문서](../../CS-이론/네트워크/SSH-Key.md) 참고
 
 ## Deploy Key vs SSH Key (User Key)
 

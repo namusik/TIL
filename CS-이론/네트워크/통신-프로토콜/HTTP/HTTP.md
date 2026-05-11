@@ -235,7 +235,7 @@ HTTP 위에 여러 통신 기법과 프로토콜이 쌓인다.
 | **Polling / Long Polling** | HTTP 요청을 반복 또는 응답 지연으로 실시간화 |
 | **SSE** | HTTP 응답을 스트리밍으로 유지 |
 
-자세한 내용은 [통신 기법/](통신%20기법/) 및 상위 `통신 프로토콜/` 참고.
+자세한 내용은 [통신-기법/](통신-기법/) 및 상위 `통신-프로토콜/` 참고.
 
 ## 백엔드 개발자 실무 포인트
 
@@ -249,8 +249,8 @@ HTTP 위에 여러 통신 기법과 프로토콜이 쌓인다.
 
 ## 관련 문서
 
-- [통신 기법/Polling과 Long Polling.md](통신%20기법/Polling과%20Long%20Polling.md)
-- [통신 기법/WebHook.md](통신%20기법/WebHook.md)
+- [통신-기법/Polling과 Long Polling.md](통신-기법/Polling과%20Long%20Polling.md)
+- [통신-기법/WebHook.md](통신-기법/WebHook.md)
 - [../WebSocket/WebSocket.md](../WebSocket/WebSocket.md)
 - [../SSE/SSE (Server-Sent Events).md](../SSE/SSE%20%28Server-Sent%20Events%29.md)
 - [../HTTP vs SSE vs WebSocket 비교.md](../HTTP%20vs%20SSE%20vs%20WebSocket%20비교.md)

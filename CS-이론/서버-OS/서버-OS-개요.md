@@ -84,7 +84,7 @@
 - **Active Directory**(AD), **Group Policy** 중심의 기업 인프라
 - **.NET / MSSQL / IIS / Exchange** 등 MS 생태계
 - PowerShell 기반 원격 관리
-- 상세: [Windows Server.md](Windows%20Server.md)
+- 상세: [Windows Server.md](Windows-Server.md)
 
 ### BSD 계열 (FreeBSD / OpenBSD / NetBSD)
 - 버클리 Unix 직계, **BSD 라이선스**(상용 통합 자유로움)
@@ -135,5 +135,5 @@
 ## 관련 문서
 
 - [Unix 계열 (Linux AIX HP-UX Solaris).md](Unix%20%EA%B3%84%EC%97%B4%20%28Linux%20AIX%20HP-UX%20Solaris%29.md)
-- [Windows Server.md](Windows%20Server.md)
+- [Windows Server.md](Windows-Server.md)
 - [BSD 계열.md](BSD%20%EA%B3%84%EC%97%B4.md)

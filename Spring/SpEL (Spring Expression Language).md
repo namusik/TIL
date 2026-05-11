@@ -316,5 +316,5 @@ spring:
 ## 관련 문서
 
 - [annotation/](annotation/)
-- [../CS 이론/소프트웨어 아키텍처/](../CS%20이론/%EC%86%8C%ED%94%84%ED%8A%B8%EC%9B%A8%EC%96%B4%20%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98/)
+- [../CS-이론/소프트웨어 아키텍처/](../CS-이론/%EC%86%8C%ED%94%84%ED%8A%B8%EC%9B%A8%EC%96%B4-%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98/)
 - [XSS.md](XSS.md)

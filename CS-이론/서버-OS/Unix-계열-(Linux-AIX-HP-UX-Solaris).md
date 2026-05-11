@@ -114,6 +114,6 @@
 ## 관련 문서
 
 - [서버 OS 개요.md](서버%20OS%20개요.md)
-- [Windows Server.md](Windows%20Server.md)
+- [Windows Server.md](Windows-Server.md)
 - [BSD 계열.md](BSD%20%EA%B3%84%EC%97%B4.md)
 - Linux 폴더: [../../Linux/](../../Linux/)
