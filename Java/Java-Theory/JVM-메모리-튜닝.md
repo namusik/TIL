@@ -243,6 +243,6 @@ jmap -dump:format=b,file=heap.hprof <pid>
 
 ## 관련 문서
 
-- [Java Memory](./Java%20Memory.md)
-- [Java Garbage Collection](./Java%20Garbage%20Collection.md)
+- [Java Memory](./Java-Memory.md)
+- [Java Garbage Collection](./Java-Garbage-Collection.md)
 - [JVM](./JVM.md)

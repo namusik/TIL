@@ -341,7 +341,7 @@ try (JsonParser parser = mapper.getFactory().createParser(largeFile)) {
 > **Spring 기반이면 Jackson 거의 자동 선택.** Gson은 안드로이드, Moshi는 코틀린/안드로이드에 강점.
 
 ## 관련 문서
-- [[1) 자바 직렬화 기본]] — 직렬화 전체 개념과 다른 방식들
+- [[1) 자바-직렬화 기본]] — 직렬화 전체 개념과 다른 방식들
 
 ## 참조
 - https://github.com/FasterXML/jackson

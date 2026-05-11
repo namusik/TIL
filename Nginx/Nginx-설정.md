@@ -270,7 +270,7 @@ server {
 }
 ```
 
-로드 밸런싱 알고리즘 상세는 [Nginx 개념](Nginx%20개념.md)의 로드 밸런싱 섹션 참고.
+로드 밸런싱 알고리즘 상세는 [Nginx 개념](Nginx-개념.md)의 로드 밸런싱 섹션 참고.
 
 ## 주요 내장 변수
 
@@ -328,7 +328,7 @@ Master Process: 설정 파일 다시 읽기
 
 timeout 관련 디렉티브(`proxy_read_timeout`, `proxy_connect_timeout` 등)는 별도 문서에서 상세히 다룬다.
 
--> [Nginx timeout.md](Nginx%20timeout.md)
+-> [Nginx-timeout.md](Nginx-timeout.md)
 
 ## 쿠버네티스 Ingress와의 관계
 

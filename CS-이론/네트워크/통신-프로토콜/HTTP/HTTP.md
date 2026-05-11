@@ -249,8 +249,8 @@ HTTP 위에 여러 통신 기법과 프로토콜이 쌓인다.
 
 ## 관련 문서
 
-- [통신-기법/Polling과 Long Polling.md](통신-기법/Polling과%20Long%20Polling.md)
+- [통신-기법/Polling과 Long Polling.md](통신-기법/Polling과-Long-Polling.md)
 - [통신-기법/WebHook.md](통신-기법/WebHook.md)
 - [../WebSocket/WebSocket.md](../WebSocket/WebSocket.md)
-- [../SSE/SSE (Server-Sent Events).md](../SSE/SSE%20%28Server-Sent%20Events%29.md)
-- [../HTTP vs SSE vs WebSocket 비교.md](../HTTP%20vs%20SSE%20vs%20WebSocket%20비교.md)
+- [../SSE/SSE (Server-Sent Events).md](../SSE/SSE-%28Server-Sent-Events%29.md)
+- [../HTTP vs SSE vs WebSocket 비교.md](../HTTP-vs-SSE-vs-WebSocket-비교.md)

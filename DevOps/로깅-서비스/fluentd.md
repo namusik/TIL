@@ -428,7 +428,7 @@ spec:
 
 - [Loki](Loki.md) — Loki는 Fluentd의 출력 대상 중 하나 (LGTM 스택)
 - [Grafana](../grafana/Grafana.md) — Loki/ES 시각화
-- [Prometheus](../Prometheus/Prometheus%20개념.md) — 메트릭 수집 (Fluentd는 로그)
+- [Prometheus](../Prometheus/Prometheus-개념.md) — 메트릭 수집 (Fluentd는 로그)
 - [opentelemery](../opentelemery/) — 차세대 통합 수집기 (메트릭·로그·트레이스)
 
 ## 참조

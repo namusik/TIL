@@ -189,4 +189,4 @@ implementation 'org.hibernate.orm:hibernate-community-dialects'
 ## 관련 문서
 
 - [SQLite.md](SQLite.md)
-- [../H2/H2 기본.md](../H2/H2%20기본.md) — H2와의 비교 맥락
+- [../H2/H2 기본.md](../H2/H2-기본.md) — H2와의 비교 맥락

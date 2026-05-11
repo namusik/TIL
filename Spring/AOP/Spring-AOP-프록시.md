@@ -262,8 +262,8 @@ public class LoggingAspect {
 ## 관련 문서
 
 - [AOP](../../CS-이론/AOP/AOP.md) — AOP 일반론 (언어 독립 패러다임, 다언어 구현체)
-- [Spring 원리](../Spring%20원리/) — Spring 내부 동작
-- [Spring Database](../Spring%20Database/) — `@Transactional` 깊이 다룸
+- [Spring 원리](../Spring-원리/) — Spring 내부 동작
+- [Spring Database](../Spring-Database/) — `@Transactional` 깊이 다룸
 - [annotation](../annotation/) — Spring 주요 어노테이션 정리
 
 ## 참조

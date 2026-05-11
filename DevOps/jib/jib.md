@@ -38,7 +38,7 @@ dockerfile이나 docker 명령어를 사용할 필요 없이 maven/gradle에서 
     코드를 변경하면, 전체를 빌드하는 것이 아니라,
     변경사항만 빌드한다.
 
-![jiblayer](../../images/jib%20layerd.png)
+![jiblayer](../../images/jib-layerd.png)
 
 ## 이미지 레이어 확인
 ~~~sh

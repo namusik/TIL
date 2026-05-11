@@ -192,7 +192,7 @@ doOtherWork();  // 즉시 다른 작업 수행
 | 비동기-논블로킹 | Spring WebFlux + WebClient + R2DBC |
 
 ```
-동기-블로킹 (Spring MVC)              비동기-논블로킹 (Spring WebFlux)
+동기-블로킹 (Spring-MVC)              비동기-논블로킹 (Spring-WebFlux)
 ┌──────────────┐                     ┌──────────────┐
 │ Thread per   │                     │ Event Loop   │
 │ Request      │                     │ (소수 스레드)  │

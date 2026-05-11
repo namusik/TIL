@@ -193,8 +193,8 @@ flowchart LR
 ## 관련 문서
 
 - [Grafana](../grafana/Grafana.md) — Tempo 시각화 프론트엔드 (LGTM의 G)
-- [Loki](../로깅%20서비스/Loki.md) — 로그 시스템. trace_id 점프 연결 (LGTM의 L)
-- [Prometheus](../Prometheus/Prometheus%20개념.md) — 메트릭 시스템
+- [Loki](../로깅-서비스/Loki.md) — 로그 시스템. trace_id 점프 연결 (LGTM의 L)
+- [Prometheus](../Prometheus/Prometheus-개념.md) — 메트릭 시스템
 - [opentelemery](../opentelemery/) — Tempo의 표준 계측 방법
 - [newrelic](../newrelic/) — 통합 SaaS 비교 대상
 

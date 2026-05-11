@@ -9,7 +9,7 @@
 - 비유: 도서관의 책(공개 저장소)을 복사해서 내 개인 서재(Private 저장소)에 꽂아두는 것. Fork는 도서관 안에 내 이름표를 붙인 사본을 두는 것이고, Clone + Private 전환은 아예 집으로 가져오는 것
 - 핵심: `git clone`으로 이력 전체를 복사한 뒤, remote를 내 Private 저장소로 교체하여 push
 
-> clone 자체의 상세 옵션은 [Git Clone.md](Git%20Clone.md) 참고
+> clone 자체의 상세 옵션은 [Git-Clone.md](Git-Clone.md) 참고
 
 ### Fork vs Clone + Private 전환
 

@@ -133,7 +133,7 @@ public class MessageJobConfig {
     ItemReader<Message> messageReader() {
         Iterator<Message> iterator = List.of(
                 new Message(1L, " hello "),
-                new Message(2L, " spring batch "),
+                new Message(2L, " spring-batch "),
                 new Message(3L, " world ")
         ).iterator();
 

@@ -191,7 +191,7 @@ ws.onclose   = () => console.log("closed");
 - **STOMP** — WebSocket 위에서 동작하는 메시지 브로커 프로토콜 ([STOMP/STOMP.md](STOMP/STOMP.md))
 - **SockJS** — WebSocket 폴백 라이브러리
 - **WebRTC** — 브라우저 간 P2P 통신 (WebSocket은 서버 경유)
-- **SSE** — 단방향 스트리밍이 필요하면 더 단순 ([../SSE/SSE (Server-Sent Events).md](../SSE/SSE%20%28Server-Sent%20Events%29.md))
+- **SSE** — 단방향 스트리밍이 필요하면 더 단순 ([../SSE/SSE (Server-Sent Events).md](../SSE/SSE-%28Server-Sent-Events%29.md))
 
 ## 참고
 
@@ -203,7 +203,7 @@ ws.onclose   = () => console.log("closed");
 
 ## 관련 문서
 
-- [../SSE/SSE (Server-Sent Events).md](../SSE/SSE%20%28Server-Sent%20Events%29.md)
-- [../SSE vs WebSocket 비교.md](../SSE%20vs%20WebSocket%20비교.md)
+- [../SSE/SSE (Server-Sent Events).md](../SSE/SSE-%28Server-Sent-Events%29.md)
+- [../SSE vs WebSocket 비교.md](../SSE-vs-WebSocket-비교.md)
 - [STOMP/STOMP.md](STOMP/STOMP.md)
 - [../HTTP/HTTP.md](../HTTP/HTTP.md)

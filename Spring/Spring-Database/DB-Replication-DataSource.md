@@ -21,7 +21,7 @@
 
 
 ## 개념
-- DB Replication을 통해 DB를 read/write로 구분하는 것이 일반적. [DB Replication](../../Database/데이터베이스%20이론/database%20replication.md)
+- DB Replication을 통해 DB를 read/write로 구분하는 것이 일반적. [DB Replication](../../Database/데이터베이스-이론/database-replication.md)
 - @Transactional(readOnly = true)를 사용해서 데이터 소스 라우팅 설정이 필요.
 - 이번 예제에서는 실제로 DB가 replication이 되어있지는 않고, Read/Write 작업이 서로 다른 DB로 요청이 가는지만 확인하려 한다.
 

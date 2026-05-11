@@ -372,7 +372,7 @@ SELECT user, host FROM mysql.user WHERE account_locked = 'Y';
 
 ## 관련 문서
 
-- [Transaction Isolation Level.md](Transaction%20Isolation%20Level.md)
-- [../../AWS/RDS/RDS%20기본.md](../../AWS/RDS/RDS%20기본.md)
-- [../../AWS/RDS/필수%20%20파라미터%20그룹%20설정.md](../../AWS/RDS/필수%20%20파라미터%20그룹%20설정.md)
-- [../../AWS/RDS/RDS%20장애%20대응.md](../../AWS/RDS/RDS%20장애%20대응.md)
+- [Transaction-Isolation-Level.md](Transaction-Isolation-Level.md)
+- [../../AWS/RDS/RDS%20기본.md](../../AWS/RDS/RDS-기본.md)
+- [../../AWS/RDS/필수%20%20파라미터%20그룹%20설정.md](../../AWS/RDS/필수--파라미터-그룹-설정.md)
+- [../../AWS/RDS/RDS%20장애%20대응.md](../../AWS/RDS/RDS-장애-대응.md)

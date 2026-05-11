@@ -121,7 +121,7 @@ public class Handler implements RequestHandler<Map<String, Object>, String> {
 
 ## 사용 사례
 
-- **웹/모바일 백엔드 API** (API Gateway + Lambda)
+- **웹/모바일 백엔드 API** (API-Gateway + Lambda)
 - **파일 업로드 후처리** (S3 업로드 → 썸네일 생성, 바이러스 스캔)
 - **스케줄 배치 작업** (EventBridge cron → 일일 리포트 생성)
 - **스트리밍 데이터 처리** (Kinesis → 실시간 분석/변환)

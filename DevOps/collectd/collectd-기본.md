@@ -68,7 +68,7 @@ sudo journalctl -u collectd.service -f
 ------
 
 2.	CloudWatch Agent 설치 및 설정:
-[cloudwatch agent 설치](../../AWS/Amazon%20Logging/CloudWatch%20기본.md)
+[cloudwatch agent 설치](../../AWS/Amazon-Logging/CloudWatch-기본.md)
 
 ------
 

@@ -113,7 +113,7 @@ public class Config {
 
 ## Runtime Data Areas
 
-JVM이 프로그램 실행 중 사용하는 메모리 영역. 상세 내용은 [Java Memory](./Java%20Memory.md) 참고.
+JVM이 프로그램 실행 중 사용하는 메모리 영역. 상세 내용은 [Java Memory](./Java-Memory.md) 참고.
 
 | 영역 | 공유 범위 | 저장 내용 |
 |------|----------|----------|
@@ -178,7 +178,7 @@ void process() {
 
 ### Garbage Collector
 
-참조되지 않는 객체를 자동으로 메모리에서 해제. 상세 내용은 [Java Garbage Collection](./Java%20Garbage%20Collection.md) 참고.
+참조되지 않는 객체를 자동으로 메모리에서 해제. 상세 내용은 [Java Garbage Collection](./Java-Garbage-Collection.md) 참고.
 
 ## JVM 구현체
 
@@ -233,13 +233,13 @@ GraalVM AOT:  .class → [빌드 시] → Native Binary → 즉시 실행       
 | `-XX:+PrintFlagsFinal` | 모든 JVM 플래그와 현재 값 출력 |
 | `-Xlog:gc*` | GC 로그 활성화 (Java 9+) |
 
-GC 튜닝, 모니터링 도구 등 상세 내용은 [JVM 메모리 튜닝](./JVM%20메모리%20튜닝.md) 참고.
+GC 튜닝, 모니터링 도구 등 상세 내용은 [JVM 메모리 튜닝](./JVM-메모리-튜닝.md) 참고.
 
 ## 관련 문서
 
 - [JDK](./JDK.md)
-- [컴파일과 바이트코드](./컴파일과%20바이트코드.md)
-- [Java 동작 원리](./Java%20동작%20원리.md)
-- [Java Memory](./Java%20Memory.md)
-- [Java Garbage Collection](./Java%20Garbage%20Collection.md)
-- [JVM 메모리 튜닝](./JVM%20메모리%20튜닝.md)
+- [컴파일과 바이트코드](./컴파일과-바이트코드.md)
+- [Java 동작 원리](./Java-동작-원리.md)
+- [Java Memory](./Java-Memory.md)
+- [Java Garbage Collection](./Java-Garbage-Collection.md)
+- [JVM 메모리 튜닝](./JVM-메모리-튜닝.md)

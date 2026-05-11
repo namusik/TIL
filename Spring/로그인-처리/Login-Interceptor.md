@@ -11,7 +11,7 @@
 웹과 관려된 공통관심사는 필터나 스프링 인터셉터를 사용하는 것이 좋다.
 
 ## Spring Interceptor
-[상세내용](./../Spring%20Interceptor/Spring%20Interceptor.md)
+[상세내용](./../Spring-Interceptor/Spring-Interceptor.md)
 
 ~~~java
 String requestURI = request.getRequestURI();

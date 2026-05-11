@@ -154,15 +154,15 @@ void example() {
 참조되지 않는 객체를 자동으로 메모리에서 해제하는 메커니즘.
 
 - Heap 영역이 GC의 주요 대상
-- 상세 내용은 [Java Garbage Collection](./Java%20Garbage%20Collection.md) 참고
+- 상세 내용은 [Java Garbage Collection](./Java-Garbage-Collection.md) 참고
 
 ## 메모리 튜닝 & 모니터링
 
-튜닝 옵션, GC 튜닝, 모니터링 도구, 실무 체크리스트 등 상세 내용은 [JVM 메모리 튜닝](./JVM%20메모리%20튜닝.md) 참고.
+튜닝 옵션, GC 튜닝, 모니터링 도구, 실무 체크리스트 등 상세 내용은 [JVM 메모리 튜닝](./JVM-메모리-튜닝.md) 참고.
 
 ## 관련 문서
 
 - [JVM](./JVM.md)
-- [Java Garbage Collection](./Java%20Garbage%20Collection.md)
-- [JVM 메모리 튜닝](./JVM%20메모리%20튜닝.md)
-- [Java 동작 원리](./Java%20동작%20원리.md)
+- [Java Garbage Collection](./Java-Garbage-Collection.md)
+- [JVM 메모리 튜닝](./JVM-메모리-튜닝.md)
+- [Java 동작 원리](./Java-동작-원리.md)

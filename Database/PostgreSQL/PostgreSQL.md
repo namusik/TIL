@@ -288,7 +288,7 @@ docker run -d --name pg17 \
 ## 관련 문서
 
 - [../MySQL/](../MySQL/)
-- [../H2/H2 기본.md](../H2/H2%20기본.md)
+- [../H2/H2 기본.md](../H2/H2-기본.md)
 - [../SQLite/SQLite.md](../SQLite/SQLite.md)
-- [../DB Transaction.md](../DB%20Transaction.md)
+- [../DB-Transaction.md](../DB-Transaction.md)
 - [../Flyway.md](../Flyway.md)

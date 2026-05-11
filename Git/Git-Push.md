@@ -122,7 +122,7 @@ git push -u origin feature/login
 
 히스토리를 재작성(`amend`, `rebase`, `reset`)한 후에는 일반 push가 거부된다. 이때 force push가 필요하다.
 
-> force push 상세 설명은 [Git 커밋 히스토리 관리](Git%20커밋%20히스토리%20관리.md) 참고
+> force push 상세 설명은 [Git 커밋 히스토리 관리](Git-커밋-히스토리-관리.md) 참고
 
 ```bash
 # 안전한 force push (권장)

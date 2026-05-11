@@ -67,7 +67,7 @@ DispatcherServlet이 이 패턴이다.
 
 ### 3. 서버에 HTTP 요청이 오면 DispatcherServlet.doDispatch()가 호출된다. 
 
-- DispatcherServlet (Spring MVC의 Front Controller): Tomcat으로부터 HttpServletRequest와 HttpServletResponse 객체를 전달받음
+- DispatcherServlet (Spring-MVC의 Front Controller): Tomcat으로부터 HttpServletRequest와 HttpServletResponse 객체를 전달받음
   - 요청 분석: DispatcherServlet은 HttpServletRequest를 분석하여 요청 URL (/hello 또는 /greet/world), HTTP 메서드 (GET), 요청 헤더, 파라미터 등 **모든 요청 정보를 파악**
   - **핸들러 매핑** (Handler Mapping): DispatcherServlet은 **미리 준비된 매핑 정보**(단계 0에서 Spring Boot가 스캔하여 준비한 정보)를 조회하여, /hello GET 요청에 해당하는 **처리 메서드(HelloController의 hello() 메서드)** 를 찾음.
   - **핸들러 어댑터** (Handler Adapter): 적절한 처리 메서드를 찾았으면, DispatcherServlet은 **해당 메서드를 실제로 호출하기 위해 HandlerAdapter를 사용**합니다. 

@@ -16,7 +16,7 @@
 
 람다 표현식은 변수에 저장될 수 있는데, 그 변수가 Functional Interface이다. 
 
-[Functional Interface 설명](./Java%20Functional%20Interface.md)
+[Functional Interface 설명](./Java-Functional-Interface.md)
 
 ## 문법
 ~~~java

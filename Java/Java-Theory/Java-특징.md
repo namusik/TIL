@@ -148,7 +148,7 @@ Thread.startVirtualThread(() -> System.out.println("Hello"));
 
 ## 관련 문서
 
-- [Java 동작 원리](./Java%20동작%20원리.md)
+- [Java 동작 원리](./Java-동작-원리.md)
 - [JVM](./JVM.md)
 - [JDK](./JDK.md)
-- [Java Garbage Collection](./Java%20Garbage%20Collection.md)
+- [Java Garbage Collection](./Java-Garbage-Collection.md)

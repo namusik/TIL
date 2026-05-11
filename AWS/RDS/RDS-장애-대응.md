@@ -215,7 +215,7 @@ Performance Insights만으로 안 보이는 **리소스 레벨** 지표.
 
 ## 관련 문서
 
-- [RDS 기본.md](RDS%20기본.md)
-- [필수 파라미터 그룹 설정.md](필수%20%20파라미터%20그룹%20설정.md)
-- [RDS 로그 그룹.md](RDS%20로그%20그룹.md)
+- [RDS 기본.md](RDS-기본.md)
+- [필수 파라미터 그룹 설정.md](필수--파라미터-그룹-설정.md)
+- [RDS 로그 그룹.md](RDS-로그-그룹.md)
 - [AuroraEstimatedSharedMemoryBytes.md](AuroraEstimatedSharedMemoryBytes.md)

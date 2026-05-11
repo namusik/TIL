@@ -238,7 +238,7 @@ flowchart LR
 
 웹 응답의 `Cache-Control`·`ETag`·`Last-Modified` 헤더로 브라우저·프록시·CDN의 캐시 동작을 정밀 제어. RFC 9111(2022)이 최신 표준이며 `max-age`/`no-cache`/`no-store`/`private`/`public`/`s-maxage`/`stale-while-revalidate`/`immutable` 등 다양한 디렉티브가 존재.
 
-> 디렉티브 전체 표·재검증(304 Not Modified)·Strong/Weak ETag·Vary 헤더·자원 종류별 권장 정책은 [HTTP Cache](Http%20Cache.md) 참조.
+> 디렉티브 전체 표·재검증(304 Not Modified)·Strong/Weak ETag·Vary 헤더·자원 종류별 권장 정책은 [HTTP Cache](Http-Cache.md) 참조.
 
 ## CDN (Content Delivery Network)
 
@@ -289,8 +289,8 @@ flowchart LR
 
 ## 관련 문서
 
-- [HTTP Cache](Http%20Cache.md) — 웹 응답 캐시(`Cache-Control`/`ETag`/`Vary`) 정밀 가이드
-- [Springboot Cache](Springboot%20Cache.md) — Spring `@Cacheable` 등 어노테이션 실전
+- [HTTP Cache](Http-Cache.md) — 웹 응답 캐시(`Cache-Control`/`ETag`/`Vary`) 정밀 가이드
+- [Springboot Cache](Springboot-Cache.md) — Spring `@Cacheable` 등 어노테이션 실전
 - [Redis](../Redis/) — 분산 캐시 사실상 표준
 
 ## 참조

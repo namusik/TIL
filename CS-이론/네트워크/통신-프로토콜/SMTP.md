@@ -219,5 +219,5 @@ with smtplib.SMTP("smtp.example.com", 587) as s:
 ## 관련 문서
 
 - [Network Protocol.md](../Network-Protocol.md)
-- [프로토콜의 구성 요소.md](프로토콜의%20구성%20요소.md)
+- [프로토콜의 구성 요소.md](프로토콜의-구성-요소.md)
 - [DNS.md](../DNS.md) — SPF/DKIM/DMARC는 DNS TXT 레코드로 설정

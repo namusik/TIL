@@ -19,7 +19,7 @@
 
 → Polling/Long Polling은 클라이언트가 **언제·어떻게 HTTP 요청을 보내느냐**의 전략일 뿐, 별도 스펙이 없다.
 
-> 표에 나오는 **표준 문서 / 와이어 포맷 / 전용 MIME** 같은 프로토콜 공통 용어는 [../../프로토콜의 구성 요소.md](../../%ED%94%84%EB%A1%9C%ED%86%A0%EC%BD%9C%EC%9D%98%20%EA%B5%AC%EC%84%B1%20%EC%9A%94%EC%86%8C.md) 참고.
+> 표에 나오는 **표준 문서 / 와이어 포맷 / 전용 MIME** 같은 프로토콜 공통 용어는 [../../프로토콜의 구성 요소.md](../../%ED%94%84%EB%A1%9C%ED%86%A0%EC%BD%9C%EC%9D%98-%EA%B5%AC%EC%84%B1-%EC%9A%94%EC%86%8C.md) 참고.
 
 ## Polling (주기적 폴링)
 
@@ -195,7 +195,7 @@ WebSocket/SSE가 표준화되기 전, 2000년대 중반~2010년대 초반에 **"
 
 - [HTTP Streaming.md](HTTP-Streaming.md) — Comet 시대의 또 다른 축, SSE의 전신
 - [WebHook.md](WebHook.md)
-- [../../SSE/SSE (Server-Sent Events).md](../../SSE/SSE%20%28Server-Sent%20Events%29.md)
+- [../../SSE/SSE (Server-Sent Events).md](../../SSE/SSE-%28Server-Sent-Events%29.md)
 - [../../WebSocket/WebSocket.md](../../WebSocket/WebSocket.md)
-- [../../HTTP vs SSE vs WebSocket 비교.md](../../HTTP%20vs%20SSE%20vs%20WebSocket%20비교.md)
+- [../../HTTP vs SSE vs WebSocket 비교.md](../../HTTP-vs-SSE-vs-WebSocket-비교.md)
 - [../HTTP.md](../HTTP.md)

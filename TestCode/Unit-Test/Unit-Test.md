@@ -26,7 +26,7 @@ System Under Test
 Depended on Component
 SUT가 의존하고 있는 객체
 
-SUT를 테스트 할 때, DOC가 문제가 되는 경우 [TestDouble](../Test%20Doubles.md)을 사용해서 대체한다.
+SUT를 테스트 할 때, DOC가 문제가 되는 경우 [TestDouble](../Test-Doubles.md)을 사용해서 대체한다.
 
 ### Sociable Tests
 ![sociable](../../images/TestCode/sociabletest.png)

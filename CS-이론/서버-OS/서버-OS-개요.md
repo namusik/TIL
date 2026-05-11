@@ -73,12 +73,12 @@
 ### Linux
 - **배포판** 형태로 제공 (같은 커널 + 다른 패키징/툴)
 - 클라우드·컨테이너·엣지까지 전 분야 지배
-- 상세: [Unix 계열 (Linux AIX HP-UX Solaris).md](Unix%20%EA%B3%84%EC%97%B4%20%28Linux%20AIX%20HP-UX%20Solaris%29.md)
+- 상세: [Unix 계열 (Linux AIX HP-UX Solaris).md](Unix-%EA%B3%84%EC%97%B4-%28Linux-AIX-HP-UX-Solaris%29.md)
 
 ### Unix 계열 (AIX / HP-UX / Solaris)
 - 상용 Unix — 제조사별 전용 하드웨어에 묶인 "수직 통합" OS
 - 뛰어난 RAS(안정성), 하지만 **클라우드 전환 어려움** 으로 레거시화
-- 상세: [Unix 계열 (Linux AIX HP-UX Solaris).md](Unix%20%EA%B3%84%EC%97%B4%20%28Linux%20AIX%20HP-UX%20Solaris%29.md)
+- 상세: [Unix 계열 (Linux AIX HP-UX Solaris).md](Unix-%EA%B3%84%EC%97%B4-%28Linux-AIX-HP-UX-Solaris%29.md)
 
 ### Windows Server
 - **Active Directory**(AD), **Group Policy** 중심의 기업 인프라
@@ -89,7 +89,7 @@
 ### BSD 계열 (FreeBSD / OpenBSD / NetBSD)
 - 버클리 Unix 직계, **BSD 라이선스**(상용 통합 자유로움)
 - Netflix CDN, PlayStation OS, pfSense 등에서 활용
-- 상세: [BSD 계열.md](BSD%20%EA%B3%84%EC%97%B4.md)
+- 상세: [BSD 계열.md](BSD-%EA%B3%84%EC%97%B4.md)
 
 ### 메인프레임 (z/OS)
 - IBM Z 하드웨어 전용 — x86과 **완전히 다른 세계**
@@ -134,6 +134,6 @@
 
 ## 관련 문서
 
-- [Unix 계열 (Linux AIX HP-UX Solaris).md](Unix%20%EA%B3%84%EC%97%B4%20%28Linux%20AIX%20HP-UX%20Solaris%29.md)
+- [Unix 계열 (Linux AIX HP-UX Solaris).md](Unix-%EA%B3%84%EC%97%B4-%28Linux-AIX-HP-UX-Solaris%29.md)
 - [Windows Server.md](Windows-Server.md)
-- [BSD 계열.md](BSD%20%EA%B3%84%EC%97%B4.md)
+- [BSD 계열.md](BSD-%EA%B3%84%EC%97%B4.md)

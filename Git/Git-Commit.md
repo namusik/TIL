@@ -191,7 +191,7 @@ git reset --mixed HEAD~1  # 커밋 + staging 취소, 워킹 디렉토리 유지
 git reset --hard HEAD~1   # 완전 삭제 (복구 어려움)
 ```
 
-> 자세한 내용은 [Git Reset](Git%20Reset.md) 참고
+> 자세한 내용은 [Git Reset](Git-Reset.md) 참고
 
 ### revert vs reset 비교
 

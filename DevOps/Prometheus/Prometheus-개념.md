@@ -303,7 +303,7 @@ http_requests_total{path="/api/orders/:id"}
 ## 관련 문서
 
 - [Grafana](../grafana/Grafana.md) — Prometheus의 시각화 프론트엔드 (사실상 짝)
-- [Loki](../로깅%20서비스/Loki.md) — 로그 버전 Prometheus (LGTM 스택)
+- [Loki](../로깅-서비스/Loki.md) — 로그 버전 Prometheus (LGTM 스택)
 - [newrelic](../newrelic/) — 통합 관찰성 SaaS 비교 대상
 - [opentelemery](../opentelemery/) — 차세대 표준
 

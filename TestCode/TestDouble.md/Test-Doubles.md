@@ -57,7 +57,7 @@ public void calculates_grades_average_for_student() {
 여기서 `when()`을 사용해서 `gradebook.gradesFor()`을 리턴 값을 지정해주고 있다.
 
 #### Command Query Separation
-[설명](../Java/Java%20Method/Query%20and%20Command.md)
+[설명](../Java/Java-Method/Query-and-Command.md)
 
 `averageGrades()`는 값을 리턴만 하고 상태를 변화시킨 않기 때문에 `Query`이다. 이럴 때, `Stub`을 사용한다.
 

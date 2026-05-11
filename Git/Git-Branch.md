@@ -503,7 +503,7 @@ main → X → Y → Z → M (머지 커밋, 부모가 2개)
 | **Restrict force pushes** | force push 차단으로 히스토리 보호 |
 | **Require linear history** | merge commit 금지 (squash/rebase만 허용) |
 
-> 상세 내용은 [Git Pull Request](Git%20Pull%20Request.md)의 Branch Protection Rules 섹션 참고.
+> 상세 내용은 [Git Pull Request](Git-Pull-Request.md)의 Branch Protection Rules 섹션 참고.
 > GitHub는 2023년부터 **Rulesets**를 도입하여 조직(Organization) 수준의 규칙 관리를 지원한다.
 
 ## 유용한 브랜치 관련 명령어

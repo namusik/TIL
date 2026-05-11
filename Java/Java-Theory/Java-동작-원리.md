@@ -85,7 +85,7 @@ public class App {
 }
 ```
 
-상세 내용은 [컴파일과 바이트코드](./컴파일과%20바이트코드.md) 참고.
+상세 내용은 [컴파일과 바이트코드](./컴파일과-바이트코드.md) 참고.
 
 ## ③ 클래스 로딩 (Class Loader)
 
@@ -189,7 +189,7 @@ java Hello.java                      # javac 없이 바로 실행 가능 (단일
 
 ## 관련 문서
 
-- [컴파일과 바이트코드](./컴파일과%20바이트코드.md)
+- [컴파일과 바이트코드](./컴파일과-바이트코드.md)
 - [JVM](./JVM.md)
 - [JDK](./JDK.md)
-- [Java Memory](./Java%20Memory.md)
+- [Java Memory](./Java-Memory.md)

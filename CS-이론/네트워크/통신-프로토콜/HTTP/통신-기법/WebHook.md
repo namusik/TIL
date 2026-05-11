@@ -216,7 +216,7 @@ ngrok http 8080
 
 ## 관련 문서
 
-- [Polling과 Long Polling.md](Polling과%20Long%20Polling.md) — 반대 방향 기법
+- [Polling과 Long Polling.md](Polling과-Long-Polling.md) — 반대 방향 기법
 - [../HTTP.md](../HTTP.md)
-- [../../SSE/SSE (Server-Sent Events).md](../../SSE/SSE%20%28Server-Sent%20Events%29.md)
+- [../../SSE/SSE (Server-Sent Events).md](../../SSE/SSE-%28Server-Sent-Events%29.md)
 - [../../WebSocket/WebSocket.md](../../WebSocket/WebSocket.md)

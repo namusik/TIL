@@ -17,7 +17,7 @@
 | 표준 스펙 | **없음** — 단, 그 발상을 표준화한 게 **SSE** |
 | 본질 | **HTTP 응답을 길게 유지하는 패턴** |
 
-→ 용어 설명은 [../../프로토콜의 구성 요소.md](../../%ED%94%84%EB%A1%9C%ED%86%A0%EC%BD%9C%EC%9D%98%20%EA%B5%AC%EC%84%B1%20%EC%9A%94%EC%86%8C.md) 참고.
+→ 용어 설명은 [../../프로토콜의 구성 요소.md](../../%ED%94%84%EB%A1%9C%ED%86%A0%EC%BD%9C%EC%9D%98-%EA%B5%AC%EC%84%B1-%EC%9A%94%EC%86%8C.md) 참고.
 
 ## 배경/역사 — "Comet" 시대
 
@@ -246,8 +246,8 @@ public StreamingResponseBody stream() {
 
 ## 관련 문서
 
-- [Polling과 Long Polling.md](Polling과%20Long%20Polling.md) — Comet 시대 다른 한 축
+- [Polling과 Long Polling.md](Polling과-Long-Polling.md) — Comet 시대 다른 한 축
 - [WebHook.md](WebHook.md)
-- [../../SSE/SSE (Server-Sent Events).md](../../SSE/SSE%20%28Server-Sent%20Events%29.md) — HTTP Streaming의 표준화 버전
-- [../../HTTP vs SSE vs WebSocket 비교.md](../../HTTP%20vs%20SSE%20vs%20WebSocket%20비교.md)
-- [../../프로토콜의 구성 요소.md](../../%ED%94%84%EB%A1%9C%ED%86%A0%EC%BD%9C%EC%9D%98%20%EA%B5%AC%EC%84%B1%20%EC%9A%94%EC%86%8C.md)
+- [../../SSE/SSE (Server-Sent Events).md](../../SSE/SSE-%28Server-Sent-Events%29.md) — HTTP Streaming의 표준화 버전
+- [../../HTTP vs SSE vs WebSocket 비교.md](../../HTTP-vs-SSE-vs-WebSocket-비교.md)
+- [../../프로토콜의 구성 요소.md](../../%ED%94%84%EB%A1%9C%ED%86%A0%EC%BD%9C%EC%9D%98-%EA%B5%AC%EC%84%B1-%EC%9A%94%EC%86%8C.md)

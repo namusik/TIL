@@ -201,9 +201,9 @@ dependencies {
 
 - **코드 생성이 빌드를 느리게 만든다** → `generateSchemaSourceOnCompilation = false`로 두고 필요 시에만 `./gradlew generateJooq` 실행
 - **DDL 스크립트만으로 생성하기** → DB 없이도 Flyway/Liquibase 스크립트에서 직접 메타를 뽑는 `DDLDatabase` 사용 가능 (CI 환경에서 유용)
-- **테스트용 별도 스키마 생성** → `configurations { test { ... } }` 블록으로 분리 (자세한 설정은 [test용 Jooq 설정](test용%20Jooq%20설정.md) 참고)
+- **테스트용 별도 스키마 생성** → `configurations { test { ... } }` 블록으로 분리 (자세한 설정은 [test용 Jooq 설정](test용-Jooq-설정.md) 참고)
 
 ## 관련 문서
 
 - [Jooq_method.md](Jooq_method.md) — select/fetch/insert 등 메서드 사용법
-- [test용 Jooq 설정.md](test용%20Jooq%20설정.md) — 테스트용 별도 generator 구성
+- [test용-Jooq-설정.md](test용-Jooq-설정.md) — 테스트용 별도 generator 구성

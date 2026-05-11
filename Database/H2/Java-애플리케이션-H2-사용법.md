@@ -8,7 +8,7 @@ H2는 **Java로 작성된 DB**라 **JAR 의존성 하나만 추가하면 바로 
 
 > 비유하자면 "앱을 실행하면 같이 켜지는 미니 DB". 운영용 MySQL/PostgreSQL을 띄울 필요 없이, **개발·테스트·프로토타입** 단계에서 즉시 DB를 쓸 수 있게 해준다.
 
-H2 자체 개념이나 실행 모드(Embedded/In-Memory/Server)는 [H2 기본.md](H2%20기본.md) 참고. 이 문서는 **Java 코드에서 H2를 쓰는 실제 방법**에 집중한다.
+H2 자체 개념이나 실행 모드(Embedded/In-Memory/Server)는 [H2 기본.md](H2-기본.md) 참고. 이 문서는 **Java 코드에서 H2를 쓰는 실제 방법**에 집중한다.
 
 ## 사용 시나리오
 
@@ -125,7 +125,7 @@ spring.datasource.password=
 ```
 
 - 별도로 `./h2.sh`로 H2 서버가 떠 있어야 함
-- 자세한 서버 기동은 [H2 시작하는 법.md](H2%20시작하는%20법.md) 참고
+- 자세한 서버 기동은 [H2 시작하는 법.md](H2-시작하는-법.md) 참고
 
 ## 4. H2 웹 콘솔 활성화
 
@@ -367,8 +367,8 @@ spring.datasource.url=jdbc:h2:mem:testdb;MODE=MySQL;DB_CLOSE_DELAY=-1;DATABASE_T
 
 ## 관련 문서
 
-- [H2 기본.md](H2%20기본.md) — H2 자체 개념/모드
-- [H2 시작하는 법.md](H2%20시작하는%20법.md) — 독립 H2 서버 설치·기동
+- [H2 기본.md](H2-기본.md) — H2 자체 개념/모드
+- [H2 시작하는 법.md](H2-시작하는-법.md) — 독립 H2 서버 설치·기동
 - [../Flyway.md](../Flyway.md)
 - [../JPA/](../JPA/)
 - [../Jooq/](../Jooq/)

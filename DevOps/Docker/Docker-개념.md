@@ -112,7 +112,7 @@ AppArmor와 SELinux는 리눅스 시스템의 보안 모듈로, 컨테이너가 
 - 컴퓨터나 컨테이너가 네트워크와 상호작용하는 물리적 또는 가상 장치
 - 컴퓨터 시스템이나 컨테이너가 데이터를 주고받는 경로를 제공
 
-![dockernetwork](../../images/docker/docker%20network.png)
+![dockernetwork](../../images/docker/docker-network.png)
 
 ### **docker0 (브리지 네트워크 인터페이스)**
 - docker0는 **호스트 시스템에서 생성되는 브리지 네트워크 인터페이스**

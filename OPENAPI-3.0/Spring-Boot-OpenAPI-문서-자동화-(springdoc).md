@@ -26,7 +26,7 @@ Swagger UI (내장)  →  브라우저에서 시각화 및 테스트
 ### Gradle
 
 ```groovy
-// Spring Boot 3.x (Spring MVC)
+// Spring Boot 3.x (Spring-MVC)
 implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.6'
 
 // Spring Boot 3.x (WebFlux)

@@ -245,5 +245,5 @@ java -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/tmp/heap.hprof -jar app.j
 
 ## 관련 문서
 
-- [Java Memory](./Java%20Memory.md)
+- [Java Memory](./Java-Memory.md)
 - [JVM](./JVM.md)

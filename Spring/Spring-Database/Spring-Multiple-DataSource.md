@@ -13,11 +13,11 @@
 
 <!-- /TOC -->
 
-[DataSource 개념](../../Java/Java%20Database/JDBC/JDBC%20Class.md/)
+[DataSource 개념](../../Java/Java-Database/JDBC/JDBC-Class.md/)
 
 ## PlatformTransactionManager
 
-[PlatformTransactionManager 개념](Spring%20Transaction.md)
+[PlatformTransactionManager 개념](Spring-Transaction.md)
 
 ## 예제 코드
 

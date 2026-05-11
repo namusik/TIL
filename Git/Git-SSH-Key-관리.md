@@ -6,7 +6,7 @@
 
 Git 원격 저장소(GitHub, GitLab 등) 인증에 사용하는 **SSH Key의 종류, 보안 관리, 운영 방법**을 다룬다.
 
-- SSH Key를 이용한 멀티 계정 설정은 [Git 멀티 계정 SSH 설정](Git%20멀티%20계정%20SSH%20설정.md) 참고
+- SSH Key를 이용한 멀티 계정 설정은 [Git 멀티 계정 SSH 설정](Git-멀티-계정-SSH-설정.md) 참고
 - SSH Key 자체의 암호학적 원리는 [SSH Key 문서](../../CS-이론/네트워크/SSH-Key.md) 참고
 
 ## Deploy Key vs SSH Key (User Key)
@@ -131,7 +131,7 @@ Host *
 
 | 상황 | 권장 방식 |
 |---|---|
-| 개인 PC에서 여러 GitHub 계정 사용 | User Key + [멀티 계정 SSH 설정](Git%20멀티%20계정%20SSH%20설정.md) |
+| 개인 PC에서 여러 GitHub 계정 사용 | User Key + [멀티 계정 SSH 설정](Git-멀티-계정-SSH-설정.md) |
 | CI/CD 서버에서 특정 repo만 접근 | Deploy Key (read-only) |
 | 배포 서버에서 특정 repo push 필요 | Deploy Key (write access 활성화) |
 | 보안이 엄격한 환경 | Secretive 또는 Yubikey (키 추출 불가) |

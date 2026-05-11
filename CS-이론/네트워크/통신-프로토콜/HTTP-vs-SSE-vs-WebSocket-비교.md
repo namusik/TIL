@@ -207,7 +207,7 @@ class WsConfig implements WebSocketConfigurer {
 ## 관련 문서
 
 - [HTTP/HTTP.md](HTTP/HTTP.md)
-- [SSE/SSE (Server-Sent Events).md](SSE/SSE%20%28Server-Sent%20Events%29.md)
+- [SSE/SSE (Server-Sent Events).md](SSE/SSE-%28Server-Sent-Events%29.md)
 - [WebSocket/WebSocket.md](WebSocket/WebSocket.md)
-- [HTTP/통신-기법/Polling과 Long Polling.md](HTTP/통신-기법/Polling과%20Long%20Polling.md)
+- [HTTP/통신-기법/Polling과 Long Polling.md](HTTP/통신-기법/Polling과-Long-Polling.md)
 - [HTTP/통신-기법/WebHook.md](HTTP/통신-기법/WebHook.md)

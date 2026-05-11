@@ -3,7 +3,7 @@
 ## 개념
 - Java New Input/Output
 - Java I/O 작업에 대한 새로운 접근 방식
-  - [JavaIO 정리](../Java%20IO/Java%20IO%20basic.md)
+  - [JavaIO 정리](../Java-IO/Java-IO-basic.md)
 - java.nio 패키지를 통해 NIO 프레임워크용 클래스와 인터페이스를 포함하는 Java 표준 라이브러리 패키지를 제공한다.
 
 

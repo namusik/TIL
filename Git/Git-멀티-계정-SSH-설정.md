@@ -438,4 +438,4 @@ Windows OpenSSH (PowerShell):
 
 ## 더 알아보기
 
-Deploy Key, SSH Key 로테이션, 키 관리 도구(1Password, Secretive, Yubikey) 등 SSH Key 보안 운영에 대해서는 [Git SSH Key 관리](Git%20SSH%20Key%20관리.md) 참고.
+Deploy Key, SSH Key 로테이션, 키 관리 도구(1Password, Secretive, Yubikey) 등 SSH Key 보안 운영에 대해서는 [Git SSH Key 관리](Git-SSH-Key-관리.md) 참고.

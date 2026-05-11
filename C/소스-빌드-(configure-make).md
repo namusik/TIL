@@ -300,7 +300,7 @@ xxx --version
 
 ## 관련 문서
 
-- [빌드 파일 확장자 (.c .o .a .so .in).md](빌드%20파일%20확장자%20%28.c%20.o%20.a%20.so%20.in%29.md) — 빌드 중 등장하는 파일 확장자 정리
-- [../Linux/파일/파일 관리 명령어.md](../Linux/%ED%8C%8C%EC%9D%BC/%ED%8C%8C%EC%9D%BC%20%EA%B4%80%EB%A6%AC%20%EB%AA%85%EB%A0%B9%EC%96%B4.md) — `tar`, `wget` 등 Linux 파일 관련 명령
+- [빌드 파일 확장자 (.c .o .a .so .in).md](빌드-파일-확장자-%28.c-.o-.a-.so-.in%29.md) — 빌드 중 등장하는 파일 확장자 정리
+- [../Linux/파일/파일-관리-명령어.md](../Linux/%ED%8C%8C%EC%9D%BC/%ED%8C%8C%EC%9D%BC-%EA%B4%80%EB%A6%AC-%EB%AA%85%EB%A0%B9%EC%96%B4.md) — `tar`, `wget` 등 Linux 파일 관련 명령
 - [../Linux/쉘/환경변수설정.md](../Linux/%EC%89%98/%ED%99%98%EA%B2%BD%EB%B3%80%EC%88%98%EC%84%A4%EC%A0%95.md) — `LD_LIBRARY_PATH`, `PATH`
-- [../Linux/네트워크/서버 접속](../Linux/%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC/%EC%84%9C%EB%B2%84%20%EC%A0%91%EC%86%8D)
+- [../Linux/네트워크/서버-접속](../Linux/%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC/%EC%84%9C%EB%B2%84-%EC%A0%91%EC%86%8D)

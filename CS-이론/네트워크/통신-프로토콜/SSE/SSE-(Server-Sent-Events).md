@@ -193,7 +193,7 @@ public Flux<ServerSentEvent<String>> stream() {
 | **SSE** | **서버→클라 단방향** | **낮음** | **낮음** | **낮음** |
 | **WebSocket** | **양방향** | 낮음 | 낮음 | 중간 |
 
-자세한 비교는 [../SSE vs WebSocket 비교.md](../SSE%20vs%20WebSocket%20비교.md) 참고.
+자세한 비교는 [../SSE vs WebSocket 비교.md](../SSE-vs-WebSocket-비교.md) 참고.
 
 ## 백엔드 개발자 실무 포인트
 
@@ -205,6 +205,6 @@ public Flux<ServerSentEvent<String>> stream() {
 
 ## 관련 문서
 
-- [../SSE vs WebSocket 비교.md](../SSE%20vs%20WebSocket%20비교.md)
+- [../SSE vs WebSocket 비교.md](../SSE-vs-WebSocket-비교.md)
 - [../WebSocket/WebSocket.md](../WebSocket/WebSocket.md)
 - [../HTTP/HTTP.md](../HTTP/HTTP.md)

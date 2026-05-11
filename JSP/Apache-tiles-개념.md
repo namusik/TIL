@@ -17,7 +17,7 @@
 
 ## Composite View 패턴
 
-![tiles](../images/JSP/tiles%20pattern.jpeg)
+![tiles](../images/JSP/tiles-pattern.jpeg)
 
     모듈 단위의 뷰 들을 조합해서 하나의 뷰를 구성.
 

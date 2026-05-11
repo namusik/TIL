@@ -110,7 +110,7 @@ Beck/Fowler 측 반론은 "TDD가 죽은 게 아니라 **단위 테스트 도그
 
 - **Service 계층부터 시작** — Repository/Controller보다 도메인 로직이 있는 Service가 TDD 효과 큼
 - **Test Double 신중히** — Stub/Mock/Fake 차이 이해. Mockito 남용보다 Fake 객체나 Testcontainers로 실제 의존성 사용 검토
-- **테스트 이름은 행위로** — `add_두_수를_더하면_합이_반환된다` 같이 *상황 → 결과* 표현 (`Test Naming Conventions.md` 참조)
+- **테스트 이름은 행위로** — `add_두_수를_더하면_합이_반환된다` 같이 *상황 → 결과* 표현 (`Test-Naming-Conventions.md` 참조)
 - **JUnit5 + AssertJ 조합** — `assertThat`의 가독성이 TDD 사이클 속도에 영향
 - **CI에 회귀 테스트 강제** — 로컬 통과만으로 안 됨. PR 단위로 자동 실행
 
@@ -122,8 +122,8 @@ Beck/Fowler 측 반론은 "TDD가 죽은 게 아니라 **단위 테스트 도그
 
 - [SDD (Spec-Driven Development)](SDD.md) — AI 시대의 명세 우선 방법론
 - [DDD (Domain-Driven Design)](DDD.md) — 도메인 모델 우선 설계
-- [테스트 코드 개론](../../TestCode/테스트%20코드%20개론.md)
-- [Test Naming Conventions](../../TestCode/Test%20Naming%20Conventions.md)
+- [테스트 코드 개론](../../TestCode/테스트-코드-개론.md)
+- [Test Naming Conventions](../../TestCode/Test-Naming-Conventions.md)
 - [TestDouble](../../TestCode/TestDouble.md)
 - [JUnit5](../../TestCode/JUnit5/)
 - [AssertJ](../../TestCode/AssertJ.md)
