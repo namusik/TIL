@@ -4,7 +4,7 @@
 
 ## 개념
 
-Fluentd는 **다양한 소스의 로그·이벤트를 수집·파싱·변환·전송하는 오픈소스 데이터 수집기(Data Collector)**다. *"Unified Logging Layer"*가 슬로건 — 100가지 입력 소스와 1000가지 목적지 사이의 **통합 중계 레이어** 역할.
+Fluentd는 **다양한 소스의 로그·이벤트를 수집·파싱·변환·전송하는 오픈소스 데이터 수집기(Data Collector)** 다. *"Unified Logging Layer"*가 슬로건 — 100가지 입력 소스와 1000가지 목적지 사이의 **통합 중계 레이어** 역할.
 
 > 비유: 로그계의 만능 어댑터. 여러 모양의 플러그(앱·시스템·파일)와 여러 종류의 콘센트(Elasticsearch·Kafka·S3·CloudWatch)를 가운데서 변환·중계해주는 장치. 어떤 입력이든 어떤 출력으로든 변환 가능.
 
@@ -100,6 +100,8 @@ tag: kubernetes.var.log.containers.payment-7d4f.payment_default_xyz.log
 → 태그 패턴(`*`, `**`, `{a,b}`)으로 라우팅 분기. 라우터 역할.
 
 ## Fluentd vs Fluent Bit — 가장 자주 묻는 비교
+
+> Fluent Bit 자체에 대한 심화 운영(멀티라인 파서로 Java 스택트레이스 묶기, 버퍼 전략, EKS 표준 설정 등)은 [[Fluent-Bit|Fluent Bit 문서]] 참조.
 
 | 항목 | Fluentd | Fluent Bit |
 |---|---|---|
@@ -426,6 +428,8 @@ spec:
 
 ## 관련 문서
 
+- [Fluent-Bit](Fluent-Bit.md) — Fluent Bit 단독 심화 (멀티라인 파서, EKS 표준 설정 등)
+- [쿠버네티스-Pod-로그](../kubernetes/쿠버네티스-Pod-로그.md) — Fluentd가 수집하는 입력 소스, `/var/log/pods` · `/var/log/containers` 구조와 로그 회전
 - [Loki](Loki.md) — Loki는 Fluentd의 출력 대상 중 하나 (LGTM 스택)
 - [Grafana](../grafana/Grafana.md) — Loki/ES 시각화
 - [Prometheus](../Prometheus/Prometheus-개념.md) — 메트릭 수집 (Fluentd는 로그)

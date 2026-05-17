@@ -4,11 +4,59 @@
 
 ## 개념
 
-Loki는 **Grafana Labs가 개발한 오픈소스 로그 집계 시스템**으로, *"Prometheus처럼 로그를 다루자"*는 철학으로 만들어졌다. 가장 큰 특징은 **로그 본문(라인)을 인덱싱하지 않고 메타데이터(라벨)만 인덱싱**한다는 점.
+Loki는 **Grafana Labs가 만든 오픈소스 로그 저장·검색 백엔드**다. 수집기가 보내준 로그를 받아 **인덱싱·저장·쿼리**까지 책임진다. *"Prometheus처럼 로그를 다루자"*는 철학으로, 가장 큰 특징은 **로그 본문(라인)을 인덱싱하지 않고 메타데이터(라벨)만 인덱싱**한다는 점.
 
 > 비유: 도서관에서 책 본문을 통째로 색인하지 않고 **서가 위치(라벨)만 색인**하는 방식. "결제 서가 → 2024년 10월 칸"까지는 빠르게 찾고, 거기서부터는 grep으로 본문 검색. 책 본문 색인을 안 만드니 도서관 운영비(스토리지)가 1/10로 줄어든다.
 
 핵심 명제: **"모든 로그 라인을 인덱싱하는 것은 비용 낭비"** — 라벨로 좁힌 후 line filter(grep)로 충분하다는 가설. Elasticsearch 대비 저장 비용을 대폭 절감.
+
+## 파이프라인에서의 위치 — "Loki는 어디서 일하는가"
+
+Loki를 처음 만날 때 가장 흔한 혼동: **"수집기(Fluent Bit/Promtail)랑 뭐가 다른가?"** 답은 간단함 — **완전히 다른 레이어**이고, 둘 다 있어야 한다.
+
+```mermaid
+flowchart LR
+  App[애플리케이션] -- stdout --> Node[노드 디스크<br/>/var/log/containers]
+  Node --> Collector[수집기<br/>Fluent Bit / Promtail / Alloy]
+  Collector -- push --> Loki[(Loki<br/>저장·인덱싱·쿼리)]
+  Loki -- LogQL --> Grafana[Grafana 대시보드]
+  Loki -- 알림 규칙 --> Alert[Alertmanager]
+  Loki -- chunk flush --> S3[(Object Storage<br/>S3/GCS/Azure)]
+```
+
+| 레이어 | 역할 | 대표 도구 |
+|---|---|---|
+| **앱** | stdout으로 한 줄씩 출력 | (Logback, slf4j, etc.) |
+| **수집기 (Collector)** | 노드 파일을 읽어 어딘가로 **전달**. 자체 저장/검색 기능 없음 | Fluent Bit, Promtail, Grafana Alloy, Fluentd |
+| **저장·쿼리 백엔드** | 받은 로그를 **인덱싱·저장·검색** 제공 | **Loki**, Elasticsearch, CloudWatch Logs |
+| **시각화·알림** | 사람이 보고, 임계치 넘으면 알림 | Grafana, Alertmanager |
+
+### 자주 묻는 혼동: "Fluent Bit이 그냥 수집해서 저장하면 안 돼?"
+
+Fluent Bit으로 파일에 떨궈 두는 것 자체는 가능. 그런데 그 다음 단계가 **전부 직접 만들어야** 한다.
+
+| 운영 요구 | 파일 저장만으로 | Loki 사용 시 |
+|---|---|---|
+| "어제 3시 payment 에러 찾기" | GB 단위 파일 grep — 너무 느림 | `{app="payment"} \|= "error"` 즉시 |
+| "10개 노드 로그 한 화면에서" | 노드마다 분산 → 직접 합쳐야 | 알아서 통합 |
+| "분당 5xx 100건 넘으면 알림" | 별도 스크립트 작성 | LogQL `rate()` + Ruler |
+| "trace_id로 마이크로서비스 추적" | 사실상 불가 | Tempo와 자동 연동 |
+| "30일 지난 로그 자동 삭제" | cron + find 직접 | retention 정책 한 줄 |
+| "팀/테넌트별 권한 분리" | 없음 | 다중 테넌트 내장 |
+
+→ 결국 직접 만들면 **그게 곧 Loki(혹은 ES)**. 이미 잘 만들어진 걸 쓰는 게 합리적.
+
+### 그러면 수집기는 왜 따로 두나? Loki가 직접 수집하면 안 되나?
+
+Loki는 **노드에 직접 들어가서 파일을 읽지 않는다.** 노드별 로그 파일에 접근하려면 노드마다 에이전트가 떠 있어야 함(DaemonSet). 이걸 가벼운 수집기가 담당하고, Loki는 받는 쪽에 한 번만 띄움. **관심사 분리** + 노드 자원 절약.
+
+| 옵션 | 결과 |
+|---|---|
+| Loki만 단독 | 노드 로그 수집 불가 — 누가 가져다줄 사람이 없음 |
+| Fluent Bit만 단독 | 검색·집계·알림 불가 — 보내고 끝 |
+| **Fluent Bit/Promtail + Loki + Grafana** | **표준 LGTM 셋업** |
+
+> 한 줄: **"수집기가 가져다 주고, Loki가 저장·검색하고, Grafana가 보여준다."** 셋이 한 팀.
 
 ## 배경/역사
 
@@ -66,6 +114,65 @@ flowchart LR
 | **Monolithic** | 단일 바이너리, 모든 컴포넌트 통합 | 소규모 / 개발 환경 |
 | **Simple Scalable** | read·write 분리 (2개 deployment) | 중간 규모 |
 | **Microservices** | 컴포넌트별 독립 deployment | 대규모 / 멀티 테넌트 |
+
+## 저장 구조 — 실제 데이터는 어디에 어떤 형태로 사는가
+
+Loki는 자체 디스크가 아니라 **Object Storage(객체 스토리지)** 를 본 저장소로 쓴다. 이게 운영 단순함과 비용 절감의 핵심.
+
+### 어디에 저장되나
+
+| 옵션 | 비고 |
+|---|---|
+| **AWS S3** | 가장 흔함. 별도 DB 불필요 |
+| **GCS** (Google Cloud Storage) | GCP |
+| **Azure Blob Storage** | Azure |
+| **MinIO** | 온프렘에서 S3 호환 |
+| 로컬 파일시스템 | 개발/single-node 전용. 운영 비권장 |
+
+→ 실제 디스크 파일은 S3 버킷 안의 객체로 존재. 예: `s3://my-loki-bucket/chunks/<tenant>/<fingerprint>/<chunk-id>`
+
+### 무엇이 저장되나 — 두 종류
+
+| 종류 | 내용 | 형태 |
+|---|---|---|
+| **Chunk** | 같은 라벨 스트림의 로그 라인들을 묶어 **gzip/snappy 압축** | 바이너리 객체 (수십 KB ~ 수 MB) |
+| **Index** | "이 라벨 셋 → 이 chunk들에 있음" 매핑. Loki 3.x는 **TSDB 포맷**(Prometheus와 동일) | 같은 S3 버킷에 별도 prefix로 저장 |
+
+청크 안의 **라인 본문은 인덱싱하지 않는다.** 이게 ES 대비 1/10 비용의 본질.
+
+### 저장 흐름 단계별
+
+1. **수신**: Distributor가 수집기 push를 받음 → 라벨 검증 → hash ring으로 Ingester에 분배
+2. **메모리 누적**: Ingester가 라벨 스트림별로 메모리에 chunk를 만들며 압축 누적
+3. **WAL 동시 기록**: 메모리 chunk 만드는 동안 **로컬 디스크 WAL**(Write-Ahead Log)에도 동시에 기록 → Ingester가 죽어도 복원 가능
+4. **flush 조건 도달 시 S3로**:
+   - `chunk_target_size` (기본 1.5 MB) 도달
+   - `chunk_idle_period` (기본 30분) 동안 추가 입력 없음
+   - `max_chunk_age` (기본 2시간) 초과
+   - Ingester graceful shutdown
+5. **메모리·WAL 정리**: S3 업로드 확정 후 메모리·WAL에서 제거
+
+> WAL은 "잠깐의 in-flight 데이터 보호"용이지 영구 저장소가 아니다. 영구 저장소는 항상 S3.
+
+### 인덱스의 진화 (참고)
+
+| 시기 | 인덱스 저장소 |
+|---|---|
+| Loki 1.x | 별도 DB (Cassandra·BigTable·DynamoDB·BoltDB) |
+| Loki 2.x | **boltdb-shipper** — 인덱스도 파일로 만들어 S3에 올림 → 별도 DB 불필요 |
+| Loki 3.x | **TSDB shipper**(권장) — Prometheus TSDB 포맷. 더 빠르고 압축률 높음 |
+
+→ 현재(3.x)는 **인덱스도 청크도 모두 S3 한 곳**. 외부 DB 의존성 0. 이게 Loki 운영이 단순한 근본 이유.
+
+### 보관(retention)
+
+| 설정 | 의미 |
+|---|---|
+| `retention_period` | 기간 지나면 Compactor가 자동 삭제 (예: `30d`, `90d`) |
+| S3 lifecycle | Loki와 별개로 S3 자체 정책으로 Glacier 이동·완전 삭제 가능 |
+| Compactor | 작은 chunk들을 통합·정리해 객체 수 절감 |
+
+> 한 줄: **chunk(압축 로그) + index(TSDB)를 둘 다 S3에 두고, 잠깐 메모리에 있는 동안만 WAL로 보호.**
 
 ## LogQL — Loki의 쿼리 언어
 
