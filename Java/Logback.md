@@ -271,6 +271,52 @@ public class TraceFilter implements Filter {
 
 → 같은 요청에서 발생한 모든 로그가 `traceId`를 공유 → 분산 환경에서 요청 추적 가능. Spring Sleuth/Micrometer Tracing이 자동으로 MDC에 traceId 넣어줌.
 
+## OpenTelemetry Agent와의 관계 — 다른 계층, 함께 쓴다
+
+Logback과 [[opentelemetry-agent|OpenTelemetry Agent]]는 **경쟁이 아니라 다른 계층**이다. Logback은 "로그를 만들어 출력"하고, OTel Agent는 "trace·metric·log를 수집해 OTLP로 전송"한다. 분산 추적이 필요해지면 Logback **위에** OTel Agent를 얹는 구조다.
+
+| 구분 | Logback | OpenTelemetry Agent |
+|---|---|---|
+| 정체 | **로깅 프레임워크** | **관측성 수집 도구** |
+| 다루는 신호 | Log만 | **Trace + Metric + Log** |
+| 데이터 종착지 | 콘솔/파일/소켓 | OTLP → Collector → Grafana 등 |
+| 적용 방식 | SLF4J 구현체로 classpath에 포함 | `-javaagent` JVM 옵션 |
+| 비유 | 일지를 **쓰는 펜** | 일지·계기판·동선을 **모아 본사로 보내는 택배** |
+
+> **꼭 같이 써야 하나?** 단일 서비스에 로그만으로 충분하면 Logback만으로 OK. **MSA에서 서비스 간 요청 흐름·병목을 추적**하려는 순간부터 OTel Agent가 필요해진다.
+
+### 협력 방식 1 — traceId 자동 주입 (MDC bridge)
+
+OTel Agent를 부착하면 **현재 진행 중인 Span의 `trace_id`/`span_id`를 자동으로 MDC에 넣어준다**. 코드 변경 없이 Logback 패턴에 그대로 꽂힌다.
+
+```xml
+<!-- Agent가 MDC에 trace_id/span_id를 자동으로 넣어줌 -->
+<pattern>%d %-5p [trace=%X{trace_id} span=%X{span_id}] %logger - %msg%n</pattern>
+```
+
+```
+2026-05-31 10:23:45 ERROR [trace=4bf92f3577b34da6 span=00f067aa0ba902b7] PaymentService - 결제 실패
+                          └ 이 ID로 Grafana Tempo/Jaeger에서 요청 전체 흐름 즉시 조회
+```
+
+LogstashEncoder를 쓰면 JSON 필드(`trace_id`, `span_id`)로 자동 노출되어 Loki/Elastic에서 trace ↔ log 양방향 점프가 가능해진다.
+
+### 협력 방식 2 — OpenTelemetry Logback Appender
+
+로그 자체를 **OTLP로 직접 전송**하고 싶을 때 사용. Agent 없이 SDK만으로도 가능하며, Agent 환경에서는 자동 구성된다.
+
+```xml
+<!-- Logback에서 OTel로 로그 이벤트 직접 전송 -->
+<appender name="OTEL" class="io.opentelemetry.instrumentation.logback.appender.v1_0.OpenTelemetryAppender"/>
+
+<root level="INFO">
+    <appender-ref ref="STDOUT"/>
+    <appender-ref ref="OTEL"/>   <!-- stdout과 병행 -->
+</root>
+```
+
+> 정리: **Logback만으로 충분한 프로젝트가 대부분**이고, 분산 추적이 필요해지면 OTel Agent를 얹어 `trace_id`를 MDC에 자동 주입받아 쓰는 것이 가장 흔한 패턴이다.
+
 ## Filter
 
 Appender 직전 단계에서 이벤트를 통과·차단.
@@ -402,6 +448,7 @@ implementation 'org.springframework.boot:spring-boot-starter-log4j2'
 - [[Java-Exception]] — 스택트레이스 구조 (Logback이 출력하는 `%ex`의 내용)
 - [[쿠버네티스-Pod-로그]] — Logback stdout이 도달하는 `/var/log/containers/*.log` 구조
 - [[Spring-모니터링-설정]] — Spring Boot 운영 모니터링 전반
+- [[opentelemetry-agent]] — `-javaagent`로 trace·metric·log를 자동 수집. Logback MDC에 `trace_id`를 자동 주입해 로그와 분산 추적을 연결
 
 ## 참조
 

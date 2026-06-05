@@ -134,4 +134,3 @@ Beck/Fowler 측 반론은 "TDD가 죽은 게 아니라 **단위 테스트 도그
 - Martin Fowler & Kent Beck, ["Is TDD Dead?"](https://martinfowler.com/articles/is-tdd-dead/) 대담 시리즈 (2014)
 - [Baeldung: Unit Testing vs TDD](https://www.baeldung.com/cs/unit-testing-vs-tdd)
 - [Baeldung: BDD Guide](https://www.baeldung.com/cs/bdd-guide#tdd)
-- [TDD는 죽었는가? (jinson 블로그)](https://jinson.tistory.com/271)

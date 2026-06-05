@@ -23,7 +23,10 @@
       "WebFetch(domain:aws.amazon.com)",
       "WebFetch(domain:missing.csail.mit.edu)",
       "WebFetch(domain:www.warp.dev)",
-      "WebFetch(domain:www.freecodecamp.org)"
+      "WebFetch(domain:www.freecodecamp.org)",
+      "WebFetch(domain:martinfowler.com)",
+      "WebFetch(domain:ff4j.github.io)",
+      "WebFetch(domain:opentelemetry.io)"
     ]
   }
 }
