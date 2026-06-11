@@ -239,4 +239,5 @@ HTTP 진화사를 관통하는 단 하나의 키워드. 어느 버전이 어느 
 - [../SSE/SSE-(Server-Sent-Events).md](../SSE/SSE-%28Server-Sent-Events%29.md) — chunked 기반 서버 푸시
 - [../gRPC.md](../gRPC.md) — HTTP/2 기반 RPC
 - [../HTTP-vs-SSE-vs-WebSocket-비교.md](../HTTP-vs-SSE-vs-WebSocket-비교.md)
-- [../../Network-Model.md](../../Network-Model.md) — TCP/UDP·계층 모델
+- [../../네트워크-모델/TCP-IP-Model.md](../../네트워크-모델/TCP-IP-Model.md) — TCP/IP 4계층 모델
+- [../../네트워크-모델/OSI.md](../../네트워크-모델/OSI.md) — OSI 7계층 모델

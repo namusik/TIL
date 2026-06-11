@@ -287,4 +287,5 @@ if (lock.tryLock(3, 10, TimeUnit.SECONDS)) {  // 내부적으로 Lua 실행
 - [Redis 개념](./1\)-Redis-개념.md)
 - [Redis 명령어](./3\)-Redis-명령어.md)
 - [Redis 운영 시 주의할 점](./11\)-Redis-운영시-주의할-점.md)
-- [Redis Cluster](./Redis-Cluster.md)
+- [Redis Cluster (개념)](./Redis-Cluster.md)
+- [Redis Cluster (실습)](./Redis-Cluster-실습.md)

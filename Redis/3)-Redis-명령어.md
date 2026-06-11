@@ -45,7 +45,7 @@ docker stop my-redis
 
 
 ## redis-cli 명령어
-![rediscli](../../images/Redis/rediscli.png)
+![rediscli](../images/Redis/rediscli.png)
 - redis-server : 레디스가 동작하는 서버
 - redis-cli : 레디스 서버에 커맨드를 실행할 수 있는 인터페이스
   - Container안에서 redis-cli를 실행해야 한다.

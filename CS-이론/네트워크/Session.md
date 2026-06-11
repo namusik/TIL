@@ -161,4 +161,4 @@ sequenceDiagram
 - [통신-프로토콜/HTTP/](통신-프로토콜/HTTP/)
 - [보안/TLS/TLS.md](보안/TLS/TLS.md)
 - [../../인증/](../../인증/)
-- [../../Cache/Redis/Redis-Session.md](../../Cache/Redis/Redis-Session.md)
+- [../../Redis/Redis-Session.md](../../Redis/Redis-Session.md)
