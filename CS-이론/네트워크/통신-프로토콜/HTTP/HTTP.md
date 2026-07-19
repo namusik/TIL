@@ -115,6 +115,51 @@ Client                         Server
 | `Location` | 리다이렉션 URL |
 | `Access-Control-Allow-Origin` | CORS 허용 출처 |
 
+## 프록시와 클라이언트 IP (X-Forwarded-For)
+
+로드밸런서·리버스 프록시를 거치면, 서버가 보는 출발지 IP는 **실제 클라이언트가 아니라 프록시의 IP**다. 서버 입장에서 바로 앞 홉이 프록시이기 때문이다.
+
+```
+클라이언트(1.2.3.4) → 로드밸런서(10.0.0.1) → WAS
+```
+
+이 구조에서 WAS의 `getRemoteAddr()`는 `10.0.0.1`(LB)만 본다. 실제 사용자 IP를 알려면 프록시가 원래 클라이언트 IP를 헤더에 적어 전달해야 하는데, 그 대표 헤더가 **X-Forwarded-For(XFF)**다.
+
+### 형식
+
+프록시를 여러 개 거치면 쉼표로 이어 붙는다. 맨 왼쪽이 최초 클라이언트, 오른쪽으로 갈수록 서버에 가까운 프록시다.
+
+```
+X-Forwarded-For: 203.0.113.7, 70.41.3.18, 150.172.238.178
+                 └ 실제 클라이언트    └ 거쳐온 프록시들 →
+```
+
+| 헤더 | 설명 |
+|------|------|
+| **X-Forwarded-For** | 사실상 표준(de facto). 클라이언트 IP 체인 |
+| **X-Real-IP** | nginx가 주로 세팅. 단일 클라이언트 IP |
+| **X-Forwarded-Proto** | 원 요청 프로토콜(`http`/`https`) |
+| **Forwarded** | RFC 7239로 정식 표준화. `Forwarded: for=1.2.3.4;proto=https` |
+
+### ⚠️ XFF는 위조된다 — 맨 왼쪽을 믿지 마라
+
+XFF는 그냥 HTTP 헤더라 **클라이언트가 임의로 넣을 수 있다.** 공격자가 요청에 `X-Forwarded-For: 127.0.0.1`을 박아 보내면 그 값이 맨 왼쪽에 붙는다. 이를 그대로 신뢰하면 **IP 기반 접근 제어 우회, 로그 오염, Rate limiting 회피**에 악용된다.
+
+안전한 원칙은 **내가 통제하는 신뢰 프록시(LB)가 붙인 값만 신뢰**하는 것이다. 맨 왼쪽을 덥석 믿지 말고, **오른쪽(서버에 가까운 쪽)부터 신뢰된 프록시를 벗겨내** 신뢰 경계 바로 바깥의 IP를 실제 클라이언트로 취급한다.
+
+> 이는 L3에서 출발지 IP 자체를 덮어쓰는 NAT와 대비된다 — XFF는 L7 헤더에 원 IP를 **적어서** 전달할 뿐이다. (→ [IP](../IP.md)의 NAT)
+
+### 실무 처리
+
+직접 `getHeader("X-Forwarded-For")`의 첫 값을 파싱하는 방식은 위조에 취약하다. 프레임워크의 신뢰 프록시 처리를 쓴다.
+
+```properties
+# Spring Boot — 프록시 헤더를 신뢰해 실제 IP/프로토콜 복원
+server.forward-headers-strategy=framework   # 또는 native (Tomcat RemoteIpValve)
+```
+
+Tomcat `RemoteIpValve`/`RemoteIpFilter`에 신뢰할 프록시 대역(`internalProxies`)을 지정하면, XFF를 안전하게 벗겨 `getRemoteAddr()`가 실제 클라이언트 IP를 반환하도록 해준다.
+
 ## 주요 특성
 
 ### 1. Stateless (무상태)

@@ -426,7 +426,8 @@ ack-mode가 RECORD일 때 처리 중 예외가 나면 오프셋이 커밋되지 
 
 - [Spring-Kafka.md](Spring-Kafka.md) — 상위 문서 (개념·Producer·기본 설정·트랜잭션)
 - [Kafka-Consumer.md](Kafka-Consumer.md) — 프레임워크 무관 컨슈머 원리 (Pull 모델·Long Polling·리밸런싱·전달 의미론)
-- [1)-Kafka-개념.md](1\)-Kafka-개념.md) — 토픽/파티션/컨슈머 그룹 개념
+- [1)-Kafka-개념.md](1\)-Kafka-개념.md) — 컨슈머 그룹·아키텍처 개념
+- [Kafka-Topic.md](Kafka-Topic.md) — 토픽/파티션 개념
 - [5)-Kafka-명령어.md](5\)-Kafka-명령어.md) — 토픽·컨슈머 그룹 CLI
 - `Kafka-pub-sub-예제/` — 동작 예제 프로젝트
 

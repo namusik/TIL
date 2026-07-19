@@ -219,7 +219,8 @@ public void process(Chatmessage msg) {
 
 - [Spring-Kafka-Consumer.md](Spring-Kafka-Consumer.md) — 컨슈머 심화 (설정·리스너 컨테이너·리밸런싱·역직렬화·에러 처리)
 - [Kafka-Consumer.md](Kafka-Consumer.md) — 프레임워크 무관 컨슈머 원리 (Pull 모델·Long Polling·전달 의미론)
-- [1)-Kafka-개념.md](1\)-Kafka-개념.md) — Kafka 아키텍처, 토픽/파티션/컨슈머 그룹 개념
+- [1)-Kafka-개념.md](1\)-Kafka-개념.md) — Kafka 아키텍처, 컨슈머 그룹 개념
+- [Kafka-Topic.md](Kafka-Topic.md) — 토픽/파티션/복제/오프셋 개념
 - [5)-Kafka-명령어.md](5\)-Kafka-명령어.md) — 토픽 생성·조회 CLI
 - [3)-Kafka-도커-설치.md](3\)-Kafka-도커-설치.md) — KRaft 모드 브로커 구성
 - `Kafka-pub-sub-예제/` — 이 문서의 코드가 담긴 동작 예제 프로젝트

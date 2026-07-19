@@ -1,6 +1,6 @@
 # DB Charset과 인코딩
 
-> 최종 업데이트: 2026-06-10 | MySQL 8.0, JDBC 8.x 기준
+> 최종 업데이트: 2026-06-25 | MySQL 8.0, JDBC 8.x 기준
 
 ## 개념
 
@@ -202,24 +202,55 @@ spring:
 
 ## Collation — 정렬·비교 규칙
 
-charset과 함께 **collation**(콜레이션) 설정도 중요하다. 같은 charset이라도 문자를 어떻게 비교·정렬하는지의 규칙이 다르다.
+charset이 "문자를 어떤 바이트로 저장하나"라면, **collation**(콜레이션)은 그 문자들을 **어떻게 비교·정렬하나**의 규칙이다. `=` 비교, `ORDER BY`, `GROUP BY`, `UNIQUE` 제약, 인덱스 정렬이 전부 collation을 따른다.
 
-| collation | 특징 |
-|-----------|------|
-| `utf8mb4_unicode_ci` | 유니코드 표준 비교, 대소문자 구분 없음(CI) |
-| `utf8mb4_general_ci` | 빠르지만 일부 유니코드 규칙 무시. 구버전 호환용 |
-| `utf8mb4_bin` | 바이트 단위 비교, 대소문자 구분 |
-| `utf8mb4_0900_ai_ci` | MySQL 8.0 기본. Unicode 9.0 기반, 악센트·대소문자 무시 |
+> 비유: charset이 글자를 적는 법이라면, collation은 그 단어들을 **사전 순으로 줄 세우는 규칙**이다. 사전마다 `café`와 `cafe`를 같게 볼지, `A`와 `a`를 같게 볼지가 다르다.
 
-`_ci` = case-insensitive (대소문자 무시), `_cs` = case-sensitive, `_bin` = binary.
+### 이름 읽는 법
+
+collation 이름은 토막마다 의미가 박혀 있다. `utf8mb4_0900_ai_ci`를 풀면:
+
+| 토막 | 의미 |
+|------|------|
+| `utf8mb4` | 짝이 되는 charset |
+| `0900` | **Unicode 9.0.0** 표준 정렬 알고리즘(UCA) 기반 — 다국어 정렬이 정확 |
+| `ai` | **Accent Insensitive** — 악센트 무시 (`é` = `e`) |
+| `ci` | **Case Insensitive** — 대소문자 무시 (`A` = `a`) |
+
+끝의 민감도 접미사는 짝으로 외운다.
+
+| 접미사 | 의미 |
+|--------|------|
+| `_ai` / `_as` | 악센트 무시 / 구분 (accent insensitive / sensitive) |
+| `_ci` / `_cs` | 대소문자 무시 / 구분 (case insensitive / sensitive) |
+| `_bin` | 바이트 그대로 비교 (가장 엄격, `A` ≠ `a` ≠ `á`) |
+
+### 주요 collation 비교
+
+| collation | 기반 | 정확도·특징 | 비고 |
+|-----------|------|------------|------|
+| `utf8mb4_general_ci` | 레거시 단순 규칙(UCA 아님) | 빠르지만 일부 비교 부정확 | MySQL 5.x 시절 흔함 |
+| `utf8mb4_unicode_ci` | UCA 4.0.0 | 표준 비교, 정확 | 8.0 이전 권장값 |
+| `utf8mb4_0900_ai_ci` | **UCA 9.0.0** | 가장 정확, 8.0에서 더 빠름 | **MySQL 8.0 기본·권장 (8.0 전용)** |
+| `utf8mb4_bin` | 바이트 비교 | 대소문자·악센트 전부 구분 | 케이스 민감 데이터용 |
+
+`general_ci`는 빠르다고 알려졌지만 부정확하다(예: 독일어 `ß` vs `ss` 비교가 어긋남). MySQL 8.0 신규 프로젝트는 기본값인 `utf8mb4_0900_ai_ci`를 쓰면 된다 — 더 정확하고 8.0에서는 오히려 빠르다.
+
+### 동작과 주의점
+
+`_ci`라 대소문자를, `_ai`라 악센트를 같게 본다.
 
 ```sql
--- 'A'와 'a'를 같다고 보는 경우 (ci)
-SELECT * FROM users WHERE name = 'hello';  -- 'Hello', 'HELLO' 모두 매칭
+-- ai_ci: 'Hello', 'HELLO', 'héllo' 모두 매칭
+SELECT * FROM users WHERE name = 'hello';
 
--- 정확히 구분해야 하면 bin 또는 cs 사용
+-- 정확히 구분해야 하면 BINARY 또는 _bin / _cs collation
 SELECT * FROM users WHERE BINARY name = 'hello';
 ```
+
+- **collation을 섞으면 비교에서 터진다.** 한 컬럼은 `general_ci`, 다른 컬럼은 `0900_ai_ci`인데 JOIN·비교하면 `Illegal mix of collations` 에러가 난다. **DB·테이블·컬럼 collation을 통일**해야 한다.
+- **버전 호환 주의.** `0900_ai_ci`는 **MySQL 8.0 전용**이다. 8.0에서 덤프를 떠 5.7 이하로 넣으면 이 collation을 못 알아본다. 마이그레이션·구버전 연동 시 `unicode_ci` 등 호환 가능한 값을 검토한다.
+- **ai_ci는 같게 본다는 점이 양날의 검**이다. `'Café' = 'cafe'`라 검색·로그인 비교엔 편하지만, 악센트나 대소문자를 구분해야 하는 값(토큰, 케이스 민감 코드)에는 `_as_cs`나 `_bin`을 써야 한다.
 
 ## 레거시 마이그레이션 — utf8 → utf8mb4
 
@@ -282,7 +313,7 @@ WHERE table_schema = 'mydb';
 - [CS-이론/Character-Encoding.md](../CS-이론/Character-Encoding.md) — 인코딩·디코딩 개념, CCS/CES, UTF-8/16, Mojibake
 - [CS-이론/한글-인코딩.md](../CS-이론/한글-인코딩.md) — EUC-KR, CP949, 한글 인코딩 역사
 - [MySQL/Charset-확인.md](MySQL/Charset-확인.md) — MySQL charset 확인 쿼리 모음
-- [timezone.md](timezone.md) — DB timezone 설정 (charset과 함께 자주 맞춰야 하는 설정)
+- [MySQL/MySQL-날짜시간-저장.md](MySQL/MySQL-날짜시간-저장.md) — DATETIME/TIMESTAMP와 타임존 (charset과 함께 자주 맞춰야 하는 설정)
 
 ## 출처
 

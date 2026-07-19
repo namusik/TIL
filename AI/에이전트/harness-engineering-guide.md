@@ -594,6 +594,43 @@ conditions:
 🔐 민감 파일 편집 — 자격증명 하드코딩 금지, .gitignore 확인
 ```
 
+#### E. 테스트 무결성 (warn) — AI의 테스트 조작 방어
+
+AI 에이전트는 테스트를 통과시키려고 테스트를 삭제/비활성화하려는 구조적 유혹이 있다 (Kent Beck 1차 증언: "AI가 테스트를 삭제하려 들며 막기 어렵다", Pragmatic Engineer 인터뷰 2025). 2룰 세트:
+
+```markdown
+---
+name: test-integrity-file
+enabled: true
+event: file
+action: warn
+conditions:
+  - field: file_path
+    operator: regex_match
+    pattern: src/test/.*\.(java|kt)$    # 스택에 맞게 조정 (예: \.(test|spec)\.(ts|js)$)
+  - field: new_text
+    operator: regex_match
+    pattern: (@Disabled|@Ignore|\.skip\(|xit\(|xdescribe\(|enabled\s*=\s*false)
+---
+
+🛑 테스트 비활성화 감지 — 통과 목적 skip/disable 금지. 실패하면 production code를 고친다. flaky 격리는 사용자 승인 시만 + 격리 경로는 "미검증" 취급.
+```
+
+```markdown
+---
+name: test-integrity-delete
+enabled: true
+event: bash
+action: warn
+conditions:
+  - field: command
+    operator: regex_match
+    pattern: (rm\s+(-[a-zA-Z]+\s+)?|git\s+rm\s+).*src/test/
+---
+
+🛑 테스트 파일 삭제 감지 — 통과 목적 삭제 금지. 정당한 삭제(요구사항 변경/파일 이동)면 spec 먼저 갱신 + 사유 기록.
+```
+
 ### 6-4. 한계 / 주의
 
 - **추상 판단 불가** — "사용자가 답을 안 했는데 Claude가 진행" 같은 워크플로우 상태 추적은 hookify로 안 됨. 메모리/CLAUDE.md 컨벤션 영역

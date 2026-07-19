@@ -127,118 +127,15 @@
   - 최소 3대 브로커 + replication.factor=3 구성을 권장
   - 
 
-## 토픽(Topic)
+## 토픽과 파티션
 
-- **논리적인 표현 단위** (눈으로 보이는 물리적 공간이 아님)
-- 브로커에서 데이터를 관리할 때 기준이 되는 개념
-- 토픽 이름으로 구분됨.
-  - 네이밍룰을 만들어두면 좋다.
-  - 의미를 쉽게 유추할 수 있도록.
-- 여러 파티션의 집합
-  - Topic 생성시에 Partition 개수를 지정해준다. (각 파티션의 replication factor 개수 와는 다른 개념)
-  - 여러 파티션은 곧 **병렬 처리 성능**을 의미
-  - **운영 도중에 변경을 권장하지 않음.**
+토픽(메시지 분류의 논리적 단위)과 파티션(물리적 분할·병렬 처리·비용 단위), 그리고 복제·오프셋·내부 토픽은 분량이 커서 **별도 문서로 분리**했다.
 
-### 내부 토픽
+→ **[Kafka-Topic.md](Kafka-Topic.md)** 에서 다룬다.
 
-#### __consumer_offsets
-
-- 각 Consumer Group 이 “토픽-파티션을 어디까지 읽었는지”(committed offset)와 그룹 메타데이터를 저장·관리하는 내부 토픽
-- 첫 오프셋 커밋이 발생하면 자동 생성됩니다(브로커가 관리)
-- 파티션 수: 기본적으로 다수(예: 수십 개)로 생성되어 그룹별로 분산 저장됩니다.
-  - 기본값 50개의 partition 생성됨.
-  - 어떤 그룹의 상태를 어느 파티션에 기록할지는 해시로 결정됩니다(그룹명 → 해시 → 파티션 index).
-- replication factor
-  - 기본값 3
-- 정책: cleanup.policy=compact(로그 컴팩션).
-  - 동일 키의 가장 최신 커밋만 남기고, 예전 레코드는 정리됩니다(디스크 효율성/조회 속도 확보).
-  - 삭제를 의미하는 tombstone 레코드(값 null)도 사용됩니다.
-
-#### __transaction_state
-
-- 프로듀서가 여러 메시지를 하나의 원자적 단위(Atomic Unit) 로 묶어서 보내고, 일부만 전송된 상태로 “커밋(commit)”되지 않도록 보장하는 기능
-- Kafka 트랜잭션은 정확히 한 번 전달(Exactly-Once Semantics, EOS) 을 구현하는 핵심 요소
-- 
-- 각 트랜잭션의 상태를 저장하기 위한 전용 토픽
-- Kafka는 트랜잭션 상태의 내구성을 보장하기 위해 아래 두 가지 설정을 세트로 사용
-  - KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR : __transaction_state 복제본 수
-  - KAFKA_TRANSACTION_STATE_LOG_MIN_ISR : 트랜잭션 커밋이 유효하려면 동기(In-Sync) 상태여야 하는 최소 replica 수
-
-## Partition 파티션
-
-- Topic을 **물리적으로** 분할한 단위
-- Kafka는 OS의 파일시스템 자체를 저장소로 활용을 함.
-- 하나의 Topic은 하나 이상의 Partition으로 구성됨
-  - **병렬처리**가 가능해짐
-- 하나의 Partition이 하나의 `Commit Log`로 동작
-- 하나의 Partition은 여러개의 **Segment**로 구성됨
-  - 실제 데이터가 저장되는 물리적 file
-  - 지정된 크기보다 크거나 지정된 기간보다 오래되면 새 file이 열리고 메시지는 새 file에 추가됨.
-  - segment0, segment1. segment2 등등등 계속 생성됨. 과거의 segment0, 1에는 데이터가 write 되지 않음.
-  - segment 롤링 기준은 용량(default 1G) 혹은 시간(default 168H)
-- Topic 생성시 Partition 개수를 지정하면, 각 Partition들은 Broker에 분산돼서 배치됨.
-  - 즉, 같은 Topic의 Partition일지라도 **서로 다른 Broker에 배치**될 수 있다.
-  - 분산 기준은 Broker cluster가 최적으로 배치
-  - Partition 번호는 **0부터 오름차순**
-- Topic 내의 Partition 들은 서로 독립적
-  - 어떤 Partition은 3번 offset, 어떤 partition은 1번 offset
-- 같은 Partition 내에서의 Event 순서는 보장된다.
-- 한번 Partition에 저장된 데이터는 변경 불가 (immutable)
-- producer는 메시지 내에 key값이 비어있으면 round robin 방식으로 각 파티션에 메시지를 보냄.
-
-데이터의 보존주기는 default 7일
-
-프로듀서당 하나의 파티션에 연결하면 빠르다 
-
-하지만, 또 너무 많으면 낭비가 생김. 
-리플리케이션 (장애 복구) 시간이 증가함
-한번 늘리면 줄일 수 없음!
-
-### Partition 복제 계수(Replication Factor)
-
-![replication](../images/kafka/replication.jpeg)
-
-- replication.factor는 각 파티션을 몇 개의 브로커에 복제할지 결정
-  - 하나의 토픽 내 **모든 파티션이 동일한 replication factor**를 갖는다.
-- **Leader Partition**
-  - 프로듀서가 데이터를 쓰고, 컨슈머가 데이터를 읽는 주체
-  - Leader가 어느 브로커에 배치되는지는 컨트롤러(KRaft Controller) 가 균형을 고려한 알고리즘으로 자동 분산 배치(balance)
-- **Follower Partition**
-  - 리더 데이터를 비동기적으로 복제하는 백업 복제본
-  - read/write 권한이 없다.
-  - 리더가 죽으면 팔로워 중 하나가 자동으로 리더로 승격(Leader Election) 
-- ISR (In-Sync Replicas)
-  - 복제본 중에서도 리더와 완전히 동기화된 복제본 집합
-  - 리더와 팔로워의 데이터가 완전히 일치하면 ISR에 포함
-  - min.insync.replicas 설정으로 최소한 몇 개의 ISR이 유지되어야 쓰기가 허용되는지도 지정 가능
-- replication.factor가 클러스터 내 브로커 개수보다 크면 생성 불가능
-
-### Commit Log
-
-![commitlog2](../Images/kafka/commitlog2.png)
-
-- 추가만 가능하고 변경 불가능한 데이터 스트럭처
-- 데이터는 항상 끝에 추가된다.
-
-### Offset
-
-![offset](../Images/kafka/offset.png)
-
-- Partition에서 각 메시지의 **고유한 위치**를 나타내는 숫자
-  - 위 그림에서 0~10번의 위치
-  - 각 파티션 내에서 0으로 시작해서 순차적으로 증가
-- Producer가 Write하는 `LOG-END-OFFSET`
-- Consumer Group이 Read하고 여기까지 읽어갔다고 Commit한 위치가 `CURRENT-OFFSET`
-  - `__consumer_offsets` 내부 토픽에 저장됨
-  - **새로운 consumer group은 기존 consumer group의 offset을 모른다.**
-- 이 둘의 offset 위치 차이를 `Consuemr Lag`이라고 부름
-- Queue 처럼 읽고 삭제하는 개념이 아니라, 지정된 시간이 지나면 오래된 것 부터 삭제 되는 구조.
-- 서로 다른 Partition에서 offset은 아무 의미가 없다.
-  - Partition 0의 1번 offset과 Partition 1의 1번 offset은 아무 관계가 없음.
-- 전체 메시지의 순서를 보장하고 싶다면
-  - 파티션은 1개로만 설정해야 함.
-  - 또는 메시지에 key값을 지정해서 특정 key는 특정 partition에만 보내도록 해야함.
-  - ex) 회원 ID, 등등
+- **토픽**: 메시지가 분류되어 저장되는 논리적 단위. 여러 파티션의 집합이며, 생성 시 파티션 개수를 지정한다.
+- **파티션**: 토픽을 물리적으로 쪼갠 단위. 병렬 처리 성능의 단위인 동시에 자원(파일 핸들·메모리·복제 트래픽)을 먹는 **비용 단위**라, 무작정 늘릴 수 없다(한번 늘리면 줄일 수도 없다).
+- **복제(Replication Factor)·오프셋(Offset)·내부 토픽**(`__consumer_offsets`, `__transaction_state`)도 같은 문서에서 다룬다.
 
 ## Producer와 Consumer
 ![commitlog](../Images/kafka/commitlog.png)
