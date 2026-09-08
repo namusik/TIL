@@ -84,18 +84,34 @@ Loki는 **노드에 직접 들어가서 파일을 읽지 않는다.** 노드별 
 
 ## 아키텍처
 
+아래 그림은 **쓰기 경로와 읽기 경로를 한 장에** 그린 것이다. 위쪽 묶음이 로그가 들어오는 길, 아래쪽 묶음이 쿼리가 나가는 길이다.
+
 ```mermaid
 flowchart LR
-    A[애플리케이션] -->|로그| B[Promtail/Alloy<br/>수집 에이전트]
-    B -->|push| C[Distributor<br/>수신·검증·분배]
-    C -->|샤드별 분배| D[Ingester<br/>메모리 → 청크]
-    D -->|flush| E[Object Storage<br/>S3/GCS/Azure Blob]
-    F[Querier<br/>쿼리 처리] -->|읽기| D
-    F -->|읽기| E
-    G[Query Frontend<br/>분할·캐싱] --> F
-    H[Compactor<br/>인덱스 정리] --> E
-    U[사용자/Grafana] --> G
+    A["애플리케이션"] -->|로그| B["Promtail/Alloy<br/>수집 에이전트"]
+    U["사용자/Grafana"]
+    subgraph LOKI["🟦 여기부터 Loki 본체"]
+        subgraph W["✍️ 쓰기 경로"]
+            C["Distributor<br/>수신·검증·분배"] -->|샤드별 분배| D["Ingester<br/>메모리 → 청크"]
+        end
+        subgraph R["🔍 읽기 경로"]
+            G["Query Frontend<br/>분할·캐싱"] --> F["Querier<br/>쿼리 처리"]
+        end
+        H["Compactor<br/>인덱스 정리"]
+    end
+    B -->|push| C
+    U --> G
+    D -->|flush| E[("Object Storage<br/>S3/GCS/Azure Blob")]
+    F -->|최근 로그 조회| D
+    F -->|과거 로그 조회| E
+    H --> E
 ```
+
+가운데 큰 박스가 **Loki 본체**다. **애플리케이션 · 수집 에이전트(Promtail/Alloy) · Grafana · Object Storage는 전부 Loki 밖의 별개 구성요소**이며, Loki는 그 사이에서 **저장·인덱싱·쿼리만** 담당한다. Loki 내부는 다시 쓰기 경로와 읽기 경로로 나뉜다.
+
+> 특히 **Promtail/Alloy는 Loki가 아니다.** Loki는 노드에 직접 들어가 파일을 읽지 않으므로, 노드마다 뜬 수집 에이전트(DaemonSet)가 로그를 걷어 Loki로 push해줘야 한다. (Alloy는 Loki 전용도 아니어서 Prometheus·Tempo로도 보낸다)
+
+> **Ingester와 Object Storage는 두 경로가 만나는 지점**이다. 쓰기는 여기에 쌓고, 읽기는 여기서 꺼낸다. 특히 Querier가 **Ingester(최근)와 S3(과거)를 둘 다** 조회한다는 점이 핵심이다.
 
 | 컴포넌트 | 역할 |
 |---|---|
@@ -140,17 +156,35 @@ Loki는 자체 디스크가 아니라 **Object Storage(객체 스토리지)** �
 
 청크 안의 **라인 본문은 인덱싱하지 않는다.** 이게 ES 대비 1/10 비용의 본질.
 
-### 저장 흐름 단계별
+### 쓰기(Write) 흐름
 
-1. **수신**: Distributor가 수집기 push를 받음 → 라벨 검증 → hash ring으로 Ingester에 분배
-2. **메모리 누적**: Ingester가 라벨 스트림별로 메모리에 chunk를 만들며 압축 누적
-3. **WAL 동시 기록**: 메모리 chunk 만드는 동안 **로컬 디스크 WAL**(Write-Ahead Log)에도 동시에 기록 → Ingester가 죽어도 복원 가능
-4. **flush 조건 도달 시 S3로**:
-   - `chunk_target_size` (기본 1.5 MB) 도달
-   - `chunk_idle_period` (기본 30분) 동안 추가 입력 없음
-   - `max_chunk_age` (기본 2시간) 초과
-   - Ingester graceful shutdown
-5. **메모리·WAL 정리**: S3 업로드 확정 후 메모리·WAL에서 제거
+```mermaid
+flowchart TD
+    A["수집기 push"] --> B["Distributor<br/>라벨 검증 · hash ring 분배"]
+    B --> C["① 디스크 WAL에 먼저 기록 append"]
+    C --> D["② 램 청크에 적재"]
+    D --> E["③ OK 응답 ACK"]
+    D -. 청크가 다 차면 .-> F["④ S3로 flush"]
+    F --> G["⑤ WAL 해당 구간 삭제"]
+```
+
+핵심은 **WAL에 먼저 쓰고 나서 ACK를 준다**는 순서다. 메모리에만 담고 OK를 반환하면 Ingester가 죽는 순간 "OK 받았는데 유실"이 발생하므로, 디스크 WAL 기록을 응답보다 앞에 둔다.
+
+| 단계 | 하는 일 |
+|---|---|
+| **수신** | Distributor가 수집기 push를 받아 라벨 검증 → hash ring으로 Ingester에 분배 |
+| **① WAL append** | Ingester가 **로컬 디스크 WAL**(Write-Ahead Log)에 먼저 기록 → 프로세스가 죽어도 재시작 시 복원 |
+| **② 램 청크 적재** | 라벨 스트림별로 메모리 chunk에 압축하며 누적 |
+| **③ ACK** | WAL + 메모리 적재가 끝나야 수집기에 OK 응답 |
+| **④ flush** | 조건 도달 시 청크를 S3로 업로드 |
+| **⑤ WAL 정리** | S3 업로드가 확정된 뒤 메모리·WAL에서 해당 구간 제거 |
+
+flush가 트리거되는 조건은 네 가지다.
+
+- `chunk_target_size` (기본 1.5 MB) 도달
+- `chunk_idle_period` (기본 30분) 동안 추가 입력 없음
+- `max_chunk_age` (기본 2시간) 초과
+- Ingester graceful shutdown
 
 > WAL은 "잠깐의 in-flight 데이터 보호"용이지 영구 저장소가 아니다. 영구 저장소는 항상 S3.
 
@@ -173,6 +207,36 @@ Loki는 자체 디스크가 아니라 **Object Storage(객체 스토리지)** �
 | Compactor | 작은 chunk들을 통합·정리해 객체 수 절감 |
 
 > 한 줄: **chunk(압축 로그) + index(TSDB)를 둘 다 S3에 두고, 잠깐 메모리에 있는 동안만 WAL로 보호.**
+
+## 읽기(Read) 흐름 — 쿼리는 어떻게 처리되나
+
+```mermaid
+flowchart TD
+    U["Grafana · LogQL 쿼리"] --> QF["① Query Frontend<br/>시간 단위 분할 · 캐시 확인 · 큐잉"]
+    QF -. 캐시 히트 .-> OUT["결과 반환"]
+    QF --> Q["② Querier"]
+    Q --> ING["③-A Ingester 조회<br/>최근 = 아직 S3에 없는 로그"]
+    Q --> IDX["③-B 인덱스 TSDB 조회<br/>라벨 → 대상 청크 특정"]
+    IDX --> CHK["④ S3에서 청크 다운로드<br/>압축 해제 → line filter"]
+    ING --> M["⑤ 결과 병합 · 시간순 정렬"]
+    CHK --> M
+    M --> OUT
+```
+
+핵심은 **최근 로그와 과거 로그의 출처가 다르다**는 점이다. 방금 들어온 로그는 아직 Ingester 메모리에 있어 S3에 없고, 오래된 로그는 S3에만 있다. 그래서 Querier는 **양쪽을 모두 조회해 병합**해야 온전한 결과가 나온다.
+
+| 단계 | 하는 일 |
+|---|---|
+| **① Query Frontend** | 큰 시간 범위를 작은 구간으로 **분할**, 이미 계산된 구간은 **캐시**로 응답, 나머지는 큐에 넣어 Querier에 분배 |
+| **② Querier** | 분할된 쿼리를 실제로 실행 |
+| **③-A Ingester 조회** | **최근 데이터** — 아직 flush 전이라 메모리에만 있는 로그 |
+| **③-B 인덱스 조회** | 라벨 셀렉터로 **TSDB 인덱스**를 뒤져 읽어야 할 청크 목록을 특정 |
+| **④ 청크 처리** | S3에서 해당 청크만 다운로드 → 압축 해제 → `\|=` 같은 **line filter를 이 단계에서 적용**(grep) |
+| **⑤ 병합** | Ingester 결과 + S3 결과를 합쳐 시간순으로 정렬해 반환 |
+
+**라벨로 청크를 좁힌 뒤 본문은 grep**한다는 것이 Loki 검색의 본질이다. 라벨이 넓으면(예: `{env="prod"}`만) 다운로드·압축 해제할 청크가 폭증해 느려진다 — **라벨을 좁게 주는 것이 곧 성능**이다.
+
+> Loki 3.x의 **Bloom filter**는 ④ 직전에 개입한다. "이 청크에 그 문자열이 있을 가능성"을 미리 판단해 **아예 다운로드하지 않고 건너뛰어** 라인 검색을 가속한다.
 
 ## LogQL — Loki의 쿼리 언어
 

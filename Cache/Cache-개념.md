@@ -1,6 +1,6 @@
 # Cache (캐시)
 
-> 최종 업데이트: 2026-05-03 | CPU 캐시·HTTP 캐시·분산 캐시 통합 / 백엔드 실무 중심
+> 최종 업데이트: 2026-08-30 | CPU 캐시·HTTP 캐시·분산 캐시 통합 / 백엔드 실무 중심
 
 ![cache](../images/cache/cache.png)
 
@@ -38,6 +38,10 @@
 | **CDN 엣지 캐시** | CloudFront·Cloudflare — 지리적으로 가까운 곳 | 원본 서버 |
 
 → 모든 계층은 **"느린 단계 앞에 더 빠른 단계를 두는"** 같은 원리.
+
+### OS 페이지 캐시 — 애플리케이션이 몰라도 커널이 해주는 캐싱
+
+리눅스 커널이 디스크 I/O 결과를 유휴 RAM에 보관해두는 것. 애플리케이션은 몰라도 혜택을 받고, 필요 시 즉시 회수(reclaim)되므로 메모리 사용률이 높아도 위험 신호가 아니다. Kafka·Elasticsearch처럼 디스크 기반 처리량이 중요한 시스템일수록 이를 의도적으로 활용하도록 설계된다. 읽기/쓰기 동작 원리, `dirty page`와 `fsync`, `O_DIRECT` 우회, Kafka zero-copy 등 상세는 → [OS 페이지 캐시](OS-페이지-캐시.md).
 
 ## 캐시 위치별 분류: Local vs Distributed
 
@@ -290,6 +294,7 @@ flowchart LR
 ## 관련 문서
 
 - [HTTP Cache](Http-Cache.md) — 웹 응답 캐시(`Cache-Control`/`ETag`/`Vary`) 정밀 가이드
+- [OS 페이지 캐시](OS-페이지-캐시.md) — 커널 레벨 디스크 I/O 캐싱, Kafka·Elasticsearch의 활용 방식
 - [Springboot Cache](Springboot-Cache.md) — Spring `@Cacheable` 등 어노테이션 실전
 - [Redis](../Redis/) — 분산 캐시 사실상 표준
 

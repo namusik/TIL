@@ -44,8 +44,25 @@ List<String> lists = new ArrayList<>();
 - ArrayList 인스턴스 반환
 - 변경이 가능하다.
   - add, remove, set 가능
+- 용량이 다 차면 **1.5배(`oldCapacity + oldCapacity >> 1`)**로 늘려 전체 배열을 복사한다. 이 복사가 일어날 때만 O(n), 평균적으로는 O(1) 상각(amortized)
 
+### LinkedList
 
+#### 개념
+- List 인터페이스의 구체 구현체. **Deque**도 함께 구현해 스택·큐로도 쓸 수 있다.
+- 내부 구조(이중 연결 리스트)·일반 Big-O·캐시 지역성 문제 등 언어 비종속 CS 이론은 → [Linked List](../../CS-이론/자료구조/LinkedList/LinkedList.md)에서 다룬다. 여기서는 Java API 관점만 짚는다.
+
+```java
+List<String> list = new LinkedList<>();
+```
+
+#### ArrayList vs LinkedList — Java 관점
+
+일반 배열 vs 연결 리스트의 트레이드오프(시간복잡도·캐시 지역성)는 [Array 배열](../../CS-이론/자료구조/Array/Array.md#배열-vs-연결-리스트)·[Linked List](../../CS-이론/자료구조/LinkedList/LinkedList.md#연산별-시간-복잡도)에서 이미 다뤘다. **Java 실무 관점의 결론만 정리하면:**
+
+- **실무 기본값은 ArrayList다.** 대부분의 사용 패턴(끝에 추가, 인덱스 조회, 순회)에서 더 빠르고 메모리도 적게 쓴다.
+- 양끝만 쓰는 큐·스택 용도라도 LinkedList보다 **`ArrayDeque`**가 권장된다 — 내부가 배열(원형 버퍼)이라 캐시 지역성 이점을 그대로 가져가면서 Deque 기능은 동일하게 제공한다.
+- LinkedList를 골라야 하는 경우는 드물다 — **`ListIterator`로 순회하며 삽입/삭제를 반복하는 패턴**이 거의 유일한 정당한 사유다.
 
 ------------------------------------
 
