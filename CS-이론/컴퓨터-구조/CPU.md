@@ -10,7 +10,7 @@
 
 핵심은 **명령어 실행**. 매 클럭 사이클마다 fetch(가져오기) → decode(해석) → execute(실행) → write-back(저장)을 반복한다. 현대 CPU는 이 과정을 **파이프라이닝**, **분기 예측**, **비순차 실행** 등으로 극도로 최적화했다.
 
-> 같이 보면 좋은 문서: [Register.md](Register.md), [Memory.md](Memory.md), [Stack.md](Stack.md), [프로세스.md](프로세스.md), [OS-Thread.md](OS-Thread.md)
+> 같이 보면 좋은 문서: [Register.md](Register.md), [Memory.md](Memory.md), [Stack.md](Stack.md), [프로세스.md](프로세스.md), [OS-Thread.md](OS-Thread.md), [양자컴퓨터](양자컴퓨터.md)(비트 기반 고전 컴퓨터와 대조되는 큐비트 기반 패러다임)
 
 ## 배경/역사
 

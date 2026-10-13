@@ -1,4 +1,7 @@
 # Lambda Expression
+
+> 최종 업데이트: 2026-09-15 | Java 8+ 기준
+
 [baeldung](https://www.baeldung.com/tag/lambda-expressions)
 
 ## 개념
@@ -58,6 +61,37 @@ parameter -> body
 > 그래서 지역 변수의 값을 복사해서 별도의 스택에 저장해 두는 것이다.
 
 >그리고 값을 복사한다고 해서, 그 값이 지역변수의 최신 값임을 보장할 수 가 없다. 동시성 문제가 발생 할 수 있다.
+
+#### Mutable Holder 패턴 — 원시형 카운터를 우회하는 법
+
+`effectively final` 규칙 때문에 람다 안에서 지역변수를 **직접 증가**시키는 코드는 컴파일이 안 된다.
+
+```java
+int counted = 0;
+list.forEach(item -> counted++);   // ❌ 컴파일 에러 — counted가 effectively final이 아님
+```
+
+캡처되는 게 "변수가 가리키는 값"이라는 점에서 원시형과 참조형의 운명이 갈린다.
+
+| | `int counted` | `int[] counted` |
+|---|---|---|
+| 캡처되는 값 | **숫자 자체** | 배열의 **참조값(주소)** |
+| 증가시키면? | 값 자체를 재할당 → **금지** | 주소는 그대로, **가리키는 슬롯의 내용만 변경** → 허용 |
+
+```java
+int[] counted = {0};
+list.forEach(item -> counted[0]++);   // ✅ 참조 자체는 재할당 안 됨(effectively final 유지)
+```
+
+`counted[0]++`는 `counted`라는 변수에 새 값을 대입하는 게 아니라, **`counted`가 가리키는 배열 객체 내부의 슬롯 하나를 바꾸는 것**이다. `effectively final`은 "변수가 다른 걸 가리키게 되는 것"만 금지할 뿐, 가리키는 객체의 **내부 상태 변경**까지는 막지 않는다. `List`에 `add()`하는 코드가 원래부터 문제없었던 이유도 같다 — 참조를 재할당하는 게 아니라 그 리스트 객체 내부에 원소를 추가할 뿐이기 때문이다.
+
+이 우회를 **mutable holder(가변 홀더) 패턴** 또는 **"1칸짜리 배열 트릭"**이라 부른다. Java 8 이전 익명 클래스 시절부터 쓰이던 기법이 람다에도 그대로 이어졌다. 의도를 더 명확히 드러내려면 아래 대안을 쓴다.
+
+| 대안 | 특징 |
+|------|------|
+| `int[]` (1칸 배열) | 가장 짧지만 "왜 배열이지?"라는 의문을 남김 |
+| **`AtomicInteger`** | `incrementAndGet()`으로 의도가 코드에 드러나고, **스레드 안전성**까지 덤으로 얻음 |
+| 커스텀 mutable wrapper 클래스 | 이름 있는 홀더(`IntHolder` 등)로 가독성을 높임 |
 
 ## 참고
 http://www.tcpschool.com/java/java_lambda_concept

@@ -91,6 +91,7 @@ boolean valid = MessageDigest.isEqual(expectedMac, computed);
 ## 관련 문서
 
 - [SHA-256](SHA-256.md) — HMAC이 감싸는 내부 해시 함수, 길이 확장 공격의 원인
+- [양자컴퓨터](../컴퓨터-구조/양자컴퓨터.md) — Grover 알고리즘도 대칭키·해시 기반인 HMAC은 키 길이만 늘리면 방어 가능
 - [비밀번호 해싱](비밀번호-해싱.md) — 페퍼를 HMAC으로 적용하는 방식
 - [JWT 개념](../../Spring/스프링-시큐리티/JWT-개념.md) — `HS256` 서명에 HMAC 사용
 - [TLS Handshake](../네트워크/보안/TLS/TLS-Handshake.md) — Finished 메시지의 HMAC

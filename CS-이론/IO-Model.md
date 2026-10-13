@@ -179,7 +179,7 @@ WebClient.create()
 doOtherWork();  // 즉시 다른 작업 수행
 ```
 
-- Nginx, Node.js, Netty, Spring WebFlux의 기본 모델
+- Nginx, [Node.js](../Javascript/Node.js/Node.js.md), Netty, Spring WebFlux의 기본 모델
 - 적은 스레드로 대량의 동시 요청 처리 가능
 
 ## Java/Spring에서의 I/O 모델
